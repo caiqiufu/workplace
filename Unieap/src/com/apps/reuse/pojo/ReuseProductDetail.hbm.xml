@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-7-8 0:38:43 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.reuse.pojo.ReuseProductDetail" table="reuse_product_detail" catalog="unieap" >
+        <id name="detailId" type="java.lang.Integer">
+            <column name="detail_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="productId" type="java.lang.Integer">
+            <column name="product_id" not-null="true" />
+        </property>
+        <property name="attributeName" type="java.lang.String">
+            <column name="attribute_name" length="45" not-null="true" />
+        </property>
+        <property name="attributeValue" type="java.lang.String">
+            <column name="attribute_value" />
+        </property>
+    </class>
+</hibernate-mapping>

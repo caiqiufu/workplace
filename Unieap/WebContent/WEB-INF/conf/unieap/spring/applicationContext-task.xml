@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+    <!--method1
+	<task:annotation-driven/>  
+	-->
+	<task:scheduled-tasks>   
+        <task:scheduled ref="taskDefectEmail" method="execute" cron="15 * * * * ?"/> 
+        <task:scheduled ref="taskDefectStatus" method="execute" cron="15 * * * * ?"/>   
+	</task:scheduled-tasks>
+	<bean id="taskDefectEmail" class="com.unieap.task.TaskDefectEmail"/>
+	<bean id="taskDefectStatus" class="com.unieap.task.TaskDefectStatus"/>
+	
+	
+	<!-- method2 -->
+	<!-- 总的管理类,如果将lazy-init ="false" 那么容器启动就会执行调度程序 
+   	<bean id="startQuertz" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">    
+    	<property name="triggers">    
+    		<list>
+    			<ref bean="cronReportTrigger"/>
+    		</list>
+    	</property>
+    </bean>
+	-->
+    <!-- 定义触发时间,Spring提供两个类：SimpleTriggerBean和CronTriggerBean，它们包装了SimpleTrigger和CronTrigger类 
+	<bean id="cronReportTrigger"     
+		class="org.springframework.scheduling.quartz.CronTriggerBean">    
+		<property  name="jobDetail">
+			<ref bean="scheduledReportJobDetail"/> 
+		</property>
+		<property name="cronExpression">
+			<value>15 * * * * ?</value>
+		</property>
+	</bean>
+    -->
+	<!--定义调用对象和调用对象的方法
+	<bean id="scheduledReportJobDetail"      
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">    
+		<property name="targetObject">    
+			<ref  bean="courseService"/> 
+		</property>
+		<property name="targetMethod">    
+			<value>execute</value>
+		</property>
+	</bean>
+	-->    
+	<!-- 需要调用的工作类 
+	<bean id="courseService" class="com.unieap.task.TaskDefectEmail"/>
+	-->
+	
+	
+</beans>

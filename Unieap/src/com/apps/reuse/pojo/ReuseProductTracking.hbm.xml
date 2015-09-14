@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-7-5 13:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.reuse.pojo.ReuseProductTracking" table="reuse_product_tracking" catalog="unieap">
+        <id name="trackingId" type="java.lang.Integer">
+            <column name="tracking_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="productId" type="java.lang.Integer">
+            <column name="product_id" not-null="true" />
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status" length="45" not-null="true" />
+        </property>
+        <property name="referNo" type="java.lang.String">
+            <column name="refer_no" length="45"/>
+        </property>
+        <property name="updatedBy" type="java.lang.String">
+            <column name="updated_by" length="45" />
+        </property>
+        <property name="createDate" type="java.util.Date">
+            <column name="create_date" length="0" not-null="true" />
+        </property>
+        <property name="modifyDate" type="java.util.Date">
+            <column name="modify_date" length="0" />
+        </property>
+        <property name="createBy" type="java.lang.String">
+            <column name="create_by" length="45" not-null="true" />
+        </property>
+        <property name="modifyBy" type="java.lang.String">
+            <column name="modify_by" length="45" />
+        </property>
+        <property name="remark" type="java.lang.String">
+            <column name="remark" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	- Sample namespace-based configuration
+	-
+-->
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- 登录界面不过滤 -->
+	<http pattern="/login.jsp" security="none" />
+	<http pattern="/index.jsp" security="none" />
+	<http pattern="/apps/base/desktop/**" security="none" />
+	<http pattern="/403.jsp" security="none" />
+	<http pattern="/error.jsp" security="none" />
+	<http pattern="/timeout.jsp" security="none" />
+	<http pattern="/logout.jsp" security="none" />
+	<http pattern="/unieap/**" security="none" />
+	<http pattern="/ExtAction.do" security="none" />
+	<http access-denied-page="/accessDenied.jsp">
+		<form-login login-page="/login.jsp"
+			authentication-failure-url="/403.jsp"
+			default-target-url="/index.jsp" />
+		<!-- admin 页面访问权限
+			<intercept-url pattern="/admin.jsp" access="ROLE_ADMIN" />
+			 username-parameter,password-parameter设置登录用户名和密码的请求name 默认：j_username,j_password
+		-->
+		<!-- 访问/**资源的用户必须具有 ROLE_USER的权限
+			<intercept-url pattern="/user.jsp" access="ROLE_USER" />
+		-->
+		<session-management invalid-session-url="/timeout.jsp">
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="false" />
+		</session-management>
+		<!-- 增加一个filter -->
+		<custom-filter ref="myFilter"
+			before="FILTER_SECURITY_INTERCEPTOR" />
+		<custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
+	</http>
+
+	<beans:bean id="myFilter"
+		class="com.unieap.security.MyFilterSecurityInterceptor">
+		<beans:property name="authenticationManager"
+			ref="authenticationManager" />
+		<beans:property name="accessDecisionManager"
+			ref="myAccessDecisionManagerBean" />
+		<beans:property name="securityMetadataSource"
+			ref="securityMetadataSource" />
+	</beans:bean>
+	<!-- 验证配置,认证管理器,实现用户认证入口 -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider
+			user-service-ref="myUserDetailService">
+		</authentication-provider>
+	</authentication-manager>
+	<!-- 从数据库中获取用户信息 -->
+	<beans:bean id="myUserDetailService"
+		class="com.unieap.security.MyUserDetailService" />
+	<!-- 访问决策器 -->
+	<beans:bean id="myAccessDecisionManagerBean"
+		class="com.unieap.security.MyAccessDecisionManager" />
+	<!--资源数据定义  -->
+	<beans:bean id="securityMetadataSource"
+		class="com.unieap.security.MyInvocationSecurityMetadataSource" />
+
+	<!-- logout filter configuration Start -->
+	<beans:bean id="logoutFilter"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<beans:constructor-arg value="/login.jsp" />
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean
+					class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+				</beans:bean>
+			</beans:list>
+		</beans:constructor-arg>
+		<beans:property name="filterProcessesUrl"
+			value="/j_spring_security_logout">
+		</beans:property>
+	</beans:bean>
+
+</beans:beans>

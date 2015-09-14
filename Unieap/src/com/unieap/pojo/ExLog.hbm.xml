@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-8-8 16:02:23 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.unieap.pojo.ExLog" table="ex_log" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="operator" type="string">
+            <column name="operator" length="45" not-null="true" />
+        </property>
+        <property name="operationDate" type="timestamp">
+            <column name="operation_date" length="0" not-null="true" />
+        </property>
+        <property name="exType" type="string">
+            <column name="ex_type" length="45" not-null="true" />
+        </property>
+        <property name="bizModule" type="string">
+            <column name="biz_module" length="45" not-null="true" />
+        </property>
+        <property name="exCode" type="string">
+            <column name="ex_code" length="45" />
+        </property>
+        <property name="exInfo" type="string">
+            <column name="ex_info" length="1024" />
+        </property>
+        <property name="exTracking" type="binary">
+            <column name="ex_tracking" />
+        </property>
+    </class>
+</hibernate-mapping>

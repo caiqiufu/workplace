@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-8-8 2:32:02 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.reuse.pojo.ReuseSmsNotify" table="reuse_sms_notify" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="smsType" type="string">
+            <column name="sms_type" length="45" not-null="true" />
+        </property>
+        <property name="fromBy" type="string">
+            <column name="from_by" length="45" not-null="true" />
+        </property>
+        <property name="sendTo" type="string">
+            <column name="send_to" length="45" not-null="true" />
+        </property>
+        <property name="content" type="string">
+            <column name="content" not-null="true" />
+        </property>
+        <property name="verifyCode" type="string">
+            <column name="verify_code" length="45" />
+        </property>
+        <property name="sendDate" type="timestamp">
+            <column name="send_date" length="0" not-null="true" />
+        </property>
+        <property name="checked" type="string">
+            <column name="checked" length="45" not-null="true" />
+        </property>
+        <property name="checkTimes" type="java.lang.Integer">
+            <column name="check_times" />
+        </property>
+        <property name="expired" type="string">
+            <column name="expired" length="45" not-null="true" />
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-7-5 13:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.reuse.pojo.ReuseAsses" table="reuse_asses" catalog="unieap" >
+        <id name="assesId" type="java.lang.Integer">
+            <column name="asses_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="productId" type="java.lang.Integer">
+            <column name="product_id" not-null="true" />
+        </property>
+        <property name="assesDate" type="java.util.Date">
+            <column name="asses_date" length="0" not-null="true" />
+        </property>
+        <property name="amount" type="java.lang.String">
+            <column name="amount" length="45" not-null="true" />
+        </property>
+        <property name="status" type="java.lang.String">
+            <column name="status" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>
