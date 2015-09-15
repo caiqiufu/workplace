@@ -84,14 +84,4 @@ public class MyUserDetailService implements UserDetailsService {
 		}*/
 		return auths;
 	}
-	@SuppressWarnings("deprecation")
-	private User testUser(String userName){
-		Collection<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
-		GrantedAuthority auth = new GrantedAuthorityImpl("unieap");
-		GrantedAuthority auth1 = new GrantedAuthorityImpl("test");
-		auths.add(auth);
-		auths.add(auth1);
-		User user = new User(userName,"1",true, true, true,true, auths);
-		return user;
-	}
 }

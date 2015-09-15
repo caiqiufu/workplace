@@ -3,8 +3,6 @@ package com.unieap.security;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -21,7 +19,6 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 	 * Authentication 认证过的票据Authentication，确定了谁正在访问资源 被访问的资源object
 	 * 访问资源要求的权限配置ConfigAttributeDefinition
 	 */
-	@SuppressWarnings("unchecked")
 	public void decide(Authentication authentication, Object object,
 			Collection<ConfigAttribute> configAttributes)
 			throws AccessDeniedException, InsufficientAuthenticationException {
@@ -29,9 +26,9 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 		if (configAttributes == null) {
 			return;
 		}
-		Collection cga = authentication.getAuthorities();
+		Collection<?> cga = authentication.getAuthorities();
 		if (cga != null) {
-			Iterator itr = cga.iterator();
+			Iterator<?> itr = cga.iterator();
 			while (itr.hasNext()) {
 				String rule = itr.next().toString();
 				if (configAttributes.contains(rule)) {
@@ -46,8 +43,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean supports(Class clazz) {
+	public boolean supports(Class<?> clazz) {
 		return true;
 	}
 

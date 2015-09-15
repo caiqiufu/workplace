@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class EAPHandlerExceptionResolver implements HandlerExceptionResolver {
 
 	@Override
-	public ModelAndView resolveException(HttpServletRequest arg0,
-			HttpServletResponse arg1, Object arg2, Exception arg3) {
-		ModelAndView ma = new ModelAndView("error.jsp",null);
-		return ma;	
-		}
+	public ModelAndView resolveException(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2,
+			Exception arg3) {
+		ModelAndView ma = new ModelAndView("error", null);
+		return ma;
+	}
 
 }

@@ -20,7 +20,6 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 	/**
 	 * 返回说请求资源所需要的权限(即role)
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection getAttributes(Object object) throws IllegalArgumentException {
 		/*if(UnieapConstants.ISUNIEAP){
 			Collection<String> roles= new ArrayList<String>();
@@ -36,8 +35,7 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 		roles.add("unieap");
 		return roles;
 	}
-	@SuppressWarnings("unchecked")
-	public boolean supports(Class clazz) {
+	public boolean supports(Class<?> clazz) {
 		return true;
 	}
 	@Override

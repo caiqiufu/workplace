@@ -31,11 +31,10 @@ import org.springframework.jdbc.core.RowMapper;
 public class EntityRowMapper implements RowMapper<Object> {
 	public Class<Object> object;
 
-	@SuppressWarnings("unchecked")
-	public EntityRowMapper(Class object) {
+	public EntityRowMapper(Class<Object> object) {
 		this.object = object;
 	}
-	
+
 	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return convertMapToResultMap(rs, object);
 	}
@@ -51,9 +50,7 @@ public class EntityRowMapper implements RowMapper<Object> {
 	 * @return
 	 * @throws SQLException
 	 */
-	@SuppressWarnings("unchecked")
-	public Object convertMapToResultMap(ResultSet rs, Class object)
-			throws SQLException {
+	public Object convertMapToResultMap(ResultSet rs, Class<Object> object) throws SQLException {
 		Object vo;
 		try {
 			vo = object.newInstance();
@@ -64,7 +61,6 @@ public class EntityRowMapper implements RowMapper<Object> {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	private Object getBean(ResultSet rs, Object bean) throws SQLException {
 		BeanInfo beanInfo;
 		try {
@@ -83,10 +79,10 @@ public class EntityRowMapper implements RowMapper<Object> {
 				Class<?> retType = getter.getReturnType();
 				try {
 					rs.getObject(property);
-					//Blob blob = rs.getBlob(property);  
-					//int bolblen = (int) blob.length();  
-					//byte[] data = blob.getBytes(1, bolblen);  
-					//String content = new String(data);  
+					// Blob blob = rs.getBlob(property);
+					// int bolblen = (int) blob.length();
+					// byte[] data = blob.getBytes(1, bolblen);
+					// String content = new String(data);
 				} catch (SQLException e) {
 					continue;
 				}
@@ -94,35 +90,33 @@ public class EntityRowMapper implements RowMapper<Object> {
 				String str = "";
 				try {
 					if (value != null) {
-						//value.getClass().getCanonicalName();
-						if (("byte[]".equals(value.getClass().getTypeName()))&&(String.class == retType)){
-							Blob blob = rs.getBlob(property);  
-							int bolblen = (int) blob.length();  
-							byte[] data = blob.getBytes(1, bolblen);  
-							String content = new String(data,"utf-8");
+						// value.getClass().getCanonicalName();
+						if (("byte[]".equals(value.getClass().getTypeName())) && (String.class == retType)) {
+							Blob blob = rs.getBlob(property);
+							int bolblen = (int) blob.length();
+							byte[] data = blob.getBytes(1, bolblen);
+							String content = new String(data, "utf-8");
 							setter.invoke(bean, content);
-						}else if(String.class == retType&&StringUtils.isNotEmpty(value.toString())) {
+						} else if (String.class == retType && StringUtils.isNotEmpty(value.toString())) {
 							str = value.toString();
 							setter.invoke(bean, str);
 						} else {
-							if ((java.util.Date.class == retType
-									|| Timestamp.class == retType || java.sql.Date.class == retType)) {
+							if ((java.util.Date.class == retType || Timestamp.class == retType
+									|| java.sql.Date.class == retType)) {
 								Date date = rs.getTimestamp(property);
 								setter.invoke(bean, date);
 							} else if (java.lang.Long.class == retType) {
 								setter.invoke(bean, Long.valueOf(value.toString()));
 							} else if (boolean.class == retType) {
-								if(value.getClass()==Long.class){
-									setter.invoke(bean,((Long)value).intValue()==1);
-								}else if(value.getClass()==Integer.class){
-									setter.invoke(bean,((Integer)value).intValue()==1);
+								if (value.getClass() == Long.class) {
+									setter.invoke(bean, ((Long) value).intValue() == 1);
+								} else if (value.getClass() == Integer.class) {
+									setter.invoke(bean, ((Integer) value).intValue() == 1);
 								}
 							} else if (java.lang.Integer.class == retType) {
-								setter.invoke(bean, Integer.valueOf(value
-										.toString()));
+								setter.invoke(bean, Integer.valueOf(value.toString()));
 							} else if (java.lang.Double.class == retType) {
-								setter.invoke(bean, Double
-										.valueOf(value.toString()));
+								setter.invoke(bean, Double.valueOf(value.toString()));
 							} else {
 								setter.invoke(bean, value);
 							}
@@ -131,15 +125,14 @@ public class EntityRowMapper implements RowMapper<Object> {
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new RuntimeException("Error to get value,error:"
-							+ e.getMessage());
+					throw new RuntimeException("Error to get value,error:" + e.getMessage());
 				}
 
 			}
 		} catch (IntrospectionException e1) {
 			throw new SQLException(e1.getMessage());
 		}
-		
+
 		return bean;
 	}
 }

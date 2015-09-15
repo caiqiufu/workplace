@@ -27,5 +27,6 @@ public interface ConfigHandler {
 	 * @throws Exception
 	 */
 	public void dealNode(Node node, ServletContext servlet, String appName) throws Exception;
+	public void deal(String parameters)throws Exception;
 
 }

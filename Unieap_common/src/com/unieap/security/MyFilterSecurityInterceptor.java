@@ -58,8 +58,7 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor
 		this.securityMetadataSource = securityMetadataSource;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Class getSecureObjectClass() {
+	public Class<FilterInvocation> getSecureObjectClass() {
 		return FilterInvocation.class;
 	}
 

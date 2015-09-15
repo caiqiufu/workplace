@@ -26,8 +26,7 @@ public class PaginationSupport extends BaseVO {
 	private int pageSize = 15;
 	private int currentPage = 1;
 	private int startIndex = 1;
-	@SuppressWarnings("unchecked")
-	private List items;
+	private List<Object> items;
 	private int totalCount = 0;
 	private String jsonString = "";
 	private String dsName = null;
@@ -53,9 +52,6 @@ public class PaginationSupport extends BaseVO {
 			}
 			jsonString = data.toString();
 		}
-		if (SYSConfig.isDebug) {
-			log.debug("jsonString:" + jsonString);
-		}
 		return jsonString;
 	}
 
@@ -63,13 +59,11 @@ public class PaginationSupport extends BaseVO {
 		this.jsonString = jsonString;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getItems() {
+	public List<Object> getItems() {
 		return items;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void setItems(List items) {
+	public void setItems(List<Object> items) {
 		this.items = items;
 	}
 
@@ -80,9 +74,7 @@ public class PaginationSupport extends BaseVO {
 	public void setTotalCount(int totalCount) {
 		if (totalCount > 0) {
 			this.totalCount = totalCount;
-			int count = totalCount / pageSize;
 			if (totalCount % pageSize > 0) {
-				count++;
 			}
 		} else {
 			this.totalCount = 0;
@@ -194,7 +186,7 @@ public class PaginationSupport extends BaseVO {
 		this.dir = dir;
 	}
 	
-	public void po2vo(Class object) throws Exception {
+	public void po2vo(Class<?> object) throws Exception {
 		List<Object> vos = new ArrayList<Object>();
 		for (Object r : this.items) {
 			Object vo = object.newInstance();

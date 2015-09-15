@@ -13,7 +13,7 @@ import com.unieap.base.vo.ExtTreeVO;
 public class TreeEntityRowMapper implements RowMapper<Object> {
 	public Class<Object> object;
 	public String[] extendAttri;
-	public TreeEntityRowMapper(Class object,String[] extendAttri) {
+	public TreeEntityRowMapper(Class<Object> object,String[] extendAttri) {
 		this.object = object;
 		this.extendAttri = extendAttri;
 	}
@@ -21,7 +21,7 @@ public class TreeEntityRowMapper implements RowMapper<Object> {
 		return convertMapToResultMap(rs,object);
 	}
 
-	public Object convertMapToResultMap(ResultSet rs, Class object)
+	public Object convertMapToResultMap(ResultSet rs, Class<Object> object)
 			throws SQLException {
 		Object vo;
 		try {
