@@ -9,6 +9,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- springmvc的关键配置 -->
+	<!-- 
+	
+	 -->
 	<bean id="requestMappingHandlerAdapter"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
@@ -26,9 +29,7 @@
 					<property name="supportedMediaTypes">
 						<list>
 							<value>text/plain;charset=UTF-8</value>
-							<value>
-								application/json;charset=UTF-8
-							</value>
+							<value>application/json;charset=UTF-8</value>
 						</list>
 					</property>
 				</bean>

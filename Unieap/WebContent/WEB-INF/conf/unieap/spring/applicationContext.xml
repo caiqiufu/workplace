@@ -49,24 +49,28 @@
 			</list>
 		</property>
 	</bean>
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<ref bean="mappingJacksonHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
-	<bean id="mappingJacksonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-		<property name="supportedMediaTypes">
-			<list>
-				<value>text/html;charset=UTF-8</value>
-			</list>
-		</property>
-	</bean>
+	<!-- 
+	
+		<bean
+			class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+		<bean
+			class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+			<property name="messageConverters">
+				<list>
+					<ref bean="mappingJacksonHttpMessageConverter" />
+				</list>
+			</property>
+		</bean>
+		<bean id="mappingJacksonHttpMessageConverter"
+			class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+			<property name="supportedMediaTypes">
+				<list>
+					<value>text/html;charset=UTF-8</value>
+					<value>application/soap+xml; charset=utf-8</value>
+				</list>
+			</property>
+		</bean>
+	 -->
 
 
 	<import resource="applicationContext-ds.xml" />

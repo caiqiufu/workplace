@@ -21,6 +21,9 @@
 	<http pattern="/logout.jsp" security="none" />
 	<http pattern="/unieap/**" security="none" />
 	<http pattern="/ExtAction.do" security="none" />
+	<!-- 對webservice 不做任何處理，否則會導致SOAP協議被轉義成text/html请求 -->
+	<http pattern="/services/*" security="none" />
+	
 	<http access-denied-page="/accessDenied.jsp">
 		<form-login login-page="/login.jsp"
 			authentication-failure-url="/403.jsp"

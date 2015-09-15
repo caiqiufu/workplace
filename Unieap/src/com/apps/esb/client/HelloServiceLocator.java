@@ -22,7 +22,7 @@ public class HelloServiceLocator extends org.apache.axis.client.Service implemen
     }
 
     // Use to get a proxy class for HelloPort
-    private java.lang.String HelloPort_address = "http://localhost:8081/WS/services/hello.wsdl";
+    private java.lang.String HelloPort_address = "http://127.0.0.1:8080/Unieap/services/hello.wsdl";
 
     public java.lang.String getHelloPortAddress() {
         return HelloPort_address;

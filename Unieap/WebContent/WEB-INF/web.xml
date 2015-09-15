@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- - Tutorial web application -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5">
+<!-- ~ Copyright 2007 the original author or authors. ~ ~ Licensed under 
+	the Apache License, Version 2.0 (the "License"); ~ you may not use this file 
+	except in compliance with the License. ~ You may obtain a copy of the License 
+	at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 ~ ~ Unless required by 
+	applicable law or agreed to in writing, software ~ distributed under the 
+	License is distributed on an "AS IS" BASIS, ~ WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. ~ See the License for the specific 
+	language governing permissions and ~ limitations under the License. -->
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
 	<display-name>Unieap</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -42,6 +49,7 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
+
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -50,9 +58,11 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
 	<listener>
 		<listener-class>com.unieap.base.EAPContextLoaderListener</listener-class>
 	</listener>
+
 	<listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
@@ -69,7 +79,6 @@
 		<servlet-name>SpringServlet</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
-	<!--begin 配置 web service servlet -->
 	<servlet>
 		<servlet-name>spring-ws</servlet-name>
 		<servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
@@ -86,9 +95,10 @@
 		<servlet-name>spring-ws</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-	<!--end 配置 web service servlet -->
 
 	<welcome-file-list>
 		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
+
+
 </web-app>

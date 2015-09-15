@@ -3,24 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Unieap_common"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/antlr.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/axis.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-io-2.4.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mail.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-1.6.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/saaj.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-ws-1.5.4.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/wsdl4j.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xml-apis-ext.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="/Unieap_common/lib/asm.jar"/>
 	<classpathentry kind="lib" path="/Unieap_common/lib/cglib-2.1.3.jar"/>
 	<classpathentry kind="lib" path="/Unieap_common/lib/commons-collections-3.2.jar"/>
@@ -69,7 +51,25 @@
 	<classpathentry kind="lib" path="/Unieap_common/lib/spring-web-3.2.2.jar"/>
 	<classpathentry kind="lib" path="/Unieap_common/lib/spring-webmvc-3.2.2.jar"/>
 	<classpathentry kind="lib" path="/Unieap_common/lib/spring-webmvc-portlet-3.2.2.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/antlr.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/axis.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-1.6.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/saaj.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-ws-1.5.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/wsdl4j.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xml-apis-ext.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

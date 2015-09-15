@@ -37,17 +37,6 @@
 	http://localhost:8080/WS/services/hello.wsdl
 	 -->
 
-<!-- 
-	<bean id="simpleService"
-		class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
-		<property name="serviceInterface" value="com.sws.HelloService" />
-		<property name="wsdlDocumentUrl"
-			value="http://localhost:8080/WS/services/hello.wsdl" />
-		<property name="namespaceUri" value="http://www.ispring.com/ws/hello/definitions" />
-		<property name="serviceName" value="HelloService" />
-		<property name="portName" value="HelloEndPoint" />
-	</bean>
- -->
 
 
 </beans>
