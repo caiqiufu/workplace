@@ -35,7 +35,7 @@ public class ReuseAddressBO extends BaseBO {
 		sb.append(" ca.create_by as createBy,ca.modify_date as modifyDate,ca.modify_by as modifyBy,ca.phone ");
 		sb.append(" from unieap.reuse_customer_address ca, unieap.area a1,unieap.area a2,unieap.area a3 ");
 		sb.append(" where ca.province = a1.code and ca.city = a2.code and ca.district = a3.code and ca.street = '' and ca.customer_id = ? ");
-		List<?> items =  DBManager.getJT(null).query(sb.toString(), new Object[]{vo.getCustomerId(),vo.getCustomerId()}, new EntityRowMapper(ReuseCustomerAddressVO.class));
+		List<Object> items =  DBManager.getJT(null).query(sb.toString(), new Object[]{vo.getCustomerId(),vo.getCustomerId()}, new EntityRowMapper(ReuseCustomerAddressVO.class));
 		page.setItems(items);
 
 	}
@@ -66,7 +66,7 @@ public class ReuseAddressBO extends BaseBO {
 		vo.setModifyDate(UnieapConstants.getDateTime(null));
 		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
 		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
-		changeLogBO.save(vo.getAddressId(), vo, "reuse_customer_address",UnieapConstants.REUSE);
+		//changeLogBO.save(vo.getAddressId(), vo, "reuse_customer_address",UnieapConstants.REUSE);
 		DBManager.getHT(null).update(vo);
 		return result(UnieapConstants.ISSUCCESS,UnieapConstants.SUCCESS);
 	}

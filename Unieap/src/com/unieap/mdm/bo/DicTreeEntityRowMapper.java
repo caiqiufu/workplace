@@ -52,6 +52,9 @@ public class DicTreeEntityRowMapper extends EntityRowMapper {
 			extendAttri.put("parentCode",rs.getObject("parentCode").toString());
 			extendAttri.put("parentName",rs.getObject("parentName").toString());
 		}
+		if(rs.getObject("dicType")!=null){
+			extendAttri.put("dicType",rs.getObject("dicType").toString());
+		}
 		if(rs.getObject("seq")!=null){
 			extendAttri.put("seq",rs.getObject("seq").toString());
 		}
@@ -61,10 +64,7 @@ public class DicTreeEntityRowMapper extends EntityRowMapper {
 		if(rs.getObject("remark")!=null){
 			extendAttri.put("remark",rs.getObject("remark").toString());
 		}
-		extendAttri.put("activeFlag",UnieapConstants.YES.equals(rs.getObject("activeFlag").toString()));
-		if(StringUtils.equals(rs.getObject("activeFlag").toString(), UnieapConstants.NO)){
-			vo.setIconCls("delete");
-		}
+		extendAttri.put("activeFlag",rs.getObject("activeFlag").toString());
 		extendAttri.put("createBy",rs.getObject("createBy").toString());
 		vo.setExtendAttri(extendAttri);
 		vo.setExpanded(false);

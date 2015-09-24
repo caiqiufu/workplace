@@ -7,7 +7,7 @@
 
 package com.apps.esb.client;
 
-public class HelloBindingStub extends org.apache.axis.client.Stub implements HelloPortType {
+public class HelloBindingStub extends org.apache.axis.client.Stub implements com.unieap.www.esb.service.hello.definitions.HelloPortType {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();
@@ -25,11 +25,11 @@ public class HelloBindingStub extends org.apache.axis.client.Stub implements Hel
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("sayHello");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.ispring.com/ws/hello", "eRequest"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.unieap.com/esb/service/hello", "eRequest"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://www.ispring.com/ws/hello", "eResponse"));
+        oper.setReturnQName(new javax.xml.namespace.QName("http://www.unieap.com/esb/service/hello", "eResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[0] = oper;

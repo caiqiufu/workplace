@@ -51,13 +51,9 @@ public class DemoController extends MultiActionController{
 		
 		String locationUrl = request.getParameter("locationUrl");
 		LoginBO loginBO = (LoginBO) ServiceUtils.getBean("loginBO");
-		MenuVO vo = loginBO.getMenu(locationUrl);
+		MenuVO vo = null;
 		String url = vo.getHref();
 		String windowName = vo.getMenuName();
-		if (SYSConfig.isDebug) {
-			logger.info("菜单请求路径:" + url);
-			logger.info("业务窗口名称:" + windowName);
-		}
 		return ma;
 	}
 }

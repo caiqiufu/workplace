@@ -10,32 +10,38 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<bean id="payloadMapping"
 		class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
 		<property name="endpointMap">
 			<map>
-				<entry key="{http://www.ispring.com/ws/hello}eRequest">
-					<ref bean="helloEndpoint" />
+				<entry key="{http://www.unieap.com/esb/service}eRequest">
+					<ref bean="bssEndpoint" />
 				</entry>
 			</map>
 		</property>
 	</bean>
-	<bean id="hello"
+	<bean id="bssservice"
 		class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition">
-		<!-- -->
-		<property name="wsdl" value="classpath://hello.wsdl"></property>
-		<!-- <property name="wsdl" value="/WEB_INF/hello.wsdl"></property> -->
-		<!-- <constructor-arg value="/WEB_INF/hello.wsdl"/> -->
+		<property name="wsdl"
+			value="classpath://com/apps/esb/service/bss/bssservice.wsdl"></property>
 	</bean>
-	<bean id="helloEndpoint" class="com.sws.HelloEndPoint">
-		<property name="helloService" ref="helloService"></property>
+	<bean id="bssEndpoint" class="com.apps.esb.service.bss.BssEndPoint">
+		<property name="bssService" ref="bssService"></property>
 	</bean>
-	<bean id="helloService" class="com.sws.HelloServiceImpl"></bean>
-	<!-- 
-	http://localhost:8080/WS/services/hello.wsdl
+	<bean id="bssService" class="com.apps.esb.service.bss.BssServiceImpl"></bean>
+
+	<!-- <bean id="payloadMapping" class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping"> 
+		<property name="endpointMap"> <map> <entry key="{http://www.unieap.com/esb/service/hello}eRequest"> 
+		<ref bean="helloEndpoint" /> </entry> </map> </property> </bean> <bean id="hello" 
+		class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition"> <property 
+		name="wsdl" value="classpath://com/apps/esb/service/demo/hello.wsdl"></property> 
+		</bean> <bean id="helloEndpoint" class="com.apps.esb.service.demo.HelloEndPoint"> 
+		<property name="helloService" ref="helloService"></property> </bean> <bean 
+		id="helloService" class="com.apps.esb.service.demo.HelloServiceImpl"></bean>
 	 -->
+
 
 
 

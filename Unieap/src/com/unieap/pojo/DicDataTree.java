@@ -14,6 +14,7 @@ public class DicDataTree implements java.io.Serializable {
 	private Integer parentId;
 	private String parentCode;
 	private String parentName;
+	private String dicType;
 	private String leaf;
 	private Integer seq;
 	private String href;
@@ -41,7 +42,7 @@ public class DicDataTree implements java.io.Serializable {
 	}
 
 	public DicDataTree(Integer dicId, String dicCode, String dicName, Integer parentId, String parentCode,
-			String parentName, String leaf, Integer seq, String href, String icon, String activeFlag, String remark,
+			String parentName,String dicType, String leaf, Integer seq, String href, String icon, String activeFlag, String remark,
 			String language, Date createDate, Date modifyDate, String createBy, String modifyBy) {
 		this.dicId = dicId;
 		this.dicCode = dicCode;
@@ -49,6 +50,7 @@ public class DicDataTree implements java.io.Serializable {
 		this.parentId = parentId;
 		this.parentCode = parentCode;
 		this.parentName = parentName;
+		this.dicType = dicType;
 		this.leaf = leaf;
 		this.seq = seq;
 		this.href = href;
@@ -104,6 +106,14 @@ public class DicDataTree implements java.io.Serializable {
 
 	public String getParentName() {
 		return this.parentName;
+	}
+
+	public String getDicType() {
+		return dicType;
+	}
+
+	public void setDicType(String dicType) {
+		this.dicType = dicType;
 	}
 
 	public void setParentName(String parentName) {

@@ -43,10 +43,6 @@ public abstract class BaseBO {
 	 */
 	public final Log log = LogFactory.getLog(BaseBO.class);
 	
-	//abstract public Object PojoToVo(Object po, Object vo);
-
-	//abstract public Object VoToPojo(Object vo, Object po);
-	
 	public Map<String,String> result(String result,String message){
 		Map<String, String> model = new HashMap<String, String>();
 		model.put(result,message);
@@ -101,7 +97,7 @@ public abstract class BaseBO {
 		sql = sql + " limit "+ps.getStartIndex()+","+ps.getPageSize();
 		int totalCount = DBManager.getJT(null).queryForInt(totalSql,parameters);
 		ps.setTotalCount(totalCount);
-		List<?> items =  DBManager.getJT(null).query(sql, parameters, new EntityRowMapper(className));
+		List<Object> items =  DBManager.getJT(null).query(sql, parameters, new EntityRowMapper(className));
 		ps.setItems(items);
 	}
 	@SuppressWarnings("unchecked")
@@ -130,18 +126,6 @@ public abstract class BaseBO {
 	@SuppressWarnings("unchecked")
 	public void setCriteria(DetachedCriteria criteria,Object bean) throws Exception{
 		if(bean!=null){
-			/*Map<String,PropertyDescriptor> poprops = CacheMgt.getBeanProps(bean.getClass().getName());
-			if(poprops==null){
-				poprops = new HashMap<String,PropertyDescriptor> ();
-				BeanInfo poInfo = Introspector.getBeanInfo(bean.getClass());
-				PropertyDescriptor[] props = poInfo.getPropertyDescriptors();
-				for (int i = 0; i < props.length; i++){
-					if (!"class".equals(props[i].getName())){
-						poprops.put(props[i].getName(), props[i]);
-					}
-				}
-				CacheMgt.setBeanProps(bean.getClass().getName(), poprops);
-			}*/
 			Map<String,PropertyDescriptor> beanprops = CacheMgt.getBeanProps(bean.getClass().getName());
 			if(beanprops==null){
 				cacheBeanprops(bean);
@@ -167,19 +151,29 @@ public abstract class BaseBO {
 			}
 		}
 	}
-	public void cacheBeanprops(Object bean) throws IntrospectionException{
+	public Map<String,PropertyDescriptor> cacheBeanprops(Object bean) throws IntrospectionException{
 		Map<String,PropertyDescriptor> beanprops = new HashMap<String,PropertyDescriptor>();
 		BeanInfo poInfo = Introspector.getBeanInfo(bean.getClass());
 		PropertyDescriptor[] props = poInfo.getPropertyDescriptors();
+		String methodName,desc;
 		for (int i = 0; i < props.length; i++){
 			if (!"class".equals(props[i].getName())){
 				Method getter = props[i].getReadMethod();
 				if(getter!=null){
-					beanprops.put(props[i].getName(), props[i]);
+					methodName = getter.getName();
+					if(methodName.length()>4){
+						desc = StringUtils.substring(methodName, methodName.length()-4);
+						if(!"Desc".equals(desc)){
+							beanprops.put(props[i].getName(), props[i]);
+						}
+					}else{
+						beanprops.put(props[i].getName(), props[i]);
+					}
 				}
 			}
 		}
 		CacheMgt.setBeanProps(bean.getClass().getName(), beanprops);
+		return beanprops;
 	}
 	@SuppressWarnings("unchecked")
 	public Map<String, String> checkExist(String displayMsg,String fieldName,String value,Class object,String dsName){

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Property;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.apps.reuse.pojo.Area;
 import com.apps.reuse.pojo.ReuseCustomer;
 import com.apps.reuse.pojo.ReuseProduct;
 import com.apps.reuse.pojo.ReuseProductTracking;
@@ -21,7 +23,7 @@ import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
 import com.unieap.db.DBManager;
 import com.unieap.mdm.bo.ChangeLogBO;
-import com.unieap.pojo.DicData;
+import com.unieap.pojo.DicDataTree;
 
 @Service("reuseProductBO")
 public class ReuseProductBO extends BaseBO {
@@ -64,7 +66,7 @@ public class ReuseProductBO extends BaseBO {
 		vo.setModifyDate(UnieapConstants.getDateTime(null));
 		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
 		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
-		changeLogBO.save(vo.getProductId(), vo, "reuse_product",UnieapConstants.REUSE);
+		//changeLogBO.save(vo.getProductId(), vo, "reuse_product",UnieapConstants.REUSE);
 		DBManager.getHT(null).update(vo);
 		return result(UnieapConstants.ISSUCCESS,UnieapConstants.SUCCESS);
 	}
@@ -72,7 +74,7 @@ public class ReuseProductBO extends BaseBO {
 	public Map<String, String> updateStatus(ReuseProduct vo,String referNo) throws Exception{
 		ReuseProduct newOld = DBManager.getHT(null).get(ReuseProduct.class,vo.getProductId());
 		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
-		changeLogBO.save(vo.getProductId(), "reuse_product", "status", "status", newOld.getStatus(), vo.getStatus(), UnieapConstants.REUSE);
+		//changeLogBO.save(vo.getProductId(), "reuse_product", "status", "status", newOld.getStatus(), vo.getStatus(), UnieapConstants.REUSE);
 		newOld.setModifyDate(UnieapConstants.getDateTime(null));
 		newOld.setModifyBy(UnieapConstants.getUser().getUserCode());
 		newOld.setStatus(vo.getStatus());
@@ -96,17 +98,17 @@ public class ReuseProductBO extends BaseBO {
 		return result(UnieapConstants.ISSUCCESS,UnieapConstants.SUCCESS);
 	}
 	public String getModel(Integer groupId, Integer parentId) throws Exception{
-		DetachedCriteria criteria=DetachedCriteria.forClass(DicData.class);
+		DetachedCriteria criteria=DetachedCriteria.forClass(DicDataTree.class);
 		Property groupIdPro = Property.forName("groupId");
 		Property parentIdPro = Property.forName("parentId");
 		criteria.add(groupIdPro.eq(groupId));
 		criteria.add(parentIdPro.eq(parentId));
 		List<Object> datas = DBManager.getHT(null).findByCriteria(criteria);
 		JSONArray ja = new JSONArray();
-		DicData dicData;
+		DicDataTree dicData;
 		if(datas!=null&&datas.size()>0){
 			for(int i = 0; i< datas.size() ; i++){
-				dicData = (DicData)datas.get(i);
+				dicData = (DicDataTree)datas.get(i);
 				JSONObject jac = new JSONObject();
 				jac.put("dicId", dicData.getDicId());
 				jac.put("dicName", dicData.getDicName());
@@ -121,6 +123,27 @@ public class ReuseProductBO extends BaseBO {
 		DetachedCriteria criteria=DetachedCriteria.forClass(ReuseProductTracking.class);
 		setCriteria(criteria,reuseProductTracking);
 		getPaginationDataByDetachedCriteria(criteria,page);
+	}
+	
+	public List<Area> getAddressDicData(Area area) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Area.class);
+		Property code = Property.forName("code");
+		Property level = Property.forName("level");
+		if (StringUtils.isEmpty(area.getCode()) && area.getLevel().intValue() != 1) {
+			return null;
+		} else if (area.getLevel() == null) {
+			return null;
+		} else if (StringUtils.isNotEmpty(area.getCode())) {
+			String codestr = StringUtils.substring(area.getCode(), 0, 2 * (area.getLevel().intValue() - 1));
+			if (StringUtils.isNotEmpty(codestr)) {
+				criteria.add(code.like(codestr, MatchMode.START));
+			}
+			criteria.add(level.eq(area.getLevel()));
+		} else {
+			criteria.add(level.eq(area.getLevel()));
+		}
+		List<Area> datas = DBManager.getHT(null).findByCriteria(criteria);
+		return datas;
 	}
 	
 }

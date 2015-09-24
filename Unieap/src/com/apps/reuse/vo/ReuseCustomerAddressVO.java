@@ -80,7 +80,7 @@ public class ReuseCustomerAddressVO implements java.io.Serializable {
 	public void setDefaultFlag(String defaultFlag) {
 		this.defaultFlag = defaultFlag;
 		if(!StringUtils.isEmpty(this.defaultFlag)){
-			DicDataVO dic =  CacheMgt.getDicData("1001",defaultFlag);
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",defaultFlag);
 			if(dic!=null){
 				this.defaultFlagDesc = dic.getDicName();
 			}

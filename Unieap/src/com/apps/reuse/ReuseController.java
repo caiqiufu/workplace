@@ -2,12 +2,15 @@ package com.apps.reuse;
 
 import java.beans.PropertyEditor;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +22,7 @@ import com.apps.reuse.bo.ReuseAddressBO;
 import com.apps.reuse.bo.ReuseCustomerBO;
 import com.apps.reuse.bo.ReuseProductBO;
 import com.apps.reuse.bo.ReuseSMSBO;
+import com.apps.reuse.pojo.Area;
 import com.apps.reuse.pojo.ReuseCustomer;
 import com.apps.reuse.pojo.ReuseCustomerAddress;
 import com.apps.reuse.pojo.ReuseProduct;
@@ -29,6 +33,7 @@ import com.unieap.BaseController;
 import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
+import com.unieap.mdm.bo.DicBO;
 @RequestMapping(value="ReuseController.do")  
 public class ReuseController extends BaseController{
 	@InitBinder
@@ -125,6 +130,36 @@ public class ReuseController extends BaseController{
 		ReuseSMSBO reuseSMSBO = (ReuseSMSBO) ServiceUtils.getBean("reuseSMSBO");
 		reuseSMSBO.getSmsverifyGrid(page,vo);
 		return page.getJsonString();
+	}
+	
+	/**
+	 * get address dic data
+	 */
+	@RequestMapping(value="MdmController.do",params="method=getAddressDicData",method = RequestMethod.GET)  
+	public @ResponseBody String getAddressDicData(Area area,String isOptional, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		ReuseProductBO reuseProductBO = (ReuseProductBO) ServiceUtils.getBean("ReuseProductBO");
+		List<Area> datas = reuseProductBO.getAddressDicData(area);
+		JSONArray ja = new JSONArray();
+		if(StringUtils.equals(isOptional, UnieapConstants.YES)){
+			JSONObject jac = new JSONObject();
+			jac.put("dicCode","");
+			jac.put("dicName","Please select...");
+			jac.put("level","");
+			ja.put(jac);
+		}
+		if(datas!=null&&datas.size()>0){
+			Area data;
+			for(int i = 0 ; i < datas.size() ; i++){
+				data = datas.get(i);
+				JSONObject jac = new JSONObject();
+				jac.put("dicCode", data.getCode());
+				jac.put("dicName", data.getName());
+				jac.put("level", data.getLevel());
+				ja.put(jac);
+			}
+		}
+		String dicString = ja.toString();
+		return dicString;
 	}
 	
 	

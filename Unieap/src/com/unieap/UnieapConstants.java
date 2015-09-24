@@ -18,7 +18,9 @@ import com.unieap.pojo.User;
  */
 public class UnieapConstants {
 	/**
-	 * <p>描述:保存类型:UPDATE,NEW,DELETE</p>
+	 * <p>
+	 * 描述:保存类型:UPDATE,NEW,DELETE
+	 * </p>
 	 */
 	public final static String ADD = "Add";
 	public final static String MODIFY = "Modify";
@@ -29,94 +31,122 @@ public class UnieapConstants {
 	public final static String SUCCESS = "success";
 	public final static String FAILED = "failed";
 	public final static String UNIEAP = "unieap";
+	public final static String THIRDPART = "thirdpart";
+	public final static String ESB = "esb";
 	public final static String REUSE = "reuse";
 	public static boolean ISUNIEAP = false;
+	
+	public final static String ERRORCODE= "errorCode";
+	public final static String ERRORDESC= "errorDesc";
+	
 	public static Long MENURESDEFID = Long.valueOf(1);
 	/**
-	 * <p>描述: true</p>
+	 * <p>
+	 * 描述: true
+	 * </p>
 	 */
-	public final static boolean TRUE  = true;
+	public final static boolean TRUE = true;
 	/**
-	 * <p>描述:false</p>
+	 * <p>
+	 * 描述:false
+	 * </p>
 	 */
-	public final static boolean FALSE  = false;
+	public final static boolean FALSE = false;
 	/**
-	 * <p>Desc:Yes</p>
+	 * <p>
+	 * Desc:Yes
+	 * </p>
 	 */
-	public final static String YES  = "Y";
+	public final static String YES = "Y";
 	/**
-	 * <p>Desc:false</p>
+	 * <p>
+	 * Desc:false
+	 * </p>
 	 */
-	public final static String NO  = "N";
+	public final static String NO = "N";
 	/**
 	 * 语言
 	 */
-	public final static String[] LANGUAGE = {"zh_CN","en_US"};
-	public final static String MYSQL  = "MYSQL";
-	public final static String ORACLE  = "ORACLE";
-    /**
-     * MENU
-     */
-    public final static String MENU = "M";
-    /**
-     * MENU
-     */
-    public final static String BUTTON = "B";
-    /**
-     * USER
-     */
-    public final static String USER = "user";
-    /**
-     * LOGINCONTEXT
-     */
-    public final static String LOGINCONTEXT = "loginContext";
-    /**
-     * LOCATIONURL
-     */
-    public final static String LOCATIONURL = "locationUrl";
-    /**
-     * MODULES
-     */
-    public final static String MODULES = "modules";
-    public final static Long TREEROOTID = Long.valueOf("-1");
-    /**
-	 * <p>WINDOWNAME</p>
+	public final static String[] LANGUAGE = { "zh_CN", "en_US" };
+	public final static String MYSQL = "MYSQL";
+	public final static String ORACLE = "ORACLE";
+	/**
+	 * MENU
+	 */
+	public final static String MENU = "M";
+	/**
+	 * MENU
+	 */
+	public final static String BUTTON = "B";
+	/**
+	 * USER
+	 */
+	public final static String USER = "user";
+	/**
+	 * LOGINCONTEXT
+	 */
+	public final static String LOGINCONTEXT = "loginContext";
+	/**
+	 * LOCATIONURL
+	 */
+	public final static String LOCATIONURL = "locationUrl";
+	/**
+	 * MODULES
+	 */
+	public final static String MODULES = "modules";
+	public final static Long TREEROOTID = Long.valueOf("-1");
+	/**
+	 * <p>
+	 * WINDOWNAME
+	 * </p>
 	 */
 	public final static String WINDOWNAME = "windowName";
 	public final static String DATEFORMAT = "yyyy-MM-dd";
 	public final static String TIMEFORMAT = "yyyy-MM-dd hh:mm:ss";
+	public final static String TIMEFORMAT2 = "yyyyMMddhhmmss";
 	public static User user = null;
-	public final static User getUser(){
+
+	public final static User getUser() {
 		return user;
 	}
-	public final static String getCurrentTime(String dsName,String format){
+
+	public final static String getCurrentTime(String dsName, String format) {
 		Map<String, Object> obj = DBManager.getJT(dsName).queryForMap("SELECT CURRENT_TIMESTAMP() CURRENTTIME");
-		Date data = (Date)obj.get("CURRENTTIME");
-		SimpleDateFormat sdf = new SimpleDateFormat(format); 
+		if (StringUtils.isEmpty(format)) {
+			format = TIMEFORMAT;
+		}
+		Date data = (Date) obj.get("CURRENTTIME");
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		String dt = sdf.format(data);
 		return dt;
 	}
-	public final static Date getDateTime(String dsName){
+
+	public final static Date getDateTime(String dsName) {
 		Map<String, Object> obj = DBManager.getJT(dsName).queryForMap("SELECT CURRENT_TIMESTAMP() CURRENTTIME");
-		Date data = (Date)obj.get("CURRENTTIME");
+		Date data = (Date) obj.get("CURRENTTIME");
 		return data;
 	}
-	public final static Integer getSequence(String dsName,String serialName){
-		return  DBManager.getJT(dsName).queryForInt("SELECT NEXTVAL('"+serialName+"') SEQ");
+
+	public final static Integer getSequence(String dsName, String serialName) {
+		return DBManager.getJT(dsName).queryForInt("SELECT NEXTVAL('" + serialName + "') SEQ");
 	}
-	public final static String getMessage(String code){
-		String lang[] = StringUtils.split(SYSConfig.defaultLanguage,"_");
-		return getMessage(code, null, "",new Locale(lang[0], lang[1]));
+
+	public final static String getMessage(String code) {
+		String lang[] = StringUtils.split(SYSConfig.defaultLanguage, "_");
+		return getMessage(code, null, "", new Locale(lang[0], lang[1]));
 	}
-	public final static String getMessage(String code, Object[] args){
-		String lang[] = StringUtils.split(SYSConfig.defaultLanguage,"_");
-		return getMessage(code, args, "",new Locale(lang[0], lang[1]));
+
+	public final static String getMessage(String code, Object[] args) {
+		String lang[] = StringUtils.split(SYSConfig.defaultLanguage, "_");
+		return getMessage(code, args, "", new Locale(lang[0], lang[1]));
 	}
-	public final static String getMessage(String code, Object[] args, String defaultMsg){
-		String lang[] = StringUtils.split(SYSConfig.defaultLanguage,"_");
-		return getMessage(code, args, defaultMsg,new Locale(lang[0], lang[1]));
+
+	public final static String getMessage(String code, Object[] args, String defaultMsg) {
+		String lang[] = StringUtils.split(SYSConfig.defaultLanguage, "_");
+		return getMessage(code, args, defaultMsg, new Locale(lang[0], lang[1]));
 	}
-	public final static String getMessage(String code, Object[] args, String defaultMsg, Locale loc){
+
+	public final static String getMessage(String code, Object[] args, String defaultMsg, Locale loc) {
 		MessageSource message = (MessageSource) ServiceUtils.getBean("messageSource");
 		return message.getMessage(code, args, defaultMsg, loc);
 	}

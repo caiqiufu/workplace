@@ -2,6 +2,11 @@ package com.unieap.pojo;
 
 import java.util.Date;
 
+import org.springframework.util.StringUtils;
+
+import com.unieap.CacheMgt;
+import com.unieap.mdm.vo.DicDataVO;
+
 /**
  * User entity.
  * 
@@ -17,8 +22,11 @@ public class User implements java.io.Serializable {
 	private String userName;
 	private String password;
 	private String enable;
+	private String enableDesc;
 	private String expired;
+	private String expiredDesc;
 	private String locked;
+	private String lockedDesc;
 	private Date createDate;
 	private Date modifyDate;
 	private String modifyBy;
@@ -70,107 +78,118 @@ public class User implements java.io.Serializable {
 	// Property accessors
 
 	public Integer getUserId() {
-		return this.userId;
+		return userId;
 	}
-
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-
 	public String getUserCode() {
-		return this.userCode;
+		return userCode;
 	}
-
 	public void setUserCode(String userCode) {
 		this.userCode = userCode;
 	}
-
 	public String getUserName() {
-		return this.userName;
+		return userName;
 	}
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getEnable() {
-		return this.enable;
+		return enable;
 	}
-
 	public void setEnable(String enable) {
 		this.enable = enable;
 	}
-
-	public String getExpired() {
-		return this.expired;
+	public String getEnableDesc() {
+		if(!StringUtils.isEmpty(this.enable)){
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",enable);
+			if(dic!=null){
+				this.enableDesc = dic.getDicName();
+			}
+		}
+		return enableDesc;
 	}
-
+	public void setEnableDesc(String enableDesc) {
+		this.enableDesc = enableDesc;
+	}
+	public String getExpired() {
+		return expired;
+	}
 	public void setExpired(String expired) {
 		this.expired = expired;
+		
 	}
-
+	public String getExpiredDesc() {
+		if(!StringUtils.isEmpty(this.expired)){
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",expired);
+			if(dic!=null){
+				this.expiredDesc = dic.getDicName();
+			}
+		}
+		return expiredDesc;
+	}
+	public void setExpiredDesc(String expiredDesc) {
+		this.expiredDesc = expiredDesc;
+	}
 	public String getLocked() {
-		return this.locked;
+		return locked;
 	}
-
 	public void setLocked(String locked) {
 		this.locked = locked;
 	}
-
-	public Date getCreateDate() {
-		return this.createDate;
+	public String getLockedDesc() {
+		if(!StringUtils.isEmpty(this.locked)){
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",locked);
+			if(dic!=null){
+				this.lockedDesc = dic.getDicName();
+			}
+		}
+		return lockedDesc;
 	}
-
+	public void setLockedDesc(String lockedDesc) {
+		this.lockedDesc = lockedDesc;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
 	public Date getModifyDate() {
-		return this.modifyDate;
+		return modifyDate;
 	}
-
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-
 	public String getModifyBy() {
-		return this.modifyBy;
+		return modifyBy;
 	}
-
 	public void setModifyBy(String modifyBy) {
 		this.modifyBy = modifyBy;
 	}
-
 	public String getCreateBy() {
-		return this.createBy;
+		return createBy;
 	}
-
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
 	}
-
 	public String getRemark() {
-		return this.remark;
+		return remark;
 	}
-
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
 	public String getEmail() {
-		return this.email;
+		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 }

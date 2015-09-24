@@ -51,10 +51,12 @@
 
 	<bean name="/LoginController.do" class="com.unieap.login.LoginController" />
 	<bean name="/MdmController.do" class="com.unieap.mdm.MdmController" />
-	<bean name="/MantisController.do" class="com.unieap.mantis.MantisController" />
+	<!-- 
 	<bean name="/UploadController.do" class="com.unieap.file.UploadController" />
 	<bean name="/ExtAction.do" class="com.unieap.ext.ExtAction" />
-	<!-- reuse application -->
+	 -->
+	<!-- reuse application
 	<bean name="/ReuseController.do" class="com.apps.reuse.ReuseController" />
 	<bean name="/EcareController.do" class="com.apps.ecare.EcareController" />
+	-->
 </beans>

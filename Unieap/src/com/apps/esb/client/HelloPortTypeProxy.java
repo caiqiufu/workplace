@@ -1,8 +1,8 @@
 package com.apps.esb.client;
 
-public class HelloPortTypeProxy implements HelloPortType {
+public class HelloPortTypeProxy implements com.unieap.www.esb.service.hello.definitions.HelloPortType {
   private String _endpoint = null;
-  private HelloPortType helloPortType = null;
+  private com.unieap.www.esb.service.hello.definitions.HelloPortType helloPortType = null;
   
   public HelloPortTypeProxy() {
     _initHelloPortTypeProxy();
@@ -15,7 +15,7 @@ public class HelloPortTypeProxy implements HelloPortType {
   
   private void _initHelloPortTypeProxy() {
     try {
-      helloPortType = (new HelloServiceLocator()).getHelloPort();
+      helloPortType = (new com.unieap.www.esb.service.hello.definitions.HelloServiceLocator()).getHelloPort();
       if (helloPortType != null) {
         if (_endpoint != null)
           ((javax.xml.rpc.Stub)helloPortType)._setProperty("javax.xml.rpc.service.endpoint.address", _endpoint);
@@ -38,7 +38,7 @@ public class HelloPortTypeProxy implements HelloPortType {
     
   }
   
-  public HelloPortType getHelloPortType() {
+  public com.unieap.www.esb.service.hello.definitions.HelloPortType getHelloPortType() {
     if (helloPortType == null)
       _initHelloPortTypeProxy();
     return helloPortType;

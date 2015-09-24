@@ -78,7 +78,7 @@ public class ReuseCustomerBO extends BaseBO {
 		vo.setModifyDate(UnieapConstants.getDateTime(null));
 		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
 		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
-		changeLogBO.save(vo.getCustomerId(), vo, "reuse_customer",UnieapConstants.REUSE);
+		//changeLogBO.save(vo.getCustomerId(), vo, "reuse_customer",UnieapConstants.REUSE);
 		DBManager.getHT(null).update(vo);
 		return result(UnieapConstants.ISSUCCESS,UnieapConstants.SUCCESS);
 	}

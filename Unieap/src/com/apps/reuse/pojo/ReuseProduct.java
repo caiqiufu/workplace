@@ -238,7 +238,7 @@ public class ReuseProduct implements java.io.Serializable {
 	public void setIcloudStatus(String icloudStatus) {
 		this.icloudStatus = icloudStatus;
 		if(!StringUtils.isEmpty(this.icloudStatus)){
-			DicDataVO dic =  CacheMgt.getDicData("1001",icloudStatus);
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",icloudStatus);
 			if(dic!=null){
 				this.icloudStatusDesc = dic.getDicName();
 			}
@@ -274,7 +274,7 @@ public class ReuseProduct implements java.io.Serializable {
 	public void setInWater(String inWater) {
 		this.inWater = inWater;
 		if(!StringUtils.isEmpty(this.inWater)){
-			DicDataVO dic =  CacheMgt.getDicData("1001",inWater);
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",inWater);
 			if(dic!=null){
 				this.inWaterDesc = dic.getDicName();
 			}

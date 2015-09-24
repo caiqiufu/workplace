@@ -5,7 +5,7 @@
 	String errorCode = request.getParameter("errorCode");
 	String errorDesc = "";
 	if("001".equals(errorCode)){
-		errorDesc = "User name or password incorrect";
+		errorDesc = UnieapConstants.getMessage("user.login.error.usercode");
 	}
     String path = request.getContextPath();
 %>

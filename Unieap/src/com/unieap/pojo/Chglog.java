@@ -12,6 +12,7 @@ public class Chglog implements java.io.Serializable {
 	private int logId;
 	private String userName;
 	private Date modifyDate;
+	private String modifyObj;
 	private String modifyType;
 	private String displayName;
 	private String oldValue;
@@ -23,22 +24,24 @@ public class Chglog implements java.io.Serializable {
 	public Chglog() {
 	}
 
-	public Chglog(int logId, String userName, Date modifyDate, String modifyType, String displayName, int recordId,
+	public Chglog(int logId, String userName, Date modifyDate,String modifyObj, String modifyType, String displayName, int recordId,
 			String app) {
 		this.logId = logId;
 		this.userName = userName;
 		this.modifyDate = modifyDate;
+		this.modifyObj = modifyObj;
 		this.modifyType = modifyType;
 		this.displayName = displayName;
 		this.recordId = recordId;
 		this.app = app;
 	}
 
-	public Chglog(int logId, String userName, Date modifyDate, String modifyType, String displayName, String oldValue,
+	public Chglog(int logId, String userName, Date modifyDate,String modifyObj, String modifyType, String displayName, String oldValue,
 			String newValue, String fieldName, int recordId, String app) {
 		this.logId = logId;
 		this.userName = userName;
 		this.modifyDate = modifyDate;
+		this.modifyObj = modifyObj;
 		this.modifyType = modifyType;
 		this.displayName = displayName;
 		this.oldValue = oldValue;
@@ -70,6 +73,14 @@ public class Chglog implements java.io.Serializable {
 
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
+	}
+
+	public String getModifyObj() {
+		return modifyObj;
+	}
+
+	public void setModifyObj(String modifyObj) {
+		this.modifyObj = modifyObj;
 	}
 
 	public String getModifyType() {

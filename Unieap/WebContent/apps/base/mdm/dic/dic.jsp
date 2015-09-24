@@ -29,12 +29,12 @@ Ext.onReady(function(){
             root:{  
                 id:1,  
                 text:'Root',  
-                leaf:false,  
-                expanded:false  
+                leaf:false,
+                expanded:false
             },
             folderSort: true
         });
-   	 
+   	 	var selectedNode;
 	   	var dicTreePanel = Ext.create('Ext.tree.Panel', {
 	   		title: '<%=UnieapConstants.getMessage("mdm.dic.data.title.list")%>',
 	   		layout:'fit',
@@ -45,20 +45,36 @@ Ext.onReady(function(){
 	        //multiSelect: false,
 	        listeners:{
 	        	itemcontextmenu: function(view, record, node, index, e){
+	        		selectedNode = record;
+	        		var addDisabled = false;
+	        		if(UnieapButton.Dic_Add==null){
+	        			addDisabled = true;
+	        		}
+	        		var modifyDisabled = false;
+	        		if(UnieapButton.Dic_Modify==null){
+	        			modifyDisabled = true;
+	        		}
 	        		var rightMenu = new Ext.menu.Menu({
 	                    items: [{
 	                    	iconCls : 'add',
+	                    	disabled : addDisabled,
 	                        text: '<%=UnieapConstants.getMessage("comm.add")%>',
 	                        handler: Ext.bind(function(btn){
 	                        	rightMenu.hide();
-	                        	addNode(record);
+	                        	addNode();
 	                        },this)
 	                    }, {
 	                    	iconCls : 'edit',
+	                    	disabled : modifyDisabled,
 	                        text: '<%=UnieapConstants.getMessage("comm.modify")%>',
 	                        handler: Ext.bind(function(){
 	                        	rightMenu.hide();
-	                        	editNode(record);
+	                        	if(selectedNode.data.id==1){
+	                        		Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("mdm.dic.check.root.noModify")%>',
+                            			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                        	}else{
+	                        		editNode();
+	                        	}
 	                        },this)
 	                    }]
 
@@ -94,7 +110,6 @@ Ext.onReady(function(){
             sorters: [{ property: 'roleCode', direction: 'ASC'}]
         });
     	roleGridStore.on('beforeload', function (store, options){
-	   			var rec = roleDatagrid.getSelectionModel().getSelection();
 	   	        Ext.apply(store.proxy.extraParams,{dicCode:'-1'});
 	   	     });
     	var selModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single'});
@@ -124,16 +139,16 @@ Ext.onReady(function(){
                 items:[roleDatagrid]
             }]
         });
-	  function addNode(record){
-		   showForm('Add',record);
+	  function addNode(){
+		   showForm('Add');
 	  }
-	  function editNode(record){
-		   showForm('Modify',record);
+	  function editNode(){
+		   showForm('Modify');
 	  }
 	  var dataWin = null;
       var dataForm = null;
       var operType = '';
-      function showForm(status,record){
+      function showForm(status){
        	   operType = status;
            if (dataWin==null){
            	dataForm = Ext.widget('form',
@@ -147,18 +162,21 @@ Ext.onReady(function(){
                         [
                         	{ xtype:'textfield',hidden: true, name:'dicId'},
                         	{ xtype:'textfield',hidden: true, name:'parentId'},
+                        	{ xtype:'textfield',hidden: true, name:'parentCode'},
+                        	{ xtype:'textfield',hidden: true, name:'parentName'},
+                        	{ xtype:'textfield',hidden: true, name:'dicType'},
                         	{ xtype:'textfield',hidden: true, name:'createDate'},
                         	{ xtype:'textfield',hidden: true, name:'modifyDate'},
                         	{ xtype:'textfield',hidden: true, name:'createBy'},
                         	{ xtype:'textfield',hidden: true, name:'modifyBy'},
                         	{ xtype:'textfield',labelWidth:80, width:350, name:'dicCode',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mdm.dic.display.dicCode")%>',maxLength:45,allowBlank:false},
                         	{ xtype:'textfield',labelWidth:80, width:350, name:'dicName',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mdm.dic.display.dicName")%>',maxLength:128,allowBlank:false},
-                        	{ xtype:'numberfield', labelWidth:80, width:350,name:'seq',fieldLabel:'<%=UnieapConstants.getMessage("mdm.dic.display.sequence")%>',minValue: 0,maxValue:1000,allowBlank:false},
+                        	{ xtype:'numberfield', labelWidth:80, width:350,name:'seq',fieldLabel:'<%=UnieapConstants.getMessage("mdm.dic.display.sequence")%>',minValue: 0,maxValue:1000,allowBlank:true},
                         	{ xtype:'textfield', labelWidth:80, width:350,name:'href',fieldLabel:'<%=UnieapConstants.getMessage("mdm.dic.display.href")%>'},
-                        	{ xtype:'combo', labelWidth:80, width:350,forceSelection: true, editable:false,allowBlank:true,
+                        	{ xtype:'combo', labelWidth:80, width:350,forceSelection: true, editable:false,allowBlank:false,
                                 name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
                                 store:Ext.create('Ext.data.Store', 
-                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._1001})
+                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
 							},
                         	{ xtype:'textareafield',labelWidth:80, width:350, name:'remark',fieldLabel:'<%=UnieapConstants.getMessage("comm.remark")%>',growMin:60,growMax:100,maxLength:255,allowBlank:true}
                         ]
@@ -183,24 +201,34 @@ Ext.onReady(function(){
                                      url: 'MdmController.do?method=dicDataDeal',
                                      success: function(form, action) {
                                     	var result = Ext.JSON.decode(action.response.responseText);
-					                    if(result.isSuccess == 'failed'){
+					                    	if(result.isSuccess == 'failed'){
 						                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
 		                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
 						                    }else{
-						                    	var dicId = result.id;
+						                    	var dicId = form.findField('dicId').getValue();
+						                    	if(operType=='Add'){
+						                    		dicId = result.id;
+						                    	}
 						                    	var dicCode = form.findField('dicCode').getValue();
 						                    	var dicName = form.findField('dicName').getValue();
+						                    	var parentId = form.findField('parentId').getValue();
+						                    	var parentCode = form.findField('parentCode').getValue();
+						                    	var parentName = form.findField('parentName').getValue();
+						                    	var dicType = form.findField('dicType').getValue();
 						                    	var text = '['+dicCode+']'+dicName;
 						                    	var seq = form.findField('seq').getValue();
 						                    	var href = form.findField('href').getValue();
 						                    	var activeFlag = form.findField('activeFlag').getValue();
 						                    	var remark = form.findField('remark').getValue();
-						                    	var extendAttri = {dicId:dicId,dicCode:dicCode,dicName:dicName,seq:seq,href:href,activeFlag:activeFlag,remark:remark};
+						                    	var extendAttri = {dicId:dicId,dicCode:dicCode,dicName:dicName,parentId:parentId,
+						                    			parentCode:parentCode,parentName:parentName,dicType:dicType,
+						                    			seq:seq,href:href,activeFlag:activeFlag,remark:remark};
 						                    	if(operType=='Add'){
-							                    	createNode(record,{id:dicId,text:text,draggable: false,leaf: true},extendAttri);
+						                    		dicId = result.id;
+							                    	createNode({id:dicId,text:text,draggable: false,leaf: true},extendAttri);
 						                    	}else if(operType=='Modify'){
-						                    		record.set('text',text);
-						                    		record.data.extendAttri = extendAttri;
+						                    		selectedNode.set('text',text);
+						                    		selectedNode.data.extendAttri = extendAttri;
 						                    	}
 						                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
 				                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
@@ -222,7 +250,17 @@ Ext.onReady(function(){
            if(operType=='Add'){
 	           	dataForm.getForm().reset();
 	           	dataWin.show();
-	           	dataForm.getForm().setValues({parentId:record.data.id});
+	           	if(selectedNode.data.id==1){
+	           		dataForm.getForm().setValues({parentId:1});
+		           	dataForm.getForm().setValues({parentCode:'root'});
+		           	dataForm.getForm().setValues({parentName:'Root'});
+		           	dataForm.getForm().setValues({dicType:'D'});
+	           	}else{
+		           	dataForm.getForm().setValues({parentId:selectedNode.data.extendAttri.dicId});
+		           	dataForm.getForm().setValues({parentCode:selectedNode.data.extendAttri.dicCode});
+		           	dataForm.getForm().setValues({parentName:selectedNode.data.extendAttri.dicName});
+		           	dataForm.getForm().setValues({dicType:selectedNode.data.extendAttri.dicType});
+	           	}
 	           	dataForm.getForm().findField('dicCode').setReadOnly(false);
 	           	dataForm.getForm().findField('dicCode').inputEl.removeCls('readonly_field');
            		dataForm.getForm().findField('dicName').setReadOnly(false);
@@ -231,13 +269,14 @@ Ext.onReady(function(){
            		dataForm.getForm().findField('seq').inputEl.removeCls('readonly_field');
            		dataForm.getForm().findField('href').setReadOnly(false);
            		dataForm.getForm().findField('href').inputEl.removeCls('readonly_field');
-           		dataForm.getForm().findField('activeFlag').setReadOnly(false);
-           		dataForm.getForm().findField('activeFlag').inputEl.removeCls('readonly_field');
+           		//dataForm.getForm().findField('activeFlag').setReadOnly(false);
+           		//dataForm.getForm().findField('activeFlag').inputEl.removeCls('readonly_field');
            		dataForm.getForm().findField('remark').setReadOnly(false);
            		dataForm.getForm().findField('remark').inputEl.removeCls('readonly_field');
            }else if(operType=='Modify'){
+        	    dataForm.getForm().reset();
 	           	dataWin.show();
-	           	if(record.data.extendAttri.createBy=='unieap'){
+	           	if(selectedNode.data.extendAttri.createBy=='unieap'){
 	           		dataForm.getForm().findField('dicCode').setReadOnly(true);
 	           		dataForm.getForm().findField('dicCode').inputEl.addCls('readonly_field');
 	           		dataForm.getForm().findField('dicName').setReadOnly(true);
@@ -246,12 +285,12 @@ Ext.onReady(function(){
 	           		dataForm.getForm().findField('seq').inputEl.addCls('readonly_field');
 	           		dataForm.getForm().findField('href').setReadOnly(true);
 	           		dataForm.getForm().findField('href').inputEl.addCls('readonly_field');
-	           		dataForm.getForm().findField('activeFlag').setReadOnly(true);
-	           		dataForm.getForm().findField('activeFlag').inputEl.addCls('readonly_field');
+	           		//dataForm.getForm().findField('activeFlag').setReadOnly(true);
+	           		//dataForm.getForm().findField('activeFlag').inputEl.addCls('readonly_field');
 	           		dataForm.getForm().findField('remark').setReadOnly(true);
 	           		dataForm.getForm().findField('remark').inputEl.addCls('readonly_field');
 	           	}
-	           	dataForm.getForm().setValues(record.data.extendAttri);
+	           	dataForm.getForm().setValues(selectedNode.data.extendAttri);
            }else{
            		dataWin.show();
            }
@@ -259,11 +298,11 @@ Ext.onReady(function(){
       function showResult(btn){
       		dataWin.hide();
 	  }
-     function createNode(record,config,extendAttri) {
-          var child = record.appendChild(config);
+     function createNode(config,extendAttri) {
+          var child = selectedNode.appendChild(config);
           child.data.extendAttri = extendAttri;
-          record.set('leaf',false);  
-          record.expand();
+          selectedNode.set('leaf',false);  
+          selectedNode.expand();
       }	   
 	   	
 	});

@@ -36,12 +36,12 @@
 		<property name="basenames">
 			<list>
 				<value>classpath:/com/resource/MessageResource</value>
-				<value>classpath:/reloadConfig</value>
 			</list>
 		</property>
 		<!--refresh resource files frequency, unit is seconds -->
 		<property name="cacheSeconds" value="300" />
 	</bean>
+	<!-- 
 	<bean id="propertyConfigurer" class="com.unieap.tools.Propertyholder">
 		<property name="locations">
 			<list>
@@ -49,6 +49,7 @@
 			</list>
 		</property>
 	</bean>
+	 -->
 	<!-- 
 	
 		<bean
@@ -78,13 +79,8 @@
 	<!-- 
 	<import resource="applicationContext-email.xml" /> 
 	<import resource="applicationContext-fileupload.xml" />
-	<import resource="applicationContext-task.xml" /> 
 	-->
+	<import resource="applicationContext-task.xml" /> 
 	<import resource="applicationContext-security.xml" />
 	<import resource="applicationContext-hibernate.xml" />
-	<!-- ws service and client -->
-	<!-- 
-	<import resource="applicationContext-ws-client.xml" /> 
-	<import resource="applicationContext-ws-service.xml" />
-	-->
 </beans>

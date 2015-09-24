@@ -129,7 +129,7 @@ public class ReuseSmsNotify implements java.io.Serializable {
 	public void setChecked(String checked) {
 		this.checked = checked;
 		if(!StringUtils.isEmpty(this.checked)){
-			DicDataVO dic =  CacheMgt.getDicData("1001",checked);
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",checked);
 			if(dic!=null){
 				this.checkedDesc = dic.getDicName();
 			}
@@ -151,7 +151,7 @@ public class ReuseSmsNotify implements java.io.Serializable {
 	public void setExpired(String expired) {
 		this.expired = expired;
 		if(!StringUtils.isEmpty(this.expired)){
-			DicDataVO dic =  CacheMgt.getDicData("1001",expired);
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",expired);
 			if(dic!=null){
 				this.expiredDesc = dic.getDicName();
 			}

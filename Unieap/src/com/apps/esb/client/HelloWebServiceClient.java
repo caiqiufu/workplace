@@ -18,7 +18,7 @@ import javax.xml.soap.SOAPMessage;
 
 public class HelloWebServiceClient {
 
-public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service/hello";
+public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service";
     
     public static final String PREFIX = "tns";
     
@@ -81,7 +81,7 @@ public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service/he
     }
     
     public static void main(String[] args) throws UnsupportedOperationException, MalformedURLException, SOAPException {
-        String url = "http://localhost:8081/WS/services/hello";
+        String url = "http://127.0.0.1:8080/Unieap/services/hello.wsdl";
         HelloWebServiceClient helloClient = new HelloWebServiceClient(url);
         helloClient.callWebService();
         //test2();

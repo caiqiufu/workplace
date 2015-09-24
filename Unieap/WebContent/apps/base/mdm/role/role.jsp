@@ -40,24 +40,9 @@
 	           	}
 	        });
     	}
-    	/**
-    	if(UnieapButton.Role_Delete!=null&&UnieapButton.Role_Delete.abled==true){
-	        operationItems.push({iconCls :'',tooltip:''});
-	        operationItems.push({
-	        	iconCls :'delete',
-	           	tooltip: '<%=UnieapConstants.getMessage("comm.delete")%>',
-	           	handler:function(grid, rowIndex, colIndex){	
-	         	   selectedRecord = grid.getStore().getAt(rowIndex);
-		           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.delete.confirm")%>', removeDatas);
-	           	}
-	        });
-    	}
-    	*/
     	var selModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single',listeners:{
 	  			select:function(model,record,index){
-	  				//dicTreestore.reload();
 	  				 dicTreePanel.getStore().load();
-	  				 //dicTreePanel.getView().refresh();
 	  			}
   			}
   		});
@@ -67,7 +52,9 @@
 		   	 	selModel:selModel,title: '<%=UnieapConstants.getMessage("mdm.role.title.list")%>',
 		 		listeners:{
 		 		   		afterRender:function(thisForm, options){
-			        	if(UnieapButton.Role_Add!=null&&UnieapButton.Role_Add.abled== true){Ext.getCmp('Role_Add').show();}
+			        	if(UnieapButton.Role_Add!=null&&UnieapButton.Role_Add.abled== true){
+			        		Ext.getCmp('Role_Add').show();
+			        	}
 		            }
 		        },
 	   	   		store : roleGridStore,
@@ -109,10 +96,10 @@
 		                        	{ xtype:'textfield',hidden: true, name:'modifyBy'},
 		                        	{ xtype:'textfield',labelWidth:80, width:350, name:'roleCode',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mdm.role.display.roleCode")%>',maxLength:45,allowBlank:false},
 		                        	{ xtype:'textfield',labelWidth:80, width:350, name:'roleName',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mdm.role.display.roleName")%>',maxLength:128,allowBlank:false},
-		                        	{ xtype:'combo', labelWidth:80, width:350,forceSelection: true, emptyText: '...',editable:false,allowBlank:true,
-		                                name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'1',
+		                        	{ xtype:'combo', labelWidth:80, width:350,forceSelection: true,editable:false,allowBlank:false,
+		                                name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
 		                                store:Ext.create('Ext.data.Store', 
-		                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._1001})
+		                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
 									},
 		                        	{ xtype:'textareafield',labelWidth:80, width:350, name:'remark',fieldLabel:'<%=UnieapConstants.getMessage("comm.remark")%>',maxLength:255,growMin:60,growMax:100,allowBlank:true}
 		                        ]
@@ -175,9 +162,15 @@
 		                url: 'MdmController.do?method=roleDeal',
 		                params:{'operType':"Delete","roleId":roleId},
 		                success: function(response, opts){
-		                	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-	             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-		                	roleGridStore.reload();
+		                	var result = Ext.JSON.decode(action.response.responseText);
+		                	if(result.isSuccess == 'failed'){
+		                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+                         			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+				                	roleGridStore.reload();
+		                    }else{
+                             	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
+                            			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+		                    }
 		                },
 		                failure: function(response, opts){
 		                	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:response.responseText,
@@ -236,6 +229,8 @@
 	        		var rec = datagrid.getSelectionModel().getSelection();
             		if(rec.length>0){
 		        		opration.params.roleId = rec[0].get('roleId'); 
+            		}else{
+            			opration.params.roleId = -1;
             		}
 	        	},
 	        	checkchange:function (node,checked,eOpts){

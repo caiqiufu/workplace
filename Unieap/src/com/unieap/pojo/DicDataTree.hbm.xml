@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-9-11 13:43:49 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.unieap.pojo.DicDataTree" table="dic_data_tree" catalog="unieap" optimistic-lock="version">
@@ -22,6 +22,9 @@
         </property>
         <property name="parentName" type="string">
             <column name="parent_name" length="128" />
+        </property>
+        <property name="dicType" type="string">
+            <column name="dic_type" length="45" />
         </property>
         <property name="leaf" type="string">
             <column name="leaf" length="2" not-null="true" />

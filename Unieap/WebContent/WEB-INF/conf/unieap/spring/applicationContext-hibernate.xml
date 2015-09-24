@@ -25,7 +25,7 @@
 		<property name="mappingLocations">
 			<list>
 				<value>classpath:/com/unieap/pojo/*.hbm.xml</value>
-				<value>classpath:/com/apps/reuse/pojo/*.hbm.xml</value>
+				<value>classpath:/com/apps/esb/pojo/*.hbm.xml</value>
 			</list>
 		</property>
 		<!--all hibernate config filse

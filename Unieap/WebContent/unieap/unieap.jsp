@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@page import="java.util.ResourceBundle,com.unieap.base.ResourceBundleHelper,com.unieap.UnieapConstants,com.unieap.pojo.User,com.unieap.base.SYSConfig"%>
+<%@page import="com.unieap.UnieapConstants,com.unieap.pojo.User,com.unieap.base.SYSConfig"%>
 <%
 	
     String path = request.getContextPath();
@@ -41,6 +41,12 @@
 	}
 	.find {
 	    background-image: url(unieap/js/common/images/find.gif ) !important;
+	}
+	.search-trigger {
+	    background-image: url(unieap/js/common/images/search-trigger.png ) !important;
+	}
+	.clear-trigger {
+	    background-image: url(unieap/js/common/images/clear-trigger.gif ) !important;
 	}
 	.view {
 	    background-image: url(unieap/js/common/images/view.gif ) !important;

@@ -1,9 +1,5 @@
 package com.unieap.file;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +19,6 @@ import com.unieap.file.bo.ExcelBO;
 import com.unieap.file.bo.FileBO;
 import com.unieap.file.vo.FileUploadVO;
 import com.unieap.pojo.HandlerConfig;
-import com.unieap.pojo.MAtta;
 @RequestMapping(value="UploadController.do")  
 public class UploadController extends MultiActionController{
 	@RequestMapping(value="UploadController.do",params="method=upload",method = RequestMethod.POST)  
@@ -41,9 +36,10 @@ public class UploadController extends MultiActionController{
         return model;  
     } 
 	@RequestMapping(value="UploadController.do",params="method=download",method = RequestMethod.GET)  
-    public @ResponseBody Map download(String parameters,HandlerConfig handlerConfig,MAtta mAtta, HttpServletRequest request,HttpServletResponse response) throws Exception {  
+    public @ResponseBody Map download(String parameters,HandlerConfig handlerConfig, HttpServletRequest request,HttpServletResponse response) throws Exception {  
 		 FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
-		 Map model = fileBO.downLoad(parameters,handlerConfig,request,response, mAtta);
+		 Map model = null;
+		 //fileBO.downLoad(parameters,handlerConfig,request,response, null);
         return model;  
     }
 	@RequestMapping(value="UploadController.do",params="method=export",method = RequestMethod.GET)  

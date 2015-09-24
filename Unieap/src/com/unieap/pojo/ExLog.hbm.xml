@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2015-8-8 16:02:23 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="com.unieap.pojo.ExLog" table="ex_log" catalog="unieap" optimistic-lock="version">
+    <class name="com.unieap.pojo.ExLog" table="exclog" catalog="unieap" optimistic-lock="version">
         <id name="id" type="int">
             <column name="id" />
             <generator class="assigned" />

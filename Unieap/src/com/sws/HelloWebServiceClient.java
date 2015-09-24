@@ -20,8 +20,8 @@ import com.apps.esb.client.HelloServiceLocator;
 
 public class HelloWebServiceClient {
 
-	public static final String NAMESPACE_URI = "http://www.ispring.com/ws/hello";
-	//public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service/hello";
+	//public static final String NAMESPACE_URI = "http://www.ispring.com/ws/hello";
+	public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service/hello";
 	
     
     public static final String PREFIX = "tns";

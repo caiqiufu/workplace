@@ -6,24 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
 import com.unieap.BaseBO;
 import com.unieap.UnieapConstants;
-import com.unieap.base.SYSConfig;
-import com.unieap.db.DBManager;
 import com.unieap.file.vo.FileUploadVO;
 import com.unieap.pojo.HandlerConfig;
-import com.unieap.pojo.MAtta;
-import com.unieap.tools.JSONUtils;
 
 @Service("fileBO")
 public class FileBO extends BaseBO {
@@ -32,7 +25,7 @@ public class FileBO extends BaseBO {
 
 	public Map<String, String> SaveFile(String parameters,
 			HandlerConfig handlerConfig, FileUploadVO vo) throws Exception {
-		Map paras = JSONUtils.jsonToMap(parameters);
+		/*Map paras = JSONUtils.jsonToMap(parameters);
 		MAtta atta = new MAtta();
 		atta.setAttaId(getSequence(null, "unieap"));
 		atta.setCreateDate(UnieapConstants.getDateTime(null));
@@ -52,21 +45,21 @@ public class FileBO extends BaseBO {
 		}
 		File uploadedFile = new File(dirPath.getPath(), vo.getFile()
 				.getOriginalFilename());
-		FileCopyUtils.copy(vo.getFile().getBytes(), uploadedFile);
+		FileCopyUtils.copy(vo.getFile().getBytes(), uploadedFile);*/
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
 
 	public Map<String, String> downLoad(String parameters,
 			HandlerConfig handlerConfig, HttpServletRequest request,
-			HttpServletResponse response, MAtta mAtta) throws SQLException {
-		mAtta = DBManager.getHT(null).get(MAtta.class, mAtta.getAttaId());
+			HttpServletResponse response) throws SQLException {
+		//DBManager.getHT(null).get(null,null);
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("multipart/form-data");
 		response.setHeader("Content-Disposition", "attachment;fileName="
-				+ mAtta.getFileName());
+				+ "file name");
 		response.setHeader("Content-Length",
-				String.valueOf(mAtta.getFileSize()));
-		String filePath = getRootPath() + mAtta.getFilePath();
+				String.valueOf("file size"));
+		String filePath = getRootPath() + "file path";
 		FileInputStream fs = null;
 		OutputStream os = null;
 		try {

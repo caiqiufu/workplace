@@ -10,7 +10,7 @@ package com.apps.esb.client;
 public interface HelloService extends javax.xml.rpc.Service {
     public java.lang.String getHelloPortAddress();
 
-    public HelloPortType getHelloPort() throws javax.xml.rpc.ServiceException;
+    public com.unieap.www.esb.service.hello.definitions.HelloPortType getHelloPort() throws javax.xml.rpc.ServiceException;
 
-    public HelloPortType getHelloPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+    public com.unieap.www.esb.service.hello.definitions.HelloPortType getHelloPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

@@ -7,7 +7,7 @@
 
 package com.apps.esb.client;
 
-public class HelloServiceLocator extends org.apache.axis.client.Service implements HelloService {
+public class HelloServiceLocator extends org.apache.axis.client.Service implements com.unieap.www.esb.service.hello.definitions.HelloService {
 
     public HelloServiceLocator() {
     }
@@ -39,7 +39,7 @@ public class HelloServiceLocator extends org.apache.axis.client.Service implemen
         HelloPortWSDDServiceName = name;
     }
 
-    public HelloPortType getHelloPort() throws javax.xml.rpc.ServiceException {
+    public com.unieap.www.esb.service.hello.definitions.HelloPortType getHelloPort() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(HelloPort_address);
@@ -50,9 +50,9 @@ public class HelloServiceLocator extends org.apache.axis.client.Service implemen
         return getHelloPort(endpoint);
     }
 
-    public HelloPortType getHelloPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public com.unieap.www.esb.service.hello.definitions.HelloPortType getHelloPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            HelloBindingStub _stub = new HelloBindingStub(portAddress, this);
+            com.unieap.www.esb.service.hello.definitions.HelloBindingStub _stub = new com.unieap.www.esb.service.hello.definitions.HelloBindingStub(portAddress, this);
             _stub.setPortName(getHelloPortWSDDServiceName());
             return _stub;
         }
@@ -72,8 +72,8 @@ public class HelloServiceLocator extends org.apache.axis.client.Service implemen
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (HelloPortType.class.isAssignableFrom(serviceEndpointInterface)) {
-                HelloBindingStub _stub = new HelloBindingStub(new java.net.URL(HelloPort_address), this);
+            if (com.unieap.www.esb.service.hello.definitions.HelloPortType.class.isAssignableFrom(serviceEndpointInterface)) {
+                com.unieap.www.esb.service.hello.definitions.HelloBindingStub _stub = new com.unieap.www.esb.service.hello.definitions.HelloBindingStub(new java.net.URL(HelloPort_address), this);
                 _stub.setPortName(getHelloPortWSDDServiceName());
                 return _stub;
             }
@@ -105,7 +105,7 @@ public class HelloServiceLocator extends org.apache.axis.client.Service implemen
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://www.ispring.com/ws/hello/definitions", "HelloService");
+        return new javax.xml.namespace.QName("http://www.unieap.com/esb/service/hello/definitions", "HelloService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class HelloServiceLocator extends org.apache.axis.client.Service implemen
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://www.ispring.com/ws/hello/definitions", "HelloPort"));
+            ports.add(new javax.xml.namespace.QName("http://www.unieap.com/esb/service/hello/definitions", "HelloPort"));
         }
         return ports.iterator();
     }

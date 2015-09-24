@@ -133,7 +133,7 @@ public class Role implements java.io.Serializable {
 	public void setActiveFlag(String activeFlag) {
 		this.activeFlag = activeFlag;
 		if(!StringUtils.isEmpty(this.activeFlag)){
-			DicDataVO dic =  CacheMgt.getDicData("1001",activeFlag);
+			DicDataVO dic =  CacheMgt.getDicData("activeFlag",activeFlag);
 			if(dic!=null){
 				this.activeFlagDesc = dic.getDicName();
 			}
