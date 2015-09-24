@@ -29,9 +29,9 @@ import org.springframework.jdbc.core.RowMapper;
  * @version $Revision$
  */
 public class EntityRowMapper implements RowMapper<Object> {
-	public Class<Object> object;
+	public Class<?> object;
 
-	public EntityRowMapper(Class<Object> object) {
+	public EntityRowMapper(Class<?> object) {
 		this.object = object;
 	}
 
@@ -50,7 +50,7 @@ public class EntityRowMapper implements RowMapper<Object> {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object convertMapToResultMap(ResultSet rs, Class<Object> object) throws SQLException {
+	public Object convertMapToResultMap(ResultSet rs, Class<?> object) throws SQLException {
 		Object vo;
 		try {
 			vo = object.newInstance();

@@ -19,8 +19,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 	 * Authentication 认证过的票据Authentication，确定了谁正在访问资源 被访问的资源object
 	 * 访问资源要求的权限配置ConfigAttributeDefinition
 	 */
-	public void decide(Authentication authentication, Object object,
-			Collection<ConfigAttribute> configAttributes)
+	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
 			throws AccessDeniedException, InsufficientAuthenticationException {
 
 		if (configAttributes == null) {

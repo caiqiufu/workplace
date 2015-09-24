@@ -1,5 +1,6 @@
 package com.unieap.base;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,6 +12,9 @@ public class SYSConfig {
 	 */
 	public static Map<String,String> isDebug;
 	public static Map<String,String> config;
+	private static Map<String,Map<String,String>> bizHandler = new HashMap<String,Map<String,String>>();
+	private static Map<String,Map<String,String>> infInfo = new HashMap<String,Map<String,String>>();
+	private static Map<String,Map<String,String>> errorCoreInfo = new HashMap<String,Map<String,String>>();
 	public static Map<String, String> getConfig() {
 		return config;
 	}
@@ -30,6 +34,35 @@ public class SYSConfig {
 	}
 	public static void setIsDebug(Map<String, String> isDebug) {
 		SYSConfig.isDebug = isDebug;
+	}
+
+
+	public static Map<String, Map<String, String>> getBizHandler() {
+		return bizHandler;
+	}
+	public static void setBizHandler(Map<String, Map<String, String>> bizHandler) {
+		SYSConfig.bizHandler = bizHandler;
+	}
+	
+	
+	public static Map<String, Map<String, String>> getInfInfo() {
+		return infInfo;
+	}
+	public static void setInfInfo(Map<String, Map<String, String>> infInfo) {
+		SYSConfig.infInfo = infInfo;
+	}
+
+	public static Map<String, Map<String, String>> getErrorCoreInfo() {
+		return errorCoreInfo;
+	}
+	public static  Map<String, String> getErrorCoreInfo(String errorCode)throws Exception {
+		if(errorCoreInfo.get(errorCode)==null){
+			throw new Exception("error code["+errorCode+"] not eixst.");
+		}
+		return errorCoreInfo.get(errorCode);
+	}
+	public static void setErrorCoreInfo(Map<String, Map<String, String>> errorCoreInfo) {
+		SYSConfig.errorCoreInfo = errorCoreInfo;
 	}
 
 
@@ -58,5 +91,5 @@ public class SYSConfig {
 	/**
 	 * 默认语言
 	 */
-	public static String defaultLanguage;
+	public static String defaultLanguage = "en_US";
 }

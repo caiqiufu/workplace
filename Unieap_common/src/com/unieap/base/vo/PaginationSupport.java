@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.unieap.base.SYSConfig;
 import com.unieap.tools.JSONUtils;
 
 public class PaginationSupport extends BaseVO {

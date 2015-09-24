@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-9-19 22:30:45 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.esb.pojo.Esblog" table="esblog" catalog="unieap" optimistic-lock="version">
+        <id name="logId" type="int">
+            <column name="log_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="channelCode" type="string">
+            <column name="channel_code" length="45" />
+        </property>
+        <property name="bizCode" type="string">
+            <column name="biz_code" length="45" />
+        </property>
+        <property name="serviceNumber" type="string">
+            <column name="service_number" length="45" />
+        </property>
+        <property name="transactionId" type="string">
+            <column name="transaction_id" length="45" />
+        </property>
+        <property name="requestTime" type="string">
+            <column name="request_time" length="45" />
+        </property>
+        <property name="responseTime" type="string">
+            <column name="response_time" length="45" />
+        </property>
+        <property name="systemCode" type="string">
+            <column name="system_code" length="45" />
+        </property>
+        <property name="extTransactionId" type="string">
+            <column name="extTransaction_id" length="45" />
+        </property>
+        <property name="requestInfo" type="binary">
+            <column name="request_info" />
+        </property>
+        <property name="responseInfo" type="binary">
+            <column name="response_info" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="0" />
+        </property>
+        <property name="resultCode" type="string">
+            <column name="result_code" length="45" />
+        </property>
+        <property name="resultDesc" type="string">
+            <column name="result_desc" />
+        </property>
+        <property name="executeTime" type="string">
+            <column name="execute_time" length="45" />
+        </property>
+        <property name="sourceSystem" type="string">
+            <column name="source_system" length="45" />
+        </property>
+        <property name="destSystem" type="string">
+            <column name="dest_system" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-9-20 23:58:33 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.esb.pojo.EsbInfo" table="esb_info" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="bizCode" type="string">
+            <column name="biz_code" length="45" not-null="true" />
+        </property>
+        <property name="infName" type="string">
+            <column name="inf_name" length="128" />
+        </property>
+        <property name="url" type="string">
+            <column name="url" not-null="true" />
+        </property>
+        <property name="activeFlag" type="string">
+            <column name="active_flag" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

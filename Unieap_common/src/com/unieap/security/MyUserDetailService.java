@@ -25,7 +25,6 @@ public class MyUserDetailService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userCode) throws UsernameNotFoundException {
 		User user = null;
 		user = getUser(userCode);
-		//user = testUser(username);
 		if(user == null){
 			return null;
 		}
@@ -44,7 +43,7 @@ public class MyUserDetailService implements UserDetailsService {
 			String enable = data.get("enable").toString();
 			String expired = data.get("expired").toString();
 			String locked = data.get("locked").toString();
-			User user = new User(userCode,data.get("PASSWORD").toString(),enable==null||"1".equals(enable), expired==null||"0".equals(expired), true,locked==null||"0".equals(locked), roles);
+			User user = new User(userCode,data.get("PASSWORD").toString(),enable==null||"Y".equals(enable), expired==null||"N".equals(expired), true,locked==null||"N".equals(locked), roles);
 			return user;
 		}else{
 			return null;

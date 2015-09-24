@@ -20,26 +20,23 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 /**
  * @author caibo 自定义过滤器
  */
-public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor
-		implements Filter {
+public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
-	private final Log logger = LogFactory
-			.getLog(MyFilterSecurityInterceptor.class);
+	private final Log logger = LogFactory.getLog(MyFilterSecurityInterceptor.class);
 
 	private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
-	public void doFilter(ServletRequest arg0, ServletResponse arg1,
-			FilterChain arg2) throws IOException, ServletException {
+	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
+			throws IOException, ServletException {
 		FilterInvocation fi = new FilterInvocation(arg0, arg1, arg2);
-		/*if (SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal() == null
-				|| "anonymousUser".equals(SecurityContextHolder.getContext()
-						.getAuthentication().getPrincipal())) {
-			fi.getHttpResponse().sendRedirect(
-					"/LoginController.do?method=login");
-		}else{
-			invoke(fi);
-		}*/
+		/*
+		 * if (SecurityContextHolder.getContext().getAuthentication()
+		 * .getPrincipal() == null ||
+		 * "anonymousUser".equals(SecurityContextHolder.getContext()
+		 * .getAuthentication().getPrincipal())) {
+		 * fi.getHttpResponse().sendRedirect(
+		 * "/LoginController.do?method=login"); }else{ invoke(fi); }
+		 */
 		invoke(fi);
 	}
 
@@ -53,8 +50,7 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor
 	/**
 	 * @param securityMetadataSource
 	 */
-	public void setSecurityMetadataSource(
-			FilterInvocationSecurityMetadataSource securityMetadataSource) {
+	public void setSecurityMetadataSource(FilterInvocationSecurityMetadataSource securityMetadataSource) {
 		this.securityMetadataSource = securityMetadataSource;
 	}
 
@@ -67,16 +63,14 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	public void invoke(FilterInvocation filterInvocation) throws IOException,
-			ServletException {
+	public void invoke(FilterInvocation filterInvocation) throws IOException, ServletException {
 		InterceptorStatusToken token = super.beforeInvocation(filterInvocation);
 		try {
-			filterInvocation.getChain().doFilter(filterInvocation.getRequest(),
-					filterInvocation.getResponse());
-		}catch(IOException e){
+			filterInvocation.getChain().doFilter(filterInvocation.getRequest(), filterInvocation.getResponse());
+		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
 			throw e;
-		}finally {
+		} finally {
 			super.afterInvocation(token, null);
 		}
 	}
