@@ -53,8 +53,8 @@
 	<bean name="/MdmController.do" class="com.unieap.mdm.MdmController" />
 	<!-- 
 	<bean name="/UploadController.do" class="com.unieap.file.UploadController" />
-	<bean name="/ExtAction.do" class="com.unieap.ext.ExtAction" />
 	 -->
+	<bean name="/ExtAction.do" class="com.unieap.ext.ExtAction" />
 	<!-- reuse application
 	<bean name="/ReuseController.do" class="com.apps.reuse.ReuseController" />
 	<bean name="/EcareController.do" class="com.apps.ecare.EcareController" />

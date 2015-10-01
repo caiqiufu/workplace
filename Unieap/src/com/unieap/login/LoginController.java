@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.unieap.BaseController;
 import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
 import com.unieap.login.bo.LoginBO;
 import com.unieap.pojo.VisitLog;
 
 @RequestMapping(value="LoginController.do")  
-public class LoginController extends MultiActionController{
+public class LoginController extends BaseController{
 	@RequestMapping(value="LoginController.do",params="method=login",method = RequestMethod.GET)  
 	public ModelAndView login(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		LoginBO loginBO = (LoginBO) ServiceUtils.getBean("loginBO");

@@ -35,13 +35,21 @@ public class LoginBO extends BaseBO {
 	private final static String CODELISTJSPATH = "unieap/js/common/";
 
 	public Map<String, List<Object>> getUserMenu(Integer userId) throws Exception {
+		List<Object> menus;
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
-		sql.append("FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
-		sql.append("where u.user_id = ur.user_id and ur.role_id = rr.role_id and dd.dic_type = 'M' ");
-		sql.append("and rr.resource_id = dd.dic_code and u.user_id = ? and dd.active_flag =? order by dd.seq ASC");
-		List<Object> menus = DBManager.getJT(null).query(sql.toString(), new Object[] { userId, UnieapConstants.YES },
-				new EntityRowMapper(MenuVO.class));
+		if(StringUtils.equals(UnieapConstants.UNIEAP, UnieapConstants.getUser().getUserCode())){
+			sql.append("SELECT dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
+			sql.append(" FROM unieap.dic_data_tree dd where  dd.dic_type = 'M' and  dd.active_flag =? order by dd.seq ASC");
+			menus = DBManager.getJT(null).query(sql.toString(), new Object[] { UnieapConstants.YES },
+					new EntityRowMapper(MenuVO.class));
+		}else{
+			sql.append("SELECT dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
+			sql.append("FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
+			sql.append("where u.user_id = ur.user_id and ur.role_id = rr.role_id and dd.dic_type = 'M' ");
+			sql.append("and rr.resource_id = dd.dic_code and u.user_id = ? and dd.active_flag =? order by dd.seq ASC");
+			menus = DBManager.getJT(null).query(sql.toString(), new Object[] { userId, UnieapConstants.YES },
+					new EntityRowMapper(MenuVO.class));
+		}
 		Map<String, List<Object>> attributes = new HashMap<String, List<Object>>();
 		attributes.put("menus", menus);
 		return attributes;
@@ -116,16 +124,28 @@ public class LoginBO extends BaseBO {
 	}
 
 	public List<Object> getDicdataByUserId(Integer userId) throws Exception {
+		List<Object> dicdatas;
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT distinct dd.dic_id as dicId,dd.dic_code as dicCode,dd.dic_name as dicName,");
-		sql.append(" dd.parent_id as groupId,dd.parent_code as groupCode,dd.parent_name as groupName,dd.dic_type as dicType,");
-		sql.append(" dd.active_flag as activeFlag ,dd.seq as seq ");
-		sql.append(" FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
-		sql.append(" where u.user_id = ur.user_id and ur.role_id = rr.role_id ");
-		sql.append(" and rr.resource_id = dd.dic_code and u.user_id =? and dd.language =? order by dd.parent_code, dd.seq ASC ");
-		List<Object> dicdatas = DBManager.getJT(null).query(sql.toString(),
-				new Object[] { userId,SYSConfig.defaultLanguage },
-				new EntityRowMapper(DicDataVO.class));
+		if(StringUtils.equals(UnieapConstants.UNIEAP, UnieapConstants.getUser().getUserCode())){
+			sql.append("SELECT distinct dd.dic_id as dicId,dd.dic_code as dicCode,dd.dic_name as dicName,");
+			sql.append(" dd.parent_id as groupId,dd.parent_code as groupCode,dd.parent_name as groupName,dd.dic_type as dicType,");
+			sql.append(" dd.active_flag as activeFlag ,dd.seq as seq ");
+			sql.append(" FROM unieap.dic_data_tree dd ");
+			sql.append(" where  dd.language =? order by dd.parent_code, dd.seq ASC ");
+			dicdatas = DBManager.getJT(null).query(sql.toString(),
+					new Object[] { SYSConfig.defaultLanguage },
+					new EntityRowMapper(DicDataVO.class));
+		}else{
+			sql.append("SELECT distinct dd.dic_id as dicId,dd.dic_code as dicCode,dd.dic_name as dicName,");
+			sql.append(" dd.parent_id as groupId,dd.parent_code as groupCode,dd.parent_name as groupName,dd.dic_type as dicType,");
+			sql.append(" dd.active_flag as activeFlag ,dd.seq as seq ");
+			sql.append(" FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
+			sql.append(" where u.user_id = ur.user_id and ur.role_id = rr.role_id ");
+			sql.append(" and rr.resource_id = dd.dic_code and u.user_id =? and dd.language =? order by dd.parent_code, dd.seq ASC ");
+			dicdatas = DBManager.getJT(null).query(sql.toString(),
+					new Object[] { userId,SYSConfig.defaultLanguage },
+					new EntityRowMapper(DicDataVO.class));
+		}
 		return dicdatas;
 	}
 	public void initUserButton(ServletContext servlet) throws Exception {
@@ -144,13 +164,22 @@ public class LoginBO extends BaseBO {
 		}
 	}
 	public List<ButtonVO> getButtonsByUserId(Integer userId) throws Exception {
+		List datas;
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT distinct dd.dic_id as buttonId,dd.dic_code as buttonCode,dd.dic_name as buttonName,true as abled ");
-		sql.append(" FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
-		sql.append(" where u.user_id = ur.user_id and ur.role_id = rr.role_id ");
-		sql.append(" and rr.resource_id = dd.dic_code and dd.active_flag = 'Y' and dd.dic_type ='B' and u.user_id =? and dd.language =?");
-		List datas = DBManager.getJT(null).query(sql.toString(), new Object[] { userId, SYSConfig.defaultLanguage},
-				new EntityRowMapper(ButtonVO.class));
+		if(StringUtils.equals(UnieapConstants.UNIEAP, UnieapConstants.getUser().getUserCode())){
+			sql.append("SELECT distinct dd.dic_id as buttonId,dd.dic_code as buttonCode,dd.dic_name as buttonName,true as abled ");
+			sql.append(" FROM unieap.dic_data_tree dd ");
+			sql.append(" where  dd.active_flag = 'Y' and dd.dic_type ='B' and dd.language =?");
+			datas = DBManager.getJT(null).query(sql.toString(), new Object[] { SYSConfig.defaultLanguage},
+					new EntityRowMapper(ButtonVO.class));
+		}else{
+			sql.append("SELECT distinct dd.dic_id as buttonId,dd.dic_code as buttonCode,dd.dic_name as buttonName,true as abled ");
+			sql.append(" FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
+			sql.append(" where u.user_id = ur.user_id and ur.role_id = rr.role_id ");
+			sql.append(" and rr.resource_id = dd.dic_code and dd.active_flag = 'Y' and dd.dic_type ='B' and u.user_id =? and dd.language =?");
+			datas = DBManager.getJT(null).query(sql.toString(), new Object[] { userId, SYSConfig.defaultLanguage},
+					new EntityRowMapper(ButtonVO.class));
+		}
 		return datas;
 	}
 	

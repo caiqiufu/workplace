@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.unieap.BaseController;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
@@ -35,7 +35,7 @@ import com.unieap.pojo.Role;
 import com.unieap.pojo.User;
 import com.unieap.pojo.UserRole;
 @RequestMapping(value="MdmController.do") 
-public class MdmController extends MultiActionController{
+public class MdmController extends BaseController{
 	@InitBinder
 	protected void initBinder(HttpServletRequest request,
 	                              ServletRequestDataBinder binder) throws Exception {

@@ -11,7 +11,7 @@ public class BssEndPoint extends AbstractDomPayloadEndpoint{
 	/**
      * Namespace of both request and response
      */
-    public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service";
+    //public static final String NAMESPACE_URI = "http://www.unieap.com/esb/service";
     
     /**
      * The local name of the expected request
@@ -39,7 +39,8 @@ public class BssEndPoint extends AbstractDomPayloadEndpoint{
             throw new IllegalArgumentException("Could not find request text node");
         }
         String response = bssService.queryInfo(requestText.getNodeValue());
-        Element responseElement = document.createElementNS(NAMESPACE_URI, HELLO_RESPONSE_LOCAL_NAME);
+        Element responseElement = document.createElement(HELLO_RESPONSE_LOCAL_NAME);
+        //Element responseElement = document.createElementNS(NAMESPACE_URI, HELLO_RESPONSE_LOCAL_NAME);
         Text responseText = document.createTextNode(response);
         responseElement.appendChild(responseText);
         return responseElement;

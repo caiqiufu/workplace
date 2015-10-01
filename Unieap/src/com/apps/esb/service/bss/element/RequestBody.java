@@ -1,8 +1,8 @@
 package com.apps.esb.service.bss.element;
 
 public class RequestBody {
-	public String serviceNumber;
-	public String extParameters;
+	public String serviceNumber = "";
+	public String extParameters = "";
 	public String getServiceNumber() {
 		return serviceNumber;
 	}

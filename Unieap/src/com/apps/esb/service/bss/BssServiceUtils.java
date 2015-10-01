@@ -18,6 +18,7 @@ import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponseBody;
 import com.apps.esb.service.bss.element.ResponsetHeader;
 import com.apps.esb.service.bss.element.ResponsetInfo;
+import com.apps.esb.service.bss.handler.ProcessResult;
 import com.unieap.UnieapConstants;
 
 public class BssServiceUtils {
@@ -26,19 +27,19 @@ public class BssServiceUtils {
 		RequestHeader header = new RequestHeader();
 		RequestBody body = new RequestBody();
 		JSONObject jsonResult = new JSONObject(requestInfoString);
-		if(jsonResult.has("RequestHeader")){
-			JSONObject requestHeader = (JSONObject)jsonResult.get("RequestHeader");
+		if(jsonResult.has("requestHeader")){
+			JSONObject requestHeader = (JSONObject)jsonResult.get("requestHeader");
 			if(requestHeader.has("accessPwd")){
 				String accessPwd = requestHeader.getString("accessPwd");
 				header.setAccessPwd(accessPwd);
 			}else{
-				throw new Exception("missed element:RequestHeader->accessPwd");
+				header.setAccessPwd(UnieapConstants.UNIEAP);
 			}
 			if(requestHeader.has("accessUser")){
 				String accessUser = requestHeader.getString("accessUser");
 				header.setAccessUser(accessUser);
 			}else{
-				throw new Exception("missed element:RequestHeader->accessUser");
+				header.setAccessUser(UnieapConstants.UNIEAP);
 			}
 			if(requestHeader.has("bizCode")){
 				String bizCode = requestHeader.getString("bizCode");
@@ -50,7 +51,7 @@ public class BssServiceUtils {
 				String channelCode = requestHeader.getString("channelCode");
 				header.setChannelCode(channelCode);
 			}else{
-				throw new Exception("missed element:RequestHeader->channelCode");
+				header.setChannelCode("eCare");
 			}
 			if(requestHeader.has("extTransactionId")){
 				String extTransactionId = requestHeader.getString("extTransactionId");
@@ -60,32 +61,29 @@ public class BssServiceUtils {
 				String requestTime = requestHeader.getString("requestTime");
 				header.setRequestTime(requestTime);
 			}else{
-				throw new Exception("missed element:RequestHeader->requestTime");
+				String requestTime = UnieapConstants.getCurrentTime(null, null);
+				header.setRequestTime(requestTime);
 			}
 			if(requestHeader.has("systemCode")){
 				String systemCode = requestHeader.getString("systemCode");
 				header.setSystemCode(systemCode);
 			}else{
-				throw new Exception("missed element:RequestHeader->systemCode");
+				header.setSystemCode("APP");
 			}
 			requestInfo.setRequestHeader(header);
 		}else{
-			throw new Exception("missed element:RequestHeader");
+			throw new Exception("missed element:requestHeader");
 		}
-		if(jsonResult.has("RequestBody")){
-			JSONObject requestBody = (JSONObject)jsonResult.get("RequestBody");
+		if(jsonResult.has("requestBody")){
+			JSONObject requestBody = (JSONObject)jsonResult.get("requestBody");
 			if(requestBody.has("serviceNumber")){
 				String serviceNumber = requestBody.getString("serviceNumber");
 				body.setServiceNumber(serviceNumber);
-			}else{
-				throw new Exception("missed element:RequestBody->serviceNumber");
 			}
 			if(requestBody.has("extParameters")){
 				String extParameters = requestBody.getString("extParameters");
 				body.setExtParameters(extParameters);
 			}
-		}else{
-			throw new Exception("missed element:RequestBody");
 		}
 		requestInfo.setRequestBody(body);
 		return requestInfo;
@@ -95,46 +93,43 @@ public class BssServiceUtils {
 		ResponsetHeader header = responseInfo.getResponsetHeader();
 		ResponseBody body = responseInfo.getResponseBody();
 		JSONObject headerJsonResult = new JSONObject();
-		headerJsonResult.put("accessPwd",header.getAccessPwd());
-		headerJsonResult.put("accessUser",header.getAccessUser());
 		headerJsonResult.put("bizCode",header.getBizCode());
 		headerJsonResult.put("channelCode",header.getChannelCode());
 		headerJsonResult.put("extTransactionId",header.getExtTransactionId());
 		headerJsonResult.put("transactionId",header.getTransactionId());
 		headerJsonResult.put("requestTime",header.getRequestTime());
 		headerJsonResult.put("responseTime",header.getResponseTime());
-		headerJsonResult.put("systemCode",header.getSystemCode());
-		headerJsonResult.put("version",header.getVersion());
-		JSONObject resultJsonResult = new JSONObject();
-		resultJsonResult.put("resultCode", header.getResultCode());
-		resultJsonResult.put("resultDesc", header.getResultDesc());
-		headerJsonResult.put("result", resultJsonResult);
-		jsonResult.put("ResponseHeader", headerJsonResult);
+		headerJsonResult.put("resultCode", header.getResultCode());
+		headerJsonResult.put("resultDesc", header.getResultDesc());
+		jsonResult.put("responseHeader", headerJsonResult);
 		JSONObject bodyJsonResult = new JSONObject();
 		bodyJsonResult.put("serviceNumber", body.getServiceNumber());
-		bodyJsonResult.put("extParameters", body.getExtParameters());
-		jsonResult.put("ResponseBody", bodyJsonResult);
+		if(!StringUtils.isEmpty(body.getExtParameters())){
+			JSONObject extParametersJson = new JSONObject(body.getExtParameters());
+			bodyJsonResult.put("extParameters",extParametersJson);
+		}
+		jsonResult.put("responseBody", bodyJsonResult);
 		return jsonResult.toString();
 	}
-	public static Esblog getEsbLog(RequestInfo requestInfo, String requestInfoString, ResponsetInfo responsetInfo,
+	public static Esblog getEsbLog(RequestHeader requestHeader,ProcessResult processResult,String requestInfoString, 
 			String responsetInfoString,String during,String destSystem) {
 		Esblog esblog = new Esblog();
 		esblog.setLogId(UnieapConstants.getSequence(null, UnieapConstants.ESB));
-		esblog.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
-		esblog.setBizCode(requestInfo.getRequestHeader().getBizCode());
-		esblog.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
-		esblog.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
-		esblog.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
-		esblog.setResponseTime(responsetInfo.getResponsetHeader().getResponseTime());
-		esblog.setSystemCode(requestInfo.getRequestHeader().getSystemCode());
-		esblog.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
-		esblog.setResultCode(responsetInfo.getResponsetHeader().getResultCode());
-		esblog.setResultDesc(responsetInfo.getResponsetHeader().getResultDesc());
+		esblog.setChannelCode(requestHeader.getChannelCode());
+		esblog.setBizCode(requestHeader.getBizCode());
+		esblog.setServiceNumber(processResult.getServiceNumber());
+		esblog.setTransactionId(requestHeader.getTransactionId());
+		esblog.setRequestTime(requestHeader.getRequestTime());
+		esblog.setResponseTime(requestHeader.getResponseTime());
+		esblog.setSystemCode(requestHeader.getSystemCode());
+		esblog.setExtTransactionId(requestHeader.getExtTransactionId());
+		esblog.setResultCode(processResult.getResultCode());
+		esblog.setResultDesc(StringUtils.substring(processResult.getResultDesc(),0, 1020));
 		esblog.setRequestInfo(requestInfoString.getBytes());
 		esblog.setResponseInfo(responsetInfoString.getBytes());
 		esblog.setCreateDate(UnieapConstants.getDateTime(null));
 		esblog.setExecuteTime(during);
-		esblog.setSourceSystem(requestInfo.getRequestHeader().getSystemCode());
+		esblog.setSourceSystem(requestHeader.getSystemCode());
 		esblog.setDestSystem(destSystem);
 		return esblog;
 	}
@@ -152,9 +147,52 @@ public class BssServiceUtils {
 	public static String generateTransactionId() {
 		StringBuffer transactionId = new StringBuffer();
 		String time = UnieapConstants.getCurrentTime(null, UnieapConstants.TIMEFORMAT2);
-		long code = Math.round(Math.random() * 10000000);
-		String rundNumber = StringUtils.substring(Long.toString(code), 1);
+		double code = Math.random();
+		String strCode = Double.toString(code);
+		String rundNumber = StringUtils.substring(strCode,strCode.length()-6);
 		transactionId.append(time).append(rundNumber);
 		return transactionId.toString();
+	}
+	
+	public static ResponsetInfo getResponsetInfo(RequestInfo requestInfo, ProcessResult processResult) {
+		ResponsetInfo responsetInfo = new ResponsetInfo();
+		ResponsetHeader responsetHeader = new ResponsetHeader();
+		responsetHeader.setBizCode(requestInfo.getRequestHeader().getBizCode());
+		responsetHeader.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
+		responsetHeader.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
+		// store log id
+		responsetHeader.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
+		responsetHeader.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
+		responsetHeader.setResponseTime(UnieapConstants.getCurrentTime(null, null));
+		responsetHeader.setResultCode(processResult.getResultCode());
+		responsetHeader.setResultDesc(processResult.getResultDesc());
+		responsetInfo.setResponsetHeader(responsetHeader);
+		ResponseBody responseBody = new ResponseBody();
+		responseBody.setServiceNumber(processResult.getServiceNumber());
+		responseBody.setExtParameters(processResult.getExtParameters());
+		responsetInfo.setResponseBody(responseBody);
+		return responsetInfo;
+	}
+	public static RequestInfo  copyRequestInfo(RequestInfo oldRequestInfo){
+		RequestInfo requestInfo = new RequestInfo();
+		RequestHeader requestHeader = new RequestHeader();
+		RequestHeader oldRequestHeader = oldRequestInfo.getRequestHeader();
+		requestHeader.setAccessPwd(oldRequestHeader.getAccessPwd());
+		requestHeader.setAccessUser(oldRequestHeader.getAccessUser());
+		requestHeader.setBizCode(oldRequestHeader.getBizCode());
+		requestHeader.setChannelCode(oldRequestHeader.getChannelCode());
+		requestHeader.setExtTransactionId(oldRequestHeader.getExtTransactionId());
+		requestHeader.setRequestTime(oldRequestHeader.getRequestTime());
+		requestHeader.setResponseTime(oldRequestHeader.getResponseTime());
+		requestHeader.setSystemCode(oldRequestHeader.getSystemCode());
+		requestHeader.setTransactionId(oldRequestHeader.getTransactionId());
+		requestHeader.setVersion(oldRequestHeader.getVersion());
+		RequestBody oldRequestBody = oldRequestInfo.getRequestBody();
+		requestInfo.setRequestHeader(requestHeader);
+		RequestBody requestBody = new RequestBody();
+		requestBody.setServiceNumber(oldRequestBody.getServiceNumber());
+		requestBody.setExtParameters(oldRequestBody.getExtParameters());
+		requestInfo.setRequestBody(requestBody);
+		return requestInfo;
 	}
 }

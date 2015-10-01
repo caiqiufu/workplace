@@ -24,6 +24,8 @@ public final class CacheMgt {
 
 	private static List<Esblog> esblogDatas = Collections.synchronizedList(new ArrayList<Esblog>());
 	private static List<Map<String,Object>> esblogSOAPDatas = Collections.synchronizedList(new ArrayList<Map<String,Object>>());
+	
+	private static Map<String,List<Map<String,Object>>> cacheData = new HashMap<String,List<Map<String,Object>>>();
 
 	public static void addChglog(Chglog vo) {
 		chgLogDatas.add(vo);
@@ -84,4 +86,18 @@ public final class CacheMgt {
 	public static void addEsbSOAPlog(Map<String,Object> data) {
 		esblogSOAPDatas.add(data);
 	}
+
+	public static Map<String, List<Map<String, Object>>> getCacheData() {
+		return cacheData;
+	}
+
+	public static void setCacheData(Map<String, List<Map<String, Object>>> cacheData) {
+		CacheMgt.cacheData = cacheData;
+	}
+
+	
+	
+	
+	
+	
 }

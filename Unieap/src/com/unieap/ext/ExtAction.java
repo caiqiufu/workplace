@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.apps.esb.service.bss.BssServiceBO;
 import com.apps.reuse.bo.ReuseSMSBO;
 import com.apps.reuse.pojo.ReuseCustomer;
 import com.apps.reuse.pojo.ReuseSmsNotify;
@@ -42,5 +43,18 @@ public class ExtAction extends MultiActionController{
 		return ma;
 	}
 	
+	
+	@RequestMapping(value="ExtAction.do",params="method=queryInfo",method = RequestMethod.POST)  
+	public @ResponseBody String queryInfo(String parameters, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		BssServiceBO bssServiceBO = (BssServiceBO) ServiceUtils.getBean("bssServiceBO");
+		String responsetInfoString = bssServiceBO.queryInfo(parameters);
+		return responsetInfoString;
+	}
+	@RequestMapping(value="ExtAction.do",params="method=bizHandle",method = RequestMethod.POST)  
+	public @ResponseBody String bizHandle(String parameters, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		BssServiceBO bssServiceBO = (BssServiceBO) ServiceUtils.getBean("bssServiceBO");
+		String responsetInfoString = bssServiceBO.queryInfo(parameters);
+		return responsetInfoString;
+	}
 	
 }

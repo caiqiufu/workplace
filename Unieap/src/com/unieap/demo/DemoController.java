@@ -10,15 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-import com.unieap.base.SYSConfig;
+import com.unieap.BaseController;
 import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.MenuVO;
 import com.unieap.login.bo.LoginBO;
 
 @RequestMapping(value="DemoController.do")  
-public class DemoController extends MultiActionController{
+public class DemoController extends BaseController{
 	@RequestMapping(value="DemoController.do",params="method=begin",method = RequestMethod.GET)  
 	public ModelAndView login(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		Map model = new HashMap();

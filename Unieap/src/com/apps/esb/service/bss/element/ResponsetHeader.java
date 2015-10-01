@@ -1,30 +1,15 @@
 package com.apps.esb.service.bss.element;
 
 public class ResponsetHeader {
-	public String accessPwd;
-	public String accessUser;
 	public String bizCode;
 	public String channelCode;
 	public String extTransactionId;
 	public String transactionId;
 	public String requestTime;
 	public String responseTime;
-	public String systemCode;
-	public String version;
 	public String resultCode;
 	public String resultDesc;
-	public String getAccessPwd() {
-		return accessPwd;
-	}
-	public void setAccessPwd(String accessPwd) {
-		this.accessPwd = accessPwd;
-	}
-	public String getAccessUser() {
-		return accessUser;
-	}
-	public void setAccessUser(String accessUser) {
-		this.accessUser = accessUser;
-	}
+	
 	public String getBizCode() {
 		return bizCode;
 	}
@@ -60,18 +45,6 @@ public class ResponsetHeader {
 	}
 	public void setResponseTime(String responseTime) {
 		this.responseTime = responseTime;
-	}
-	public String getSystemCode() {
-		return systemCode;
-	}
-	public void setSystemCode(String systemCode) {
-		this.systemCode = systemCode;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
 	}
 	public String getResultCode() {
 		return resultCode;

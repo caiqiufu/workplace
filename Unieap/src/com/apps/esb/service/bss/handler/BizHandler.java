@@ -12,4 +12,8 @@ public interface BizHandler {
 	public RequestInfo getRequestInfoFromSOAPMessage(SOAPMessage request) throws Exception;
 
 	public ResponsetInfo getResponseInfoFromSOAPMessage(SOAPMessage response) throws Exception;
+
+	public SOAPMessage getRequestSOAPMessage(String serviceNumber, RequestInfo requestInfo) throws Exception;
+
+	public ProcessResult getResposeResult(SOAPMessage response) throws Exception;
 }

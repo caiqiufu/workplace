@@ -71,5 +71,15 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/fluent-hc-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/httpclient-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/httpclient-cache-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/httpclient-win-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/httpcore-4.4.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/httpmime-4.5.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/http/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

@@ -267,7 +267,7 @@ public final class JSONUtils {
 		return json;
 	}
 
-	private static JSONArray priArray(Object value) {
+	public static JSONArray priArray(Object value) {
 		JSONArray jarr = new JSONArray();
 		if (value == null)
 			return jarr;
@@ -279,7 +279,7 @@ public final class JSONUtils {
 		return jarr;
 	}
 
-	private static JSONArray arrayToJarr(Object value) throws Exception {
+	public static JSONArray arrayToJarr(Object value) throws Exception {
 		if (value == null) {
 			return new JSONArray();
 		}
@@ -419,7 +419,7 @@ public final class JSONUtils {
 		return jso;
 	}
 
-	private static final String typeKey = "___private_par_key__";
+	public static final String typeKey = "___private_par_key__";
 
 	/**
 	 * 
@@ -530,14 +530,14 @@ public final class JSONUtils {
 		return bean;
 	}
 
-	private static Object convertJSONNull(Object o) {
+	public static Object convertJSONNull(Object o) {
 		if (o == JSONObject.NULL)
 			return null;
 		else
 			return o;
 	}
 
-	private static Method getMethod(PropertyDescriptor[] props, String prop) {
+	public static Method getMethod(PropertyDescriptor[] props, String prop) {
 		for (int i = 0; i < props.length; i++) {
 			if (prop.equals(props[i].getName()))
 				return props[i].getWriteMethod();
@@ -599,7 +599,7 @@ public final class JSONUtils {
 
 	// 把jsArray转换为制定Class类型的集合
 	@SuppressWarnings("unchecked")
-	private static void initCollection(Collection c, JSONArray jarr, Class componentType, Map collectionComponentTypes)
+	public static void initCollection(Collection c, JSONArray jarr, Class componentType, Map collectionComponentTypes)
 			throws Exception {
 		// component of collection is primitive
 		if (componentType == null || isPrimitive(componentType)) {

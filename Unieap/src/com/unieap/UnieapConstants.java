@@ -113,7 +113,7 @@ public class UnieapConstants {
 	public final static String getCurrentTime(String dsName, String format) {
 		Map<String, Object> obj = DBManager.getJT(dsName).queryForMap("SELECT CURRENT_TIMESTAMP() CURRENTTIME");
 		if (StringUtils.isEmpty(format)) {
-			format = TIMEFORMAT;
+			format = TIMEFORMAT2;
 		}
 		Date data = (Date) obj.get("CURRENTTIME");
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -127,7 +127,7 @@ public class UnieapConstants {
 		return data;
 	}
 
-	public final static Integer getSequence(String dsName, String serialName) {
+	public synchronized final static Integer getSequence(String dsName, String serialName) {
 		return DBManager.getJT(dsName).queryForInt("SELECT NEXTVAL('" + serialName + "') SEQ");
 	}
 

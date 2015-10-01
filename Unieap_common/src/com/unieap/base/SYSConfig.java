@@ -14,7 +14,8 @@ public class SYSConfig {
 	public static Map<String,String> config;
 	private static Map<String,Map<String,String>> bizHandler = new HashMap<String,Map<String,String>>();
 	private static Map<String,Map<String,String>> infInfo = new HashMap<String,Map<String,String>>();
-	private static Map<String,Map<String,String>> errorCoreInfo = new HashMap<String,Map<String,String>>();
+	private static Map<String,Map<String,String>> errorCodeInfo = new HashMap<String,Map<String,String>>();
+	
 	public static Map<String, String> getConfig() {
 		return config;
 	}
@@ -53,17 +54,25 @@ public class SYSConfig {
 	}
 
 	public static Map<String, Map<String, String>> getErrorCoreInfo() {
-		return errorCoreInfo;
+		return errorCodeInfo;
 	}
 	public static  Map<String, String> getErrorCoreInfo(String errorCode)throws Exception {
-		if(errorCoreInfo.get(errorCode)==null){
+		if(errorCodeInfo.get(errorCode)==null){
 			throw new Exception("error code["+errorCode+"] not eixst.");
 		}
-		return errorCoreInfo.get(errorCode);
+		return errorCodeInfo.get(errorCode);
+	}
+	public static  String getErrorDesc(String errorCode)throws Exception {
+		if(errorCodeInfo.get(errorCode)==null){
+			throw new Exception("error code["+errorCode+"] not eixst.");
+		}
+		return errorCodeInfo.get(errorCode).get("errorDesc").toString();
 	}
 	public static void setErrorCoreInfo(Map<String, Map<String, String>> errorCoreInfo) {
-		SYSConfig.errorCoreInfo = errorCoreInfo;
+		SYSConfig.errorCodeInfo = errorCoreInfo;
 	}
+
+
 
 
 	/**

@@ -1,10 +1,10 @@
 package com.apps.esb.service.bss.handler;
 
 public class ProcessResult {
-	public String resultCode;
-	public String resultDesc;
-	public String serviceNumber;
-	public String extParameters;
+	public String resultCode = "";
+	public String resultDesc = "";
+	public String serviceNumber = "";
+	public String extParameters = "";
 	public String getResultCode() {
 		return resultCode;
 	}

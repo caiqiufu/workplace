@@ -45,7 +45,7 @@
             <column name="result_code" length="45" />
         </property>
         <property name="resultDesc" type="string">
-            <column name="result_desc" />
+            <column name="result_desc" length="1024"/>
         </property>
         <property name="executeTime" type="string">
             <column name="execute_time" length="45" />
