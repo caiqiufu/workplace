@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class Esblog implements java.io.Serializable {
 
-	private int logId;
+	private Integer logId;
 	private String channelCode;
 	private String bizCode;
 	private String serviceNumber;
@@ -29,14 +29,14 @@ public class Esblog implements java.io.Serializable {
 	public Esblog() {
 	}
 
-	public Esblog(int logId) {
+	public Esblog(Integer logId) {
 		this.logId = logId;
 	}
 
-	public Esblog(int logId, String channelCode, String bizCode, String serviceNumber, String transactionId,
+	public Esblog(Integer logId, String channelCode, String bizCode, String serviceNumber, String transactionId,
 			String requestTime, String responseTime, String systemCode, String extTransactionId, byte[] requestInfo,
-			byte[] responseInfo, Date createDate, String resultCode, String resultDesc,String executeTime,
-			String sourceSystem,String destSystem) {
+			byte[] responseInfo, Date createDate, String resultCode, String resultDesc, String executeTime,
+			String sourceSystem, String destSystem) {
 		this.logId = logId;
 		this.channelCode = channelCode;
 		this.bizCode = bizCode;
@@ -56,11 +56,11 @@ public class Esblog implements java.io.Serializable {
 		this.destSystem = destSystem;
 	}
 
-	public int getLogId() {
+	public Integer getLogId() {
 		return this.logId;
 	}
 
-	public void setLogId(int logId) {
+	public void setLogId(Integer logId) {
 		this.logId = logId;
 	}
 

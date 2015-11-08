@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,8 @@ import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
 import com.unieap.mdm.bo.DicBO;
-@RequestMapping(value="ReuseController.do")  
+@Controller
+@RequestMapping("reuseController.do")
 public class ReuseController extends BaseController{
 	@InitBinder
 	protected void initBinder(HttpServletRequest request,
@@ -45,19 +47,19 @@ public class ReuseController extends BaseController{
 	/*
 	 * customer register
 	 */
-	@RequestMapping(value="ReuseController.do",params="method=customer",method = RequestMethod.GET)  
+	@RequestMapping(params="method=customer",method = RequestMethod.GET)  
 	public ModelAndView customer(String project,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/reuse/customer");
 		return ma;
 	}
-	@RequestMapping(value="ReuseController.do",params="method=customerGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=customerGrid",method = RequestMethod.GET)  
 	public @ResponseBody String customerGrid(PaginationSupport page,ReuseCustomer reuseCustomer,String productCode,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseCustomerBO reuseCustomerBO = (ReuseCustomerBO) ServiceUtils.getBean("reuseCustomerBO");
 		reuseCustomerBO.getCustomerGrid(page,reuseCustomer,productCode);
 		return page.getJsonString();
 	}
 	
-	@RequestMapping(value="ReuseController.do",params="method=customerDeal",method = RequestMethod.POST)  
+	@RequestMapping(params="method=customerDeal",method = RequestMethod.POST)  
 	public @ResponseBody Map customerDeal(String operType,ReuseCustomer reuseCustomer, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseCustomerBO reuseCustomerBO = (ReuseCustomerBO) ServiceUtils.getBean("reuseCustomerBO");
 		Map model = reuseCustomerBO.customerDeal(operType,reuseCustomer);
@@ -67,18 +69,18 @@ public class ReuseController extends BaseController{
 	/*
 	 * customer product
 	 */
-	@RequestMapping(value="ReuseController.do",params="method=product",method = RequestMethod.GET)  
+	@RequestMapping(params="method=product",method = RequestMethod.GET)  
 	public ModelAndView product(String project,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/reuse/product");
 		return ma;
 	}
-	@RequestMapping(value="ReuseController.do",params="method=productGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=productGrid",method = RequestMethod.GET)  
 	public @ResponseBody String productGrid(PaginationSupport page,ReuseProduct reuseProduct,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseProductBO reuseProductBO = (ReuseProductBO) ServiceUtils.getBean("reuseProductBO");
 		reuseProductBO.getProductGrid(page,reuseProduct);
 		return page.getJsonString();
 	}
-	@RequestMapping(value="ReuseController.do",params="method=productDeal",method = RequestMethod.POST)  
+	@RequestMapping(params="method=productDeal",method = RequestMethod.POST)  
 	public @ResponseBody Map productDeal(String operType,ReuseProduct reuseProduct,String referNo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseProductBO reuseProductBO = (ReuseProductBO) ServiceUtils.getBean("reuseProductBO");
 		Map model;
@@ -90,12 +92,12 @@ public class ReuseController extends BaseController{
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}
-	@RequestMapping(value="ReuseController.do",params="method=getModel",method = RequestMethod.POST)  
+	@RequestMapping(params="method=getModel",method = RequestMethod.POST)  
 	public @ResponseBody String getModel(Integer groupId, Integer parentId, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseProductBO reuseProductBO = (ReuseProductBO) ServiceUtils.getBean("reuseProductBO");
 		return reuseProductBO.getModel(groupId,parentId);
 	}
-	@RequestMapping(value="ReuseController.do",params="method=producTrackingtGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=producTrackingtGrid",method = RequestMethod.GET)  
 	public @ResponseBody String producTrackingtGrid(PaginationSupport page,ReuseProductTracking reuseProductTracking,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseProductBO reuseProductBO = (ReuseProductBO) ServiceUtils.getBean("reuseProductBO");
 		reuseProductBO.getProductTrackingGrid(page,reuseProductTracking);
@@ -104,13 +106,13 @@ public class ReuseController extends BaseController{
 	/**
 	 * customer address
 	 */
-	@RequestMapping(value="ReuseController.do",params="method=addressGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=addressGrid",method = RequestMethod.GET)  
 	public @ResponseBody String addressGrid(PaginationSupport page,ReuseCustomerAddressVO vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseAddressBO reuseAddressBO = (ReuseAddressBO) ServiceUtils.getBean("reuseAddressBO");
 		reuseAddressBO.getAddressGrid(page,vo);
 		return page.getJsonString();
 	}
-	@RequestMapping(value="ReuseController.do",params="method=addressDeal",method = RequestMethod.POST)  
+	@RequestMapping(params="method=addressDeal",method = RequestMethod.POST)  
 	public @ResponseBody Map addressDeal(String operType,ReuseCustomerAddress address, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseAddressBO reuseAddressBO = (ReuseAddressBO) ServiceUtils.getBean("reuseAddressBO");
 		Map model = reuseAddressBO.addressDeal(operType,address);
@@ -120,12 +122,12 @@ public class ReuseController extends BaseController{
 	/*
 	 * sms verification
 	 */
-	@RequestMapping(value="ReuseController.do",params="method=smsverify",method = RequestMethod.GET)  
+	@RequestMapping(params="method=smsverify",method = RequestMethod.GET)  
 	public ModelAndView smsverify(String project,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/reuse/smsverify");
 		return ma;
 	}
-	@RequestMapping(value="ReuseController.do",params="method=smsverifyGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=smsverifyGrid",method = RequestMethod.GET)  
 	public @ResponseBody String smsverifyGrid(PaginationSupport page,ReuseSmsNotify vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ReuseSMSBO reuseSMSBO = (ReuseSMSBO) ServiceUtils.getBean("reuseSMSBO");
 		reuseSMSBO.getSmsverifyGrid(page,vo);

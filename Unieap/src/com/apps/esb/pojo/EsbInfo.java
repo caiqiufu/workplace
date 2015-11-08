@@ -6,7 +6,7 @@ package com.apps.esb.pojo;
  */
 public class EsbInfo implements java.io.Serializable {
 
-	private int id;
+	private Integer id;
 	private String bizCode;
 	private String infName;
 	private String url;
@@ -15,13 +15,13 @@ public class EsbInfo implements java.io.Serializable {
 	public EsbInfo() {
 	}
 
-	public EsbInfo(int id, String bizCode, String url) {
+	public EsbInfo(Integer id, String bizCode, String url) {
 		this.id = id;
 		this.bizCode = bizCode;
 		this.url = url;
 	}
 
-	public EsbInfo(int id, String bizCode, String infName, String url, String activeFlag) {
+	public EsbInfo(Integer id, String bizCode, String infName, String url, String activeFlag) {
 		this.id = id;
 		this.bizCode = bizCode;
 		this.infName = infName;
@@ -29,11 +29,11 @@ public class EsbInfo implements java.io.Serializable {
 		this.activeFlag = activeFlag;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

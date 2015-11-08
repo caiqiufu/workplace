@@ -46,5 +46,11 @@
         <property name="email" type="java.lang.String">
             <column name="email" length="45" />
         </property>
+         <property name="effectiveDate" type="java.util.Date">
+            <column name="effective_date" length="0" />
+        </property>
+         <property name="expiryDate" type="java.util.Date">
+            <column name="expiry_date" length="0" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.unieap.db.DBManager;
-import com.unieap.pojo.ExLog;
+import com.unieap.pojo.ExcLog;
 
 public class BaseController  extends MultiActionController{
 	/** 基于@ExceptionHandler异常处理 */  
     @ExceptionHandler  
     public String exp(HttpServletRequest request, Exception ex) {  
         request.setAttribute("ex", ex);  
-        ExLog log = new ExLog();
+        ExcLog log = new ExcLog();
         log.setId(UnieapConstants.getSequence(null,"unieap"));
         log.setBizModule("unieap");
         log.setExType("system_exception");
@@ -26,7 +26,11 @@ public class BaseController  extends MultiActionController{
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);
         log.setExTracking(sw.toString().getBytes());
-        log.setOperator(UnieapConstants.getUser().getUserCode());
+        if(UnieapConstants.getUser()!=null){
+        	log.setOperator(UnieapConstants.getUser().getUserCode());
+        }else{
+        	log.setOperator("system error");
+        }
         log.setOperationDate(UnieapConstants.getDateTime(null));
         DBManager.getHT(null).save(log);
         // 根据不同错误转向不同页面  
@@ -36,6 +40,6 @@ public class BaseController  extends MultiActionController{
             return "parameter_error";  
         } else {  
         }  */
-        return "Exception";  
+        return "error";  
     } 
 }

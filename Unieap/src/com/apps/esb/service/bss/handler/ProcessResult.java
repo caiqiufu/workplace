@@ -5,6 +5,7 @@ public class ProcessResult {
 	public String resultDesc = "";
 	public String serviceNumber = "";
 	public String extParameters = "";
+	public Object vo;
 	public String getResultCode() {
 		return resultCode;
 	}
@@ -28,6 +29,12 @@ public class ProcessResult {
 	}
 	public void setExtParameters(String extParameters) {
 		this.extParameters = extParameters;
+	}
+	public Object getVo() {
+		return vo;
+	}
+	public void setVo(Object vo) {
+		this.vo = vo;
 	}
 	
 }

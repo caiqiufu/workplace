@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,6 +26,7 @@ import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
 import com.unieap.base.vo.TreeVO;
 import com.unieap.mdm.bo.DicBO;
+import com.unieap.mdm.bo.RefreshCacheBO;
 import com.unieap.mdm.bo.RoleBO;
 import com.unieap.mdm.bo.UserBO;
 import com.unieap.mdm.vo.DicDataVO;
@@ -34,7 +35,8 @@ import com.unieap.pojo.DicDataTree;
 import com.unieap.pojo.Role;
 import com.unieap.pojo.User;
 import com.unieap.pojo.UserRole;
-@RequestMapping(value="MdmController.do") 
+@Controller
+@RequestMapping("mdmController.do")
 public class MdmController extends BaseController{
 	@InitBinder
 	protected void initBinder(HttpServletRequest request,
@@ -49,7 +51,7 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=dic",method = RequestMethod.GET)  
+	@RequestMapping(params="method=dic")  
 	public ModelAndView dicGroupList(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/base/mdm/dic/dic");
 		return ma;
@@ -63,7 +65,7 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=getDicTreeData",method = RequestMethod.GET)  
+	@RequestMapping(params="method=getDicTreeData")  
 	public @ResponseBody String getDicTreeData(TreeVO treeVO, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		DicBO dicBO = (DicBO) ServiceUtils.getBean("dicBO");
 		return dicBO.getDicTreeData(treeVO);
@@ -77,10 +79,10 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=dicDataDeal",method = RequestMethod.POST)  
-	public @ResponseBody Map dicDataDeal(String operType,DicDataTree dicDataTree, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	@RequestMapping(params="method=dicDataDeal")  
+	public @ResponseBody Map<String, String> dicDataDeal(String operType,DicDataTree dicDataTree, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		DicBO dicBO = (DicBO) ServiceUtils.getBean("dicBO");
-		Map model = dicBO.dicDataDeal(operType,dicDataTree);
+		Map<String, String> model = dicBO.dicDataDeal(operType,dicDataTree);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}
@@ -93,7 +95,7 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=dicRoleGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=dicRoleGrid")  
 	public @ResponseBody String dicRoleGrid(PaginationSupport page,String dicCode,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		DicBO dicBO = (DicBO) ServiceUtils.getBean("dicBO");
 		dicBO.getDicRoleGrid(page,dicCode);
@@ -108,43 +110,43 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=user",method = RequestMethod.GET)  
+	@RequestMapping(params="method=user")  
 	public ModelAndView user(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/base/mdm/user/user");
 		return ma;
 	}
-	@RequestMapping(value="MdmController.do",params="method=userGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=userGrid")  
 	public @ResponseBody String userGrid(PaginationSupport page,User vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		UserBO userBO = (UserBO) ServiceUtils.getBean("userBO");
 		userBO.getUserList(page, vo);
 		return page.getJsonString();
 	}
-	@RequestMapping(value="MdmController.do",params="method=userDeal",method = RequestMethod.POST)  
-	public @ResponseBody Map userDeal(String operType,User user,UserRole ur, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	@RequestMapping(params="method=userDeal")  
+	public @ResponseBody Map<String, String> userDeal(String operType,User user,UserRole ur, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		UserBO userBO = (UserBO) ServiceUtils.getBean("userBO");
-		Map model = userBO.userDeal(operType,user,ur);
+		Map<String, String> model = userBO.userDeal(operType,user,ur);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}
 	
-	@RequestMapping(value="MdmController.do",params="method=userRoleGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=userRoleGrid")  
 	public @ResponseBody String userRoleGrid(PaginationSupport page,User user,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		UserBO userBO = (UserBO) ServiceUtils.getBean("userBO");
 		userBO.userRoleGrid(page, user);
 		return page.getJsonString();
 	}
 	
-	@RequestMapping(value="MdmController.do",params="method=chooseUserRoleGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=chooseUserRoleGrid")  
 	public @ResponseBody String chooseUserRoleGrid(PaginationSupport page,UserRoleVO vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		UserBO bo = (UserBO) ServiceUtils.getBean("userBO");
 		bo.chooseUserRoleGrid(page, vo);
 		return page.getJsonString();
 	}
 	
-	@RequestMapping(value="MdmController.do",params="method=assignUserRole",method = RequestMethod.POST)  
-	public @ResponseBody Map assignUserRole(String datas,User user, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	@RequestMapping(params="method=assignUserRole")  
+	public @ResponseBody Map<String, String> assignUserRole(String datas,User user, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		UserBO userBO = (UserBO) ServiceUtils.getBean("userBO");
-		Map model = userBO.assignUserRole(datas,user);
+		Map<String, String> model = userBO.assignUserRole(datas,user);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}
@@ -159,21 +161,21 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=role",method = RequestMethod.GET)  
+	@RequestMapping(params="method=role")  
 	public ModelAndView role(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/base/mdm/role/role");
 		return ma;
 	}
-	@RequestMapping(value="MdmController.do",params="method=roleGrid",method = RequestMethod.GET)  
+	@RequestMapping(params="method=roleGrid")  
 	public @ResponseBody String roleGrid(PaginationSupport page,Role vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		RoleBO bo = (RoleBO) ServiceUtils.getBean("roleBO");
 		bo.getRoleList(page, vo);
 		return page.getJsonString();
 	}
-	@RequestMapping(value="MdmController.do",params="method=roleDeal",method = RequestMethod.POST)  
-	public @ResponseBody Map roleDeal(String operType,Role role, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	@RequestMapping(params="method=roleDeal")  
+	public @ResponseBody Map<String, String> roleDeal(String operType,Role role, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		RoleBO bo = (RoleBO) ServiceUtils.getBean("roleBO");
-		Map model = bo.roleDeal(operType,role);
+		Map<String, String> model = bo.roleDeal(operType,role);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}
@@ -185,20 +187,20 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=getRoleDicTreeData",method = RequestMethod.GET)  
+	@RequestMapping(params="method=getRoleDicTreeData")  
 	public @ResponseBody String getRoleDicTreeData(TreeVO treeVO,int roleId, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		RoleBO bo = (RoleBO) ServiceUtils.getBean("roleBO");
 		return bo.getRoleDicTreeData(treeVO,roleId);
 	}
-	@RequestMapping(value="MdmController.do",params="method=assignDicResource",method = RequestMethod.POST)  
-	public @ResponseBody Map assignDicResource(String datas,Role role, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	@RequestMapping(params="method=assignDicResource")  
+	public @ResponseBody Map<String, String> assignDicResource(String datas,Role role, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		RoleBO bo = (RoleBO) ServiceUtils.getBean("roleBO");
-		Map model = bo.assignDicResource(datas,role);
+		Map<String, String> model = bo.assignDicResource(datas,role);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}
 	
-	@RequestMapping(value="MdmController.do",params="method=management",method = RequestMethod.GET)  
+	@RequestMapping(params="method=management")  
 	public ModelAndView management(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/base/mdm/management");
 		return ma;
@@ -214,7 +216,7 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=getDicData",method = RequestMethod.GET)  
+	@RequestMapping(params="method=getDicData")  
 	public @ResponseBody String getDicData(String isOptional,String parentCode, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		Map<String,DicDataVO> dic = CacheMgt.getDicData(parentCode);
 		JSONArray ja = new JSONArray();
@@ -247,7 +249,7 @@ public class MdmController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="MdmController.do",params="method=getCommDicList",method = RequestMethod.GET)  
+	@RequestMapping(params="method=getCommDicList")  
 	public @ResponseBody String getCommDicList(Integer parentCode,String whereby,String isOptional, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		DicBO dicBO = (DicBO) ServiceUtils.getBean("dicBO");
 		List<?> datas = dicBO.getCommDicList(parentCode,whereby);
@@ -272,5 +274,25 @@ public class MdmController extends BaseController{
 		}
 		String dicString = ja.toString();
 		return dicString;
+	}
+	
+	/**
+	 * Role management
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params="method=refreshCache")  
+	public ModelAndView refreshCache(HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		ModelAndView ma = new ModelAndView("apps/base/mdm/refreshcache/refreshcache");
+		return ma;
+	}
+	@RequestMapping(params="method=refreshDeal")  
+	public @ResponseBody Map<String, String> refreshDeal(String id, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		RefreshCacheBO bo = (RefreshCacheBO) ServiceUtils.getBean("refreshCacheBO");
+		Map<String, String> model = bo.refreshDeal(id);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
 	}
 }

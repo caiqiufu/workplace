@@ -35,7 +35,7 @@ import com.unieap.db.EntityRowMapper;
  * @author <a href="mailto: xxx@neusoft.com">蔡秋伏</a>
  * @version $Revision: 1.2 $
  */
-public abstract class BaseBO {
+public abstract class BaseBO{
 	/**
 	 * <p>
 	 * 描述:
@@ -49,14 +49,12 @@ public abstract class BaseBO {
 		return model;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void getPaginationDataByDetachedCriteria(DetachedCriteria detachedCriteria,Projection projection,PaginationSupport ps){
 		int totalCount = getCountByDetachedCriteria(detachedCriteria,projection,ps.getDsName());
 		ps.setTotalCount(totalCount);
 		ps.setItems(DBManager.getHT(ps.getDsName()).findByCriteria(detachedCriteria, ps.getStartIndex(),ps.getPageSize()));
 	}
-	@SuppressWarnings("unchecked")
-	public void getPaginationDataByDetachedCriteria(DetachedCriteria detachedCriteria,Projection projection,PaginationSupport ps,Class vo, Class po) throws InstantiationException, IllegalAccessException{
+	public void getPaginationDataByDetachedCriteria(DetachedCriteria detachedCriteria,Projection projection,PaginationSupport ps,Class<?> vo, Class<?> po) throws InstantiationException, IllegalAccessException{
 		int totalCount = getCountByDetachedCriteria(detachedCriteria,projection,ps.getDsName());
 		ps.setTotalCount(totalCount);
 		List<Object> datas = DBManager.getHT(ps.getDsName()).findByCriteria(detachedCriteria, ps.getStartIndex(),ps.getPageSize());
@@ -71,7 +69,6 @@ public abstract class BaseBO {
 			ps.setItems(datas);
 		}
 	}
-	@SuppressWarnings("unchecked")
 	public void getPaginationDataByDetachedCriteria(DetachedCriteria detachedCriteria,PaginationSupport ps){
 		int totalCount = getCountByDetachedCriteria(detachedCriteria,null,ps.getDsName());
 		ps.setTotalCount(totalCount);

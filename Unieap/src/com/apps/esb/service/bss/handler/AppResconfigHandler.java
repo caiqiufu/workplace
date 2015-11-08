@@ -1,5 +1,7 @@
 package com.apps.esb.service.bss.handler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,23 +25,114 @@ public class AppResconfigHandler extends BaseBO implements ConfigHandler{
 
 	@Override
 	public void deal(String parameters) throws Exception {
-		getAppPictureResConfig();
-		getAppContentResConfig();
+		getAppPictureResConfigByPage();
 	}
-	public void getAppPictureResConfig(){
+	public void getAppPictureResConfigNoGroup(){
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT type, name,concat(substring(value,1,CHAR_LENGTH(value)-4),'_',seq,'.png') as value FROM unieap.app_resconfig where active_flag = 'Y' and type = 'P' order by name");
+		sql.append("SELECT type, name,url,hyperlink,text,subject, group_name,resolution,page_num,attri1,attri2  FROM unieap.app_resconfig where active_flag = 'Y' and group_name is null order by name");
 		List<Map<String,Object>> datas = (List<Map<String, Object>>) DBManager.getJT(null).queryForList(sql.toString());
+		//include all pages
+		Map<String,Map<String,List<Map<String,Object>>>> pages = new HashMap<String,Map<String,List<Map<String,Object>>>>();
+		//for each page include P and C
+		Map<String,List<Map<String,Object>>> page;
+		String pageNum,type;
 		if (datas != null && datas.size() > 0) {
-			CacheMgt.getCacheData().put("appPResConfig", datas);
+			Map<String,Object> data;
+			for(int i = 0 ; i < datas.size() ; i++){
+				data = datas.get(i);
+				pageNum = (String)data.get("page_num");
+				type = (String)data.get("type");
+				page = pages.get(pageNum);
+				if(page == null){
+					page = new HashMap<String,List<Map<String,Object>>>();
+					pages.put(pageNum, page);
+				}
+				if(page.get(type)!=null){
+					page.get(type).add(data);
+				}else{
+					List<Map<String,Object>> newdata = new ArrayList<Map<String,Object>>();
+					newdata.add(data);
+					page.put(type, newdata);
+				}
+			}
 		}
+		CacheMgt.getCacheData().put("AppResConfigNoGroup", pages);
+	}
+	public void getAppPictureResConfigWithGroup(){
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT type, name,url,hyperlink,text,subject, group_name,resolution,page_num  FROM unieap.app_resconfig where active_flag = 'Y' and group_name <> '' order by name");
+		List<Map<String,Object>> datas = (List<Map<String, Object>>) DBManager.getJT(null).queryForList(sql.toString());
+		//include all pages
+		Map<String,Map<String,List<Map<String,Object>>>> pages = new HashMap<String,Map<String,List<Map<String,Object>>>>();
+		//for each page include P and C
+		Map<String,List<Map<String,Object>>> page;
+		String pageNum,groupName;
+		if (datas != null && datas.size() > 0) {
+			Map<String,Object> data;
+			for(int i = 0 ; i < datas.size() ; i++){
+				data = datas.get(i);
+				pageNum = (String)data.get("page_num");
+				groupName = (String)data.get("group_name");
+				page = pages.get(pageNum);
+				if(page == null){
+					page = new HashMap<String,List<Map<String,Object>>>();
+					pages.put(pageNum, page);
+				}
+				if(page.get(groupName)!=null){
+					page.get(groupName).add(data);
+				}else{
+					List<Map<String,Object>> newdata = new ArrayList<Map<String,Object>>();
+					newdata.add(data);
+					page.put(groupName, newdata);
+				}
+			}
+		}
+		CacheMgt.getCacheData().put("AppResConfigWithGroup", pages);
 	}
 	public void getAppContentResConfig(){
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT type,name, value FROM unieap.app_resconfig where active_flag = 'Y' and type = 'C' order by name");
+		sql.append("SELECT type, name,url,hyperlink,text,subject, group_name,resolution,page_num  FROM unieap.app_resconfig where active_flag = 'Y' and type = 'C' order by name");
 		List<Map<String,Object>> datas = (List<Map<String, Object>>) DBManager.getJT(null).queryForList(sql.toString());
 		if (datas != null && datas.size() > 0) {
 			CacheMgt.getCacheData().put("appCResConfig", datas);
 		}
 	}
+	public void getAppPictureResConfigByPage(){
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT type, name,url,hyperlink,text,subject, group_name,resolution,page_num,attri1,attri2 FROM unieap.app_resconfig where active_flag = 'Y' order by name");
+		List<Map<String,Object>> datas = (List<Map<String, Object>>) DBManager.getJT(null).queryForList(sql.toString());
+		//include all pages
+		Map<String,Map<String,List<Map<String,Object>>>> pages = new HashMap<String,Map<String,List<Map<String,Object>>>>();
+		//for each page include P and C
+		Map<String,List<Map<String,Object>>> page;
+		String pageNum,type;
+		if (datas != null && datas.size() > 0) {
+			Map<String,Object> data;
+			for(int i = 0 ; i < datas.size() ; i++){
+				data = datas.get(i);
+				pageNum = (String)data.get("page_num");
+				type = (String)data.get("type");
+				page = pages.get(pageNum);
+				if(page == null){
+					page = new HashMap<String,List<Map<String,Object>>>();
+					pages.put(pageNum, page);
+				}
+				if(page.get(type)!=null){
+					page.get(type).add(data);
+				}else{
+					List<Map<String,Object>> newdata = new ArrayList<Map<String,Object>>();
+					newdata.add(data);
+					page.put(type, newdata);
+				}
+			}
+		}
+		CacheMgt.getCacheData().put("AppResConfig", pages);
+	}
+
+	@Override
+	public boolean reload() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
 }

@@ -4,7 +4,7 @@
 <!-- Generated 2015-9-19 22:30:45 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.apps.esb.pojo.Esblog" table="esblog" catalog="unieap" optimistic-lock="version">
-        <id name="logId" type="int">
+        <id name="logId" type="java.lang.Integer">
             <column name="log_id" />
             <generator class="assigned" />
         </id>

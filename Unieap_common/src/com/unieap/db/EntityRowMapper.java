@@ -91,7 +91,7 @@ public class EntityRowMapper implements RowMapper<Object> {
 				try {
 					if (value != null) {
 						// value.getClass().getCanonicalName();
-						if (("byte[]".equals(value.getClass().getTypeName())) && (String.class == retType)) {
+						if (("byte[]".equals(value.getClass().getName())) && (String.class == retType)) {
 							Blob blob = rs.getBlob(property);
 							int bolblen = (int) blob.length();
 							byte[] data = blob.getBytes(1, bolblen);

@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
 import com.unieap.db.DBManager;
+import com.unieap.mdm.vo.DicDataVO;
 import com.unieap.pojo.User;
 
 /**
@@ -32,13 +33,13 @@ public class UnieapConstants {
 	public final static String FAILED = "failed";
 	public final static String UNIEAP = "unieap";
 	public final static String THIRDPART = "thirdpart";
-	public final static String ESB = "esb";
-	public final static String REUSE = "reuse";
+	// public final static String ESB = "esb";
+	// public final static String REUSE = "reuse";
 	public static boolean ISUNIEAP = false;
-	
-	public final static String ERRORCODE= "errorCode";
-	public final static String ERRORDESC= "errorDesc";
-	
+
+	public final static String ERRORCODE = "errorCode";
+	public final static String ERRORDESC = "errorDesc";
+
 	public static Long MENURESDEFID = Long.valueOf(1);
 	/**
 	 * <p>
@@ -64,6 +65,17 @@ public class UnieapConstants {
 	 * </p>
 	 */
 	public final static String NO = "N";
+
+	public static String C99999 = "999999";
+	/*
+	 * success
+	 */
+	public static String C0 = "0";
+	/*
+	 * failed
+	 */
+	public static String C1 = "1";
+
 	/**
 	 * 语言
 	 */
@@ -128,26 +140,51 @@ public class UnieapConstants {
 	}
 
 	public synchronized final static Integer getSequence(String dsName, String serialName) {
+		if (StringUtils.isEmpty(serialName)) {
+			serialName = "unieap";
+		}
 		return DBManager.getJT(dsName).queryForInt("SELECT NEXTVAL('" + serialName + "') SEQ");
 	}
 
 	public final static String getMessage(String code) {
-		String lang[] = StringUtils.split(SYSConfig.defaultLanguage, "_");
-		return getMessage(code, null, "", new Locale(lang[0], lang[1]));
+		Object[] args = null;
+		return getMessage(code, args);
+	}
+
+	public final static String getMessage(String code, String args) {
+		if (!StringUtils.isEmpty(args)) {
+			Object[] argsObj = args.split(",");
+			return getMessage(code, argsObj);
+		} else {
+			return getMessage(code);
+		}
 	}
 
 	public final static String getMessage(String code, Object[] args) {
-		String lang[] = StringUtils.split(SYSConfig.defaultLanguage, "_");
-		return getMessage(code, args, "", new Locale(lang[0], lang[1]));
+		return getMessage(code, args, "");
 	}
 
 	public final static String getMessage(String code, Object[] args, String defaultMsg) {
 		String lang[] = StringUtils.split(SYSConfig.defaultLanguage, "_");
-		return getMessage(code, args, defaultMsg, new Locale(lang[0], lang[1]));
+		if (lang.length == 1) {
+			return getMessage(code, args, defaultMsg, new Locale(lang[0]));
+		} else {
+			return getMessage(code, args, defaultMsg, new Locale(lang[0], lang[1]));
+		}
 	}
 
 	public final static String getMessage(String code, Object[] args, String defaultMsg, Locale loc) {
 		MessageSource message = (MessageSource) ServiceUtils.getBean("messageSource");
 		return message.getMessage(code, args, defaultMsg, loc);
+	}
+
+	public static String getDicName(String groupCode, String dicCode) {
+		Map<String, DicDataVO> group = CacheMgt.getDicData(groupCode);
+		if (group == null || !group.containsKey(dicCode)) {
+			return dicCode;
+		} else {
+			DicDataVO dicDataVO = group.get(dicCode);
+			return dicDataVO.getDicName();
+		}
 	}
 }

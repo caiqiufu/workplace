@@ -11,6 +11,7 @@ public class RequestHeader {
 	public String responseTime;
 	public String systemCode;
 	public String version;
+	private DeviceInfo deviceInfo;
 	public String getAccessPwd() {
 		return accessPwd;
 	}
@@ -70,6 +71,12 @@ public class RequestHeader {
 	}
 	public void setVersion(String version) {
 		this.version = version;
+	}
+	public DeviceInfo getDeviceInfo() {
+		return deviceInfo;
+	}
+	public void setDeviceInfo(DeviceInfo deviceInfo) {
+		this.deviceInfo = deviceInfo;
 	}
 	
 }

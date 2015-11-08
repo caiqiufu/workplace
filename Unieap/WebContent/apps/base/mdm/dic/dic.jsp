@@ -23,7 +23,7 @@ Ext.onReady(function(){
             proxy: {
             	type: 'ajax',
             	reader: 'json',
-                url: 'MdmController.do?method=getDicTreeData'
+                url: 'mdmController.do?method=getDicTreeData'
             },
             nodeParam : "id",
             root:{  
@@ -37,7 +37,7 @@ Ext.onReady(function(){
    	 	var selectedNode;
 	   	var dicTreePanel = Ext.create('Ext.tree.Panel', {
 	   		title: '<%=UnieapConstants.getMessage("mdm.dic.data.title.list")%>',
-	   		layout:'fit',
+	   		region: 'center',flex: true,layout: 'fit',
 	        collapsible: false,
 	        useArrows: true,
 	        rootVisible: true,
@@ -102,7 +102,7 @@ Ext.onReady(function(){
             model: 'roleModel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'MdmController.do?method=dicRoleGrid',
+            proxy:{ type: 'ajax', url: 'mdmController.do?method=dicRoleGrid',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -114,31 +114,26 @@ Ext.onReady(function(){
 	   	     });
     	var selModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single'});
     	var roleDatagrid = Ext.create('Ext.grid.Panel', 
-    	        {layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
+    	        {region: 'east',width: 500,columnLines: true,autoScroll:true,autoExpandColumn:'action',
     		   	 	selModel:selModel,title: '<%=UnieapConstants.getMessage("mdm.role.title.list")%>',
     	   	   		store : roleGridStore,
     		   	   	columns:
     		   	   	[
     		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleId")%>",dataIndex: 'roleId'},
     		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleCode")%>", dataIndex: 'roleCode'},
-    		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleName")%>", dataIndex: 'roleName'},
+    		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleName")%>",flex: true, dataIndex: 'roleName'},
     		   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false},
     		   	   		{ text: "<%=UnieapConstants.getMessage("comm.remark")%>", dataIndex: 'remark',sortable: false}
     		   	   	]
     	        });
     	var viewport = Ext.create('Ext.Viewport', {
     		el : 'datalayou',
-            layout: 'column',
-            items: [{
-                columnWidth: 1/2,
-                padding: '5 0 5 5',
-                items:[dicTreePanel]
-            },{
-                columnWidth: 1/2,
-                padding: '5 0 5 5',
-                items:[roleDatagrid]
-            }]
+            layout: 'border',
+            items: [dicTreePanel,roleDatagrid]
         });
+    	
+    
+    	
 	  function addNode(){
 		   showForm('Add');
 	  }
@@ -198,7 +193,7 @@ Ext.onReady(function(){
                                      clientValidation: true,
                                      method: 'POST',
                                      params:{'operType':operType},
-                                     url: 'MdmController.do?method=dicDataDeal',
+                                     url: 'mdmController.do?method=dicDataDeal',
                                      success: function(form, action) {
                                     	var result = Ext.JSON.decode(action.response.responseText);
 					                    	if(result.isSuccess == 'failed'){

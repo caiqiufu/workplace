@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.apps.esb.pojo.Esblog;
+import com.apps.esb.pojo.EsblogDevice;
 import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.handler.ProcessResult;
@@ -25,6 +26,13 @@ public class TaskSaveEsbLog {
 			List<Esblog> copyDatas = new ArrayList<Esblog>();
 			copyDatas.addAll(datas);
 			datas.clear();
+			DBManager.getHT(null).saveOrUpdateAll(copyDatas);
+		}
+		List<EsblogDevice> deviceDatas = CacheMgt.getEsblogDeviceDatas();
+		if (deviceDatas.size() > 0) {
+			List<EsblogDevice> copyDatas = new ArrayList<EsblogDevice>();
+			copyDatas.addAll(deviceDatas);
+			deviceDatas.clear();
 			DBManager.getHT(null).saveOrUpdateAll(copyDatas);
 		}
 	}

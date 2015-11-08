@@ -3,5 +3,5 @@
     String path = request.getContextPath();
 %>
 <script type="text/javascript">
-		window.location.href = "<%=path%>/login.jsp?errorCode=001";
+	window.top.location.href = "<%=path%>/login.jsp";
 </script>

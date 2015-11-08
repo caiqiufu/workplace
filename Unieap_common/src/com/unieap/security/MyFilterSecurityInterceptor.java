@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
@@ -29,15 +30,15 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException {
 		FilterInvocation fi = new FilterInvocation(arg0, arg1, arg2);
-		/*
-		 * if (SecurityContextHolder.getContext().getAuthentication()
-		 * .getPrincipal() == null ||
-		 * "anonymousUser".equals(SecurityContextHolder.getContext()
-		 * .getAuthentication().getPrincipal())) {
-		 * fi.getHttpResponse().sendRedirect(
-		 * "/LoginController.do?method=login"); }else{ invoke(fi); }
-		 */
-		invoke(fi);
+
+		if (SecurityContextHolder.getContext().getAuthentication() == null
+				|| "anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+			fi.getHttpResponse().sendRedirect(fi.getHttpRequest().getContextPath() +"/logout.jsp");
+		} else {
+			invoke(fi);
+		}
+
+		// invoke(fi);
 	}
 
 	/**

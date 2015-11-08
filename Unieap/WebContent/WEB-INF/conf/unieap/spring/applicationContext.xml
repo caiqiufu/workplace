@@ -10,8 +10,7 @@
 		<import resource="../../apps/mdm/mdm-service.xml"/> -->
 	<!-- 公共配置 需要加载的java包 begin -->
 	<context:annotation-config />
-	<context:component-scan base-package="com.unieap" />
-	<context:component-scan base-package="com.apps" />
+	<context:component-scan base-package="com.*" />
 	<!-- 公共配置 end -->
 	<!-- auto wire -->
 	<bean
@@ -36,20 +35,21 @@
 		<property name="basenames">
 			<list>
 				<value>classpath:/com/resource/MessageResource</value>
+				<value>classpath:/com/resource/ErrorResource</value>
 			</list>
 		</property>
 		<!--refresh resource files frequency, unit is seconds -->
-		<property name="cacheSeconds" value="300" />
+		<property name="cacheSeconds" value="86400" />
 	</bean>
 	<!-- 
+	 -->
 	<bean id="propertyConfigurer" class="com.unieap.tools.Propertyholder">
 		<property name="locations">
 			<list>
-				<value>classpath:reloadConfig.properties</value>
+				<value>classpath:/com/unieap/security/license.properties</value>
 			</list>
 		</property>
 	</bean>
-	 -->
 	<!-- 
 	
 		<bean
@@ -78,7 +78,7 @@
 	<import resource="applicationContext-transaction.xml" />
 	<!-- 
 	<import resource="applicationContext-email.xml" /> 
-	<import resource="applicationContext-fileupload.xml" />
+	<import resource="applicationContext-file.xml" />
 	-->
 	<import resource="applicationContext-task.xml" /> 
 	<import resource="applicationContext-security.xml" />

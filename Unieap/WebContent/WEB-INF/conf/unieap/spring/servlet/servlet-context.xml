@@ -8,10 +8,14 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<!-- springmvc的关键配置 -->
-	<!-- 
-	
-	 -->
+	<!-- 启用spring mvc 注解 -->
+    <context:annotation-config />
+    <!-- 设置使用注解的类所在的jar包 -->
+    <context:component-scan base-package="com.*" />
+    <!-- 完成请求和注解POJO的映射 -->
+    <bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+		
 	<bean id="requestMappingHandlerAdapter"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
@@ -49,14 +53,4 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<bean name="/LoginController.do" class="com.unieap.login.LoginController" />
-	<bean name="/MdmController.do" class="com.unieap.mdm.MdmController" />
-	<!-- 
-	<bean name="/UploadController.do" class="com.unieap.file.UploadController" />
-	 -->
-	<bean name="/ExtAction.do" class="com.unieap.ext.ExtAction" />
-	<!-- reuse application
-	<bean name="/ReuseController.do" class="com.apps.reuse.ReuseController" />
-	<bean name="/EcareController.do" class="com.apps.ecare.EcareController" />
-	-->
 </beans>

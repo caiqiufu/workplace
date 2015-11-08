@@ -33,6 +33,8 @@ public class User implements java.io.Serializable {
 	private String createBy;
 	private String remark;
 	private String email;
+	private Date effectiveDate;
+	private Date expiryDate;
 
 	// Constructors
 
@@ -59,7 +61,7 @@ public class User implements java.io.Serializable {
 	public User(Integer userId, String userCode, String userName,
 			String password, String enable, String expired, String locked,
 			Date createDate, Date modifyDate, String modifyBy, String createBy,
-			String remark, String email) {
+			String remark, String email,Date effectiveDate,Date expiryDate) {
 		this.userId = userId;
 		this.userCode = userCode;
 		this.userName = userName;
@@ -73,6 +75,8 @@ public class User implements java.io.Serializable {
 		this.createBy = createBy;
 		this.remark = remark;
 		this.email = email;
+		this.effectiveDate = effectiveDate;
+		this.expiryDate = expiryDate;
 	}
 
 	// Property accessors
@@ -192,4 +196,21 @@ public class User implements java.io.Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+	
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-3 8:06:27 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.mcare.pojo.AppShop" table="app_shop" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="cityId" type="string">
+            <column name="city_id" length="45" not-null="true" />
+        </property>
+        <property name="cityName" type="string">
+            <column name="city_name" length="128" not-null="true" />
+        </property>
+        <property name="shopName" type="string">
+            <column name="shop_name" length="128" not-null="true" />
+        </property>
+        <property name="openTime" type="string">
+            <column name="open_time" length="45" not-null="true" />
+        </property>
+        <property name="shopNo" type="string">
+            <column name="shop_no" length="45" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" not-null="true" />
+        </property>
+        <property name="longitude" type="string">
+            <column name="longitude" length="45" />
+        </property>
+        <property name="latitude" type="string">
+            <column name="latitude" length="45" />
+        </property>
+        <property name="activeFlag" type="string">
+            <column name="active_flag" length="2" not-null="true" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="0" not-null="true" />
+        </property>
+        <property name="createBy" type="string">
+            <column name="create_by" length="45" not-null="true" />
+        </property>
+        <property name="modifyDate" type="timestamp">
+            <column name="modify_date" length="0" />
+        </property>
+        <property name="modifyBy" type="java.lang.Integer">
+            <column name="modify_by" />
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" />
+        </property>
+    </class>
+</hibernate-mapping>

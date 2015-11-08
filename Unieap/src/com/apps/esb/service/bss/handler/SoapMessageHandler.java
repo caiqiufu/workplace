@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +20,6 @@ import javax.xml.soap.SOAPMessage;
 import org.springframework.util.StringUtils;
 
 import com.apps.esb.pojo.Esblog;
-import com.apps.esb.service.bss.BssErrorCode;
 import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.element.RequestBody;
 import com.apps.esb.service.bss.element.RequestHeader;
@@ -29,6 +30,7 @@ import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
 import com.unieap.base.SYSConfig;
+import com.unieap.pojo.ErrorCode;
 
 public class SoapMessageHandler {
 	public MessageFactory messageFactory;
@@ -51,12 +53,12 @@ public class SoapMessageHandler {
 		envelope.addNamespaceDeclaration("bas", "http://crm.huawei.com/basetype/");
 		SOAPBody body = envelope.getBody();
 		SOAPElement bodyElement = body.addChildElement(method, "quer");
-		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
-		requestHeaderElement.addChildElement("TransactionId").addTextNode(BssServiceUtils.generateTransactionId());
-		requestHeaderElement.addChildElement("ChannelId").addTextNode(SYSConfig.getConfig().get("crm.inf.channelCode"));
-		requestHeaderElement.addChildElement("TechnicalChannelId").addTextNode(SYSConfig.getConfig().get("crm.inf.systemCode"));
-		requestHeaderElement.addChildElement("AccessUser").addTextNode(SYSConfig.getConfig().get("crm.inf.accessUser"));
-		requestHeaderElement.addChildElement("AccessPwd").addTextNode(SYSConfig.getConfig().get("crm.inf.accessPwd"));
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader","quer");
+		requestHeaderElement.addChildElement("TransactionId","bas").addTextNode(BssServiceUtils.generateTransactionId());
+		requestHeaderElement.addChildElement("ChannelId","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.channelCode"));
+		requestHeaderElement.addChildElement("TechnicalChannelId","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.systemCode"));
+		requestHeaderElement.addChildElement("AccessUser","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.accessUser"));
+		requestHeaderElement.addChildElement("AccessPwd","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.accessPwd"));
 	}
 	public void getCRMUpdHeader(String method, SOAPMessage message) throws Exception {
 		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
@@ -64,12 +66,12 @@ public class SoapMessageHandler {
 		envelope.addNamespaceDeclaration("bas", "http://crm.huawei.com/basetype/");
 		SOAPBody body = envelope.getBody();
 		SOAPElement bodyElement = body.addChildElement(method, "upd");
-		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
-		requestHeaderElement.addChildElement("TransactionId").addTextNode(BssServiceUtils.generateTransactionId());
-		requestHeaderElement.addChildElement("ChannelId").addTextNode(SYSConfig.getConfig().get("crm.inf.channelCode"));
-		requestHeaderElement.addChildElement("TechnicalChannelId").addTextNode(SYSConfig.getConfig().get("crm.inf.systemCode"));
-		requestHeaderElement.addChildElement("AccessUser").addTextNode(SYSConfig.getConfig().get("crm.inf.accessUser"));
-		requestHeaderElement.addChildElement("AccessPwd").addTextNode(SYSConfig.getConfig().get("crm.inf.accessPwd"));
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader","upd");
+		requestHeaderElement.addChildElement("TransactionId","bas").addTextNode(BssServiceUtils.generateTransactionId());
+		requestHeaderElement.addChildElement("ChannelId","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.channelCode"));
+		requestHeaderElement.addChildElement("TechnicalChannelId","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.systemCode"));
+		requestHeaderElement.addChildElement("AccessUser","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.accessUser"));
+		requestHeaderElement.addChildElement("AccessPwd","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.accessPwd"));
 	}
 	public void getCRMSerHeader(String method, SOAPMessage message) throws Exception {
 		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
@@ -77,12 +79,12 @@ public class SoapMessageHandler {
 		envelope.addNamespaceDeclaration("bas", "http://crm.huawei.com/basetype/");
 		SOAPBody body = envelope.getBody();
 		SOAPElement bodyElement = body.addChildElement(method, "ser");
-		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
-		requestHeaderElement.addChildElement("TransactionId").addTextNode(BssServiceUtils.generateTransactionId());
-		requestHeaderElement.addChildElement("ChannelId").addTextNode(SYSConfig.getConfig().get("crm.inf.channelCode"));
-		requestHeaderElement.addChildElement("TechnicalChannelId").addTextNode(SYSConfig.getConfig().get("crm.inf.systemCode"));
-		requestHeaderElement.addChildElement("AccessUser").addTextNode(SYSConfig.getConfig().get("crm.inf.accessUser"));
-		requestHeaderElement.addChildElement("AccessPwd").addTextNode(SYSConfig.getConfig().get("crm.inf.accessPwd"));
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader","ser");
+		requestHeaderElement.addChildElement("TransactionId","bas").addTextNode(BssServiceUtils.generateTransactionId());
+		requestHeaderElement.addChildElement("ChannelId","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.channelCode"));
+		requestHeaderElement.addChildElement("TechnicalChannelId","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.systemCode"));
+		requestHeaderElement.addChildElement("AccessUser","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.accessUser"));
+		requestHeaderElement.addChildElement("AccessPwd","bas").addTextNode(SYSConfig.getConfig().get("crm.inf.accessPwd"));
 	}
 	public void getCBSArsHeader(String method, SOAPMessage message) throws Exception {
 		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
@@ -92,22 +94,52 @@ public class SoapMessageHandler {
 		SOAPBody body = envelope.getBody();
 		SOAPElement bodyElement = body.addChildElement(method,"ars");
 		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
-		requestHeaderElement.addChildElement("Version").addTextNode("1.0");
-		requestHeaderElement.addChildElement("MessageSeq").addTextNode(BssServiceUtils.generateTransactionId());
+		requestHeaderElement.addChildElement("Version","cbs").addTextNode("1.0");
+		requestHeaderElement.addChildElement("MessageSeq","cbs").addTextNode(BssServiceUtils.generateTransactionId());
 		
-		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity");
-		accessSecurityElement.addChildElement("LoginSystemCode").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
-		accessSecurityElement.addChildElement("Password").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
+		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
+		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
 	}
-
+	public void getCBSBcHeader(String method, SOAPMessage message) throws Exception {
+		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+		envelope.addNamespaceDeclaration("bcs", "http://www.huawei.com/bme/cbsinterface/bcservices");
+		envelope.addNamespaceDeclaration("cbs", "http://www.huawei.com/bme/cbsinterface/cbscommon");
+		envelope.addNamespaceDeclaration("bcc", "http://www.huawei.com/bme/cbsinterface/bccommon");
+		SOAPBody body = envelope.getBody();
+		SOAPElement bodyElement = body.addChildElement(method,"bcs");
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
+		requestHeaderElement.addChildElement("Version","cbs").addTextNode("1.0");
+		requestHeaderElement.addChildElement("MessageSeq","cbs").addTextNode(BssServiceUtils.generateTransactionId());
+		
+		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
+		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
+		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+	}
+	public void getCBSBbHeader(String method, SOAPMessage message) throws Exception {
+		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+		envelope.addNamespaceDeclaration("bbs", "http://www.huawei.com/bme/cbsinterface/bbservices");
+		envelope.addNamespaceDeclaration("cbs", "http://www.huawei.com/bme/cbsinterface/cbscommon");
+		envelope.addNamespaceDeclaration("bbc", "http://www.huawei.com/bme/cbsinterface/bbcommon");
+		SOAPBody body = envelope.getBody();
+		SOAPElement bodyElement = body.addChildElement(method,"bbs");
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
+		requestHeaderElement.addChildElement("Version","cbs").addTextNode("1.0");
+		requestHeaderElement.addChildElement("MessageSeq","cbs").addTextNode(BssServiceUtils.generateTransactionId());
+		
+		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
+		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
+		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+	}
 	public ProcessResult process(Object obj, RequestInfo requestInfo, String serviceNumber, String extParameters,
 			String parameters,String timeoutName) throws Exception {
-		BizHandler bizHandler = (BizHandler) obj;
 		long beginTime = System.currentTimeMillis();
+		BizHandler bizHandler = (BizHandler) obj;
 		SOAPMessage request = bizHandler.getRequestSOAPMessage(serviceNumber, requestInfo);
 		SOAPMessage response = callService(serviceNumber, requestInfo, request, beginTime,timeoutName);
 		ProcessResult processResult = bizHandler.getResposeResult(response);
 		processResult.setServiceNumber(serviceNumber);
+		exchangeBillingErrorCodeMapping(processResult);
 		String responseTime = UnieapConstants.getCurrentTime(null, null);
 		requestInfo.getRequestHeader().setResponseTime(responseTime);
 		String bizCode = requestInfo.getRequestHeader().getBizCode();
@@ -117,7 +149,15 @@ public class SoapMessageHandler {
 		this.esbLog(request, response, requestInfo.getRequestHeader(),processResult, during, systemName);
 		return processResult;
 	}
-
+    
+	public void exchangeBillingErrorCodeMapping(ProcessResult processResult){
+		ErrorCode errorCode = CacheMgt.getErrorCode(processResult.getResultCode());
+		if(errorCode!=null){
+			processResult.setResultCode(errorCode.getErrorCode());
+			processResult.setResultDesc(errorCode.getErrorDesc());
+		}
+	}
+	
 	public SOAPMessage callWebService(String url, SOAPMessage request, String timeoutConfig) throws Exception {
 		int timeout = 10000;
 		if (!StringUtils.isEmpty(timeoutConfig) && SYSConfig.getConfig().get(timeoutConfig) != null) {
@@ -148,7 +188,7 @@ public class SoapMessageHandler {
 		String requestTime = UnieapConstants.getCurrentTime(null, null);
 		RequestHeader requestHeader = requestInfo.getRequestHeader();
 		requestHeader.setRequestTime(requestTime);
-		requestHeader.setSystemCode(UnieapConstants.ESB);
+		requestHeader.setSystemCode("esb");
 		String bizCode = requestHeader.getBizCode();
 		String url = getUrl(bizCode);
 		String systemName = getSystemName(bizCode);
@@ -157,7 +197,7 @@ public class SoapMessageHandler {
 			response = this.callWebService(url, request, timeoutName);
 		} catch (Exception e) {
 			ProcessResult processResult = new ProcessResult();
-			processResult.setResultCode(BssErrorCode.C99999);
+			processResult.setResultCode(UnieapConstants.C99999);
 			processResult.setResultDesc(e.getLocalizedMessage());
 			String requestInfoString = BssServiceUtils.getSoapMessageString(request);
 			long endTime = System.currentTimeMillis();
@@ -172,7 +212,7 @@ public class SoapMessageHandler {
 	}
 
 	public String getUrl(String bizCode) throws Exception {
-		Map<String, String> infInfo = SYSConfig.getInfInfo().get(bizCode);
+		Map<String, String> infInfo = SYSConfig.getEsbInfo().get(bizCode);
 		if (infInfo == null) {
 			throw new Exception("bizCode[" + bizCode + "] not exist.");
 		}
@@ -180,15 +220,22 @@ public class SoapMessageHandler {
 	}
 
 	public String getSystemName(String bizCode) throws Exception {
-		Map<String, String> infInfo = SYSConfig.getInfInfo().get(bizCode);
+		Map<String, String> infInfo = SYSConfig.getEsbInfo().get(bizCode);
 		if (infInfo == null) {
 			throw new Exception("bizCode[" + bizCode + "] not exist.");
 		}
 		return infInfo.get("systemName");
 	}
+	public String getInftName(String bizCode) throws Exception {
+		Map<String, String> infInfo = SYSConfig.getEsbInfo().get(bizCode);
+		if (infInfo == null) {
+			throw new Exception("bizCode[" + bizCode + "] not exist.");
+		}
+		return infInfo.get("infName");
+	}
 
 	public void esbLog(SOAPMessage request, SOAPMessage response, RequestHeader requestHeader,ProcessResult processResult,
-			String destSystem, String during) {
+			String during,String destSystem) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("request", request);
 		data.put("response", response);
@@ -284,5 +331,14 @@ public class SoapMessageHandler {
 			responsetInfo.setResponseBody(responseBody);
 		}
 		return responsetInfo;
+	}
+	public final static String converDateFormat(String dateTime, String format) {
+		if (StringUtils.isEmpty(format)) {
+			format = UnieapConstants.TIMEFORMAT;
+		}
+		Date data = new Date(dateTime);
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		String dt = sdf.format(data);
+		return dt;
 	}
 }

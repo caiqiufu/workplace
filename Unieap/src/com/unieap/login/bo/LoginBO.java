@@ -68,7 +68,11 @@ public class LoginBO extends BaseBO {
 	public void lougoutLog(VisitLog log) {
 		log.setLogId(getSequence(null, "unieap"));
 		log.setLogoutDate(UnieapConstants.getDateTime(null));
-		log.setUserCode(UnieapConstants.getUser().getUserCode());
+		if(UnieapConstants.getUser()!=null){
+			log.setUserCode(UnieapConstants.getUser().getUserCode());
+		}else{
+			log.setUserCode("system error");
+		}
 		DBManager.getHT(null).save(log);
 	}
 
@@ -149,10 +153,11 @@ public class LoginBO extends BaseBO {
 		return dicdatas;
 	}
 	public void initUserButton(ServletContext servlet) throws Exception {
-		List<ButtonVO> datas = getButtonsByUserId(UnieapConstants.getUser().getUserId());
+		List<Object> datas = getButtonsByUserId(UnieapConstants.getUser().getUserId());
 		if (datas != null) {
 			JSONObject jsonObj = new JSONObject();
-			for (ButtonVO value : datas) {
+			for (Object obj : datas) {
+				ButtonVO value = (ButtonVO)obj;
 				JSONObject json = JSONUtils.convertBean2JSON(value);
 				jsonObj.put(value.getButtonCode(), json);
 			}
@@ -163,8 +168,8 @@ public class LoginBO extends BaseBO {
 			createJs(servlet, UnieapConstants.getUser().getUserCode(), "button_constants", code);
 		}
 	}
-	public List<ButtonVO> getButtonsByUserId(Integer userId) throws Exception {
-		List datas;
+	public List<Object> getButtonsByUserId(Integer userId) throws Exception {
+		List<Object> datas;
 		StringBuffer sql = new StringBuffer();
 		if(StringUtils.equals(UnieapConstants.UNIEAP, UnieapConstants.getUser().getUserCode())){
 			sql.append("SELECT distinct dd.dic_id as buttonId,dd.dic_code as buttonCode,dd.dic_name as buttonName,true as abled ");

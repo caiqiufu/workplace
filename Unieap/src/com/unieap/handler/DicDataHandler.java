@@ -46,4 +46,10 @@ public class DicDataHandler extends BaseBO implements ConfigHandler{
 			CacheMgt.setDicData(dicData);
 		}
 	}
+
+	@Override
+	public boolean reload() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

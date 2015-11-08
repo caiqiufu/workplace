@@ -35,7 +35,7 @@ public class RoleBO extends BaseBO {
 
 	public Map<String, String> roleDeal(String operType, Role vo) throws Exception {
 		if (StringUtils.equals(operType, UnieapConstants.ADD)) {
-			Map result = checkExist(
+			Map<String, String> result = checkExist(
 					UnieapConstants.getMessage("mdm.role.check.roleCode", new Object[] { vo.getRoleCode() }),
 					"roleCode", vo.getRoleCode(), Role.class, null);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
@@ -44,7 +44,7 @@ public class RoleBO extends BaseBO {
 				return result;
 			}
 		} else if (StringUtils.equals(operType, UnieapConstants.MODIFY)) {
-			Map result = checkExistForUpdate(
+			Map<String, String> result = checkExistForUpdate(
 					UnieapConstants.getMessage("mdm.role.check.roleCode", new Object[] { vo.getRoleCode() }), "roleId",
 					vo.getRoleId(), "roleCode", vo.getRoleCode(), Role.class, null);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {

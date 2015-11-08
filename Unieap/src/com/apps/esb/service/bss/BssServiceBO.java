@@ -1,5 +1,7 @@
 package com.apps.esb.service.bss;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +9,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.pojo.Esblog;
+import com.apps.esb.pojo.EsblogDevice;
+import com.apps.esb.service.FlowController;
 import com.apps.esb.service.bss.element.RequestBody;
 import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.element.RequestInfo;
@@ -21,15 +25,108 @@ import com.unieap.UnieapConstants;
 import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
 import com.unieap.db.DBManager;
+import com.unieap.pojo.ExcLog;
+
 @Service("bssServiceBO")
-public class BssServiceBO extends BaseBO{
-	public String queryInfo(String requestInfoString) {
+public class BssServiceBO extends BaseBO {
+	public String queryInfo(String requestInfoString,Map<String,Object> extParameters) throws Exception {
+		FlowController.addQueryRequest();
+		if(FlowController.isExpired()){
+			return expiredResonse();
+		}else if(FlowController.isQueryOverFlow()){
+			FlowController.deductQueryRequest();
+			return overFlowResonse();
+		}else{
+			FlowController.deductQueryRequest();
+			return process(requestInfoString,extParameters);
+		}
+	}
+	public boolean authenticationCheck(String accessUser,String accessPwd){
+		com.unieap.pojo.User user = CacheMgt.getUser(accessUser);
+		if(user==null){
+			return false;
+		}
+		if(user.getPassword().equals(accessPwd)){
+			return true;
+		}else{
+			return true;
+		}
+	}
+	public String bizHandle(String requestInfoString,Map<String,Object> extParameters) throws Exception {
+		FlowController.addBizhandleRequest();
+		if(FlowController.isExpired()){
+			return expiredResonse();
+		}else if(FlowController.isBizhandleFlow()){
+			FlowController.deductBizhandleRequest();
+			return overFlowResonse();
+		}else{
+			FlowController.deductBizhandleRequest();
+			return process(requestInfoString,extParameters);
+		}
+	}
+
+	public void setDatas(Esblog vo) {
+		CacheMgt.addEsblog(vo);
+		batchSaveMore100();
+	}
+	public void setDeviceDatas(EsblogDevice esblogDevice) {
+		CacheMgt.addEsblogDeviceData(esblogDevice);
+		batchEsblogDeviceSaveMore100();
+	}
+	
+	public void batchSaveMore100() {
+		List<Esblog> datas = CacheMgt.getEsblogDatas();
+		List<Esblog> copyDatas = new ArrayList<Esblog>();
+		if (datas.size() > 100) {
+			copyDatas.addAll(datas);
+			datas.clear();
+			DBManager.getHT(null).saveOrUpdateAll(copyDatas);
+
+		}
+	}
+
+	public void batchEsblogDeviceSaveMore100() {
+		List<EsblogDevice> datas = CacheMgt.getEsblogDeviceDatas();
+		List<EsblogDevice> copyDatas = new ArrayList<EsblogDevice>();
+		if (datas.size() > 100) {
+			copyDatas.addAll(datas);
+			datas.clear();
+			DBManager.getHT(null).saveOrUpdateAll(copyDatas);
+
+		}
+	}
+	
+	public String process(String requestInfoString,Map<String,Object> extParameters) {
 		long beginTime = System.currentTimeMillis();
 		RequestInfo requestInfo = null;
 		try {
 			String transactionId = BssServiceUtils.generateTransactionId();
 			try {
 				requestInfo = BssServiceUtils.getRequestInfo(requestInfoString);
+				if(!authenticationCheck(requestInfo.getRequestHeader().getAccessUser(),requestInfo.getRequestHeader().getAccessPwd())){
+					String errorDesc = UnieapConstants.getMessage("10004");
+					ProcessResult processResult = new ProcessResult();
+					processResult.setResultCode("10004");
+					processResult.setResultDesc(errorDesc);
+					processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
+					long endTime = System.currentTimeMillis();
+					String during = "" + (endTime - beginTime);
+					Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
+							requestInfoString, "", during,"esb");
+					setDatas(esblog);
+					//////////////////////////////////////////
+					ResponsetInfo responsetInfo = new ResponsetInfo();
+					ResponsetHeader responsetHeader = new ResponsetHeader();
+					responsetHeader.setResultCode("10004");
+					responsetHeader.setResultDesc(errorDesc);
+					responsetHeader.setTransactionId(transactionId);
+					ResponseBody responseBody = new ResponseBody();
+					responseBody.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
+					responsetInfo.setResponsetHeader(responsetHeader);
+					responsetInfo.setResponseBody(responseBody);
+					String responsetInfoString = BssServiceUtils.getResposeInfoString(responsetInfo);
+					return responsetInfoString;
+				}
 			} catch (Exception e) {
 				requestInfo = new RequestInfo();
 				RequestHeader requestHeader = new RequestHeader();
@@ -39,19 +136,20 @@ public class BssServiceBO extends BaseBO{
 				requestHeader.setTransactionId(transactionId);
 				requestInfo.setRequestBody(requestBody);
 				ProcessResult processResult = new ProcessResult();
-				processResult.setResultCode(BssErrorCode.C99999);
+				processResult.setResultCode(UnieapConstants.C99999);
 				processResult.setResultDesc(e.getLocalizedMessage());
 				long endTime = System.currentTimeMillis();
 				String during = "" + (endTime - beginTime);
-				Esblog esblog = BssServiceUtils.getEsbLog(requestHeader, processResult, requestInfoString, "", during, UnieapConstants.ESB);
+				Esblog esblog = BssServiceUtils.getEsbLog(requestHeader, processResult, requestInfoString, "", during,
+						"esb");
 				setDatas(esblog);
 				///////////////////////////////////////
 				ResponsetInfo ResponsetInfo = new ResponsetInfo();
-				ResponsetHeader responsetHeader =  new ResponsetHeader();
+				ResponsetHeader responsetHeader = new ResponsetHeader();
 				ResponseBody responseBody = new ResponseBody();
 				ResponsetInfo.setResponsetHeader(responsetHeader);
 				ResponsetInfo.setResponseBody(responseBody);
-				responsetHeader.setResultCode(BssErrorCode.C99999);
+				responsetHeader.setResultCode(UnieapConstants.C99999);
 				responsetHeader.setResultDesc(e.getLocalizedMessage());
 				String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
 				return responsetInfoString;
@@ -60,19 +158,20 @@ public class BssServiceBO extends BaseBO{
 			String bizCode = requestInfo.getRequestHeader().getBizCode();
 			Map<String, String> handlerObj = SYSConfig.getBizHandler().get(bizCode);
 			if (handlerObj == null) {
-				String errorDesc = SYSConfig.getErrorDesc(BssErrorCode.CRM_10001);
+				String errorDesc = UnieapConstants.getMessage("10001");
 				ProcessResult processResult = new ProcessResult();
-				processResult.setResultCode(BssErrorCode.CRM_10001);
+				processResult.setResultCode("10001");
 				processResult.setResultDesc(errorDesc);
 				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 				long endTime = System.currentTimeMillis();
 				String during = "" + (endTime - beginTime);
-				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,"", during, UnieapConstants.ESB);
+				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
+						requestInfoString, "", during,"esb");
 				setDatas(esblog);
 				//////////////////////////////////////////
 				ResponsetInfo responsetInfo = new ResponsetInfo();
 				ResponsetHeader responsetHeader = new ResponsetHeader();
-				responsetHeader.setResultCode(BssErrorCode.CRM_10001);
+				responsetHeader.setResultCode("10001");
 				responsetHeader.setResultDesc(errorDesc);
 				responsetHeader.setTransactionId(transactionId);
 				ResponseBody responseBody = new ResponseBody();
@@ -85,21 +184,22 @@ public class BssServiceBO extends BaseBO{
 			BizHandler handler = (BizHandler) ServiceUtils.getBean(handlerObj.get("className"));
 			ProcessResult processResult;
 			try {
-				processResult = handler.process(copyRequestInfo(requestInfo), requestInfo.getRequestBody().getServiceNumber(),
-						requestInfo.getRequestBody().getExtParameters(), handlerObj.get("parameters"));
+				processResult = handler.process(BssServiceUtils.copyRequestInfo(requestInfo),handlerObj.get("parameters"),extParameters);
+				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 			} catch (Exception e) {
 				processResult = new ProcessResult();
-				processResult.setResultCode(BssErrorCode.C99999);
+				processResult.setResultCode(UnieapConstants.C99999);
 				processResult.setResultDesc(e.getLocalizedMessage());
 				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 				long endTime = System.currentTimeMillis();
 				String during = "" + (endTime - beginTime);
-				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,"", during, UnieapConstants.ESB);
+				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
+						requestInfoString, "", during,"esb");
 				setDatas(esblog);
 				//////////////////////////////////////////////
 				ResponsetInfo responsetInfo = new ResponsetInfo();
 				ResponsetHeader responsetHeader = new ResponsetHeader();
-				responsetHeader.setResultCode(BssErrorCode.C99999);
+				responsetHeader.setResultCode(UnieapConstants.C99999);
 				responsetHeader.setResultDesc(e.getLocalizedMessage());
 				responsetHeader.setTransactionId(transactionId);
 				ResponseBody responseBody = new ResponseBody();
@@ -114,21 +214,25 @@ public class BssServiceBO extends BaseBO{
 			String during = "" + (endTime - beginTime);
 			String responseTime = UnieapConstants.getCurrentTime(null, null);
 			responsetInfo.getResponsetHeader().setResponseTime(responseTime);
-			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(),processResult, requestInfoString, responsetInfoString, during, UnieapConstants.ESB);
+			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,
+					responsetInfoString, during,"esb");
 			setDatas(esblog);
+			EsblogDevice esblogDevice = BssServiceUtils.getEsbLogDevice(requestInfo.getRequestHeader(), esblog);
+			setDeviceDatas(esblogDevice);
 			return responsetInfoString;
 		} catch (Exception e) {
 			ProcessResult processResult = new ProcessResult();
-			processResult.setResultCode(BssErrorCode.C99999);
+			processResult.setResultCode(UnieapConstants.C99999);
 			processResult.setResultDesc(e.getLocalizedMessage());
 			//////////////////////////////////
 			long endTime = System.currentTimeMillis();
 			String during = "" + (endTime - beginTime);
-			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,"", during, UnieapConstants.ESB);
+			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,
+					"", during,"esb");
 			setDatas(esblog);
 			ResponsetInfo responsetInfo = new ResponsetInfo();
 			ResponsetHeader responsetHeader = new ResponsetHeader();
-			responsetHeader.setResultCode(BssErrorCode.C99999);
+			responsetHeader.setResultCode(UnieapConstants.C99999);
 			responsetHeader.setResultDesc(e.getLocalizedMessage());
 			ResponseBody responseBody = new ResponseBody();
 			responsetInfo.setResponsetHeader(responsetHeader);
@@ -137,48 +241,51 @@ public class BssServiceBO extends BaseBO{
 			try {
 				responsetInfoString = BssServiceUtils.getResposeInfoString(responsetInfo);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				saveException(e1);
 			}
 			return responsetInfoString;
 		}
 	}
-
-	public void setDatas(Esblog vo) {
-		CacheMgt.addEsblog(vo);
-		batchSaveMore100();
+	public String overFlowResonse() throws Exception{
+		ResponsetInfo ResponsetInfo = new ResponsetInfo();
+		ResponsetHeader responsetHeader = new ResponsetHeader();
+		ResponseBody responseBody = new ResponseBody();
+		ResponsetInfo.setResponsetHeader(responsetHeader);
+		ResponsetInfo.setResponseBody(responseBody);
+		responsetHeader.setResultCode("10002");
+		responsetHeader.setResultDesc(UnieapConstants.getMessage("10002"));
+		String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
+		return responsetInfoString;
 	}
-
-	public void batchSaveMore100() {
-		List<Esblog> datas = CacheMgt.getEsblogDatas();
-		List<Esblog> copyDatas = new ArrayList<Esblog>();
-		if (datas.size() > 100) {
-			copyDatas.addAll(datas);
-			datas.clear();
-			DBManager.getHT(null).saveOrUpdateAll(copyDatas);
-
-		}
+	public String expiredResonse() throws Exception{
+		ResponsetInfo ResponsetInfo = new ResponsetInfo();
+		ResponsetHeader responsetHeader = new ResponsetHeader();
+		ResponseBody responseBody = new ResponseBody();
+		ResponsetInfo.setResponsetHeader(responsetHeader);
+		ResponsetInfo.setResponseBody(responseBody);
+		responsetHeader.setResultCode("10003");
+		responsetHeader.setResultDesc(UnieapConstants.getMessage("10003"));
+		String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
+		return responsetInfoString;
 	}
-	public RequestInfo  copyRequestInfo(RequestInfo oldRequestInfo){
-		RequestInfo requestInfo = new RequestInfo();
-		RequestHeader requestHeader = new RequestHeader();
-		RequestHeader oldRequestHeader = oldRequestInfo.getRequestHeader();
-		requestHeader.setAccessPwd(oldRequestHeader.getAccessPwd());
-		requestHeader.setAccessUser(oldRequestHeader.getAccessUser());
-		requestHeader.setBizCode(oldRequestHeader.getBizCode());
-		requestHeader.setChannelCode(oldRequestHeader.getChannelCode());
-		requestHeader.setExtTransactionId(oldRequestHeader.getExtTransactionId());
-		requestHeader.setRequestTime(oldRequestHeader.getRequestTime());
-		requestHeader.setResponseTime(oldRequestHeader.getResponseTime());
-		requestHeader.setSystemCode(oldRequestHeader.getSystemCode());
-		requestHeader.setTransactionId(oldRequestHeader.getTransactionId());
-		requestHeader.setVersion(oldRequestHeader.getVersion());
-		RequestBody oldRequestBody = oldRequestInfo.getRequestBody();
-		requestInfo.setRequestHeader(requestHeader);
-		RequestBody requestBody = new RequestBody();
-		requestBody.setServiceNumber(oldRequestBody.getServiceNumber());
-		requestBody.setExtParameters(oldRequestBody.getExtParameters());
-		requestInfo.setRequestBody(requestBody);
-		return requestInfo;
+	
+	public void saveException(Exception ex){
+		ExcLog log = new ExcLog();
+        log.setId(UnieapConstants.getSequence(null,"unieap"));
+        log.setBizModule("unieap");
+        log.setExType("system_exception");
+        log.setExCode("");
+        log.setExInfo(ex.getLocalizedMessage());
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        log.setExTracking(sw.toString().getBytes());
+        if(UnieapConstants.getUser()!=null){
+        	log.setOperator(UnieapConstants.getUser().getUserCode());
+        }else{
+        	log.setOperator("system error");
+        }
+        log.setOperationDate(UnieapConstants.getDateTime(null));
+        DBManager.getHT(null).save(log);
 	}
 }

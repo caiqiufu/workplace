@@ -57,6 +57,8 @@
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>  
+      	<dispatcher>FORWARD</dispatcher> 
 	</filter-mapping>
 
 	<listener>
@@ -95,7 +97,9 @@
 		<servlet-name>spring-ws</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
 	<welcome-file-list>
 		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>

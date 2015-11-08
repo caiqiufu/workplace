@@ -1,43 +1,60 @@
-<%@ page import="com.unieap.file.ajaxupload.MonitoredDiskFileItemFactory" %>
-<%@ page import="com.unieap.file.ajaxupload.UploadListener" %>
-<%@ page import="org.apache.commons.fileupload.FileItem" %>
-<%@ page import="org.apache.commons.fileupload.FileItemFactory" %>
-<%@ page import="org.apache.commons.fileupload.FileUploadException" %>
-<%@ page import="org.apache.commons.fileupload.servlet.ServletFileUpload" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--
-/* Licence:
-*   Use this however/wherever you like, just don't blame me if it breaks anything.
-*
-* Credit:
-*   If you're nice, you'll leave this bit:
-*
-*   Class by Pierre-Alexandre Losson -- http://www.telio.be/blog
-*   email : plosson@users.sourceforge.net
-*/
---%>
-<%
-    UploadListener listener = new UploadListener(request, 30);
-
-    // Create a factory for disk-based file items
-    FileItemFactory factory = new MonitoredDiskFileItemFactory(listener);
-
-    // Create a new file upload handler
-    ServletFileUpload upload = new ServletFileUpload(factory);
-
-    try
-    {
-        // process uploads ..
-        upload.parseRequest(request);
-    }
-    catch (FileUploadException e)
-    {
-        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-    }
-%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<%@ include file="/unieap/unieap.jsp" %>
 <html>
-<head><title>Done</title></head>
+<head>
+<title>User</title>
+    <script type="text/javascript">
+    Ext.onReady(function(){
+    	Ext.tip.QuickTipManager.init();
+    	
+    	Ext.create('Ext.form.Panel', {
+	        width: 400,
+	        frame: true,
+	        renderTo: 'fi-form',   
+	        items: [{
+	            xtype: 'filefield',
+	            name: 'file',
+	            msgTarget: 'side',
+	            allowBlank: false,
+	            anchor: '100%',
+	            buttonText: 'Select a File...'
+	        }],
+	        buttons: [{
+	            text: 'Upload',
+	            handler: function() {
+	                var form = this.up('form').getForm();
+	                var defectId = Ext.getDom("defect_id_value").value;
+	                if(form.isValid()){
+	                    form.submit({
+	                        url: 'UploadController.do?method=upload',
+	                        params:{'handlerId':'3','parameters':Ext.JSON.encode({'defectId':defectId})},
+	                        waitMsg: 'Uploading your file...',
+	                        success: function(form, action) {
+                             	var result = Ext.JSON.decode(action.response.responseText);
+			                    if(result.isSuccess == 'failed')
+			                    {
+			                    	Ext.MessageBox.show({title: 'Status',msg:result.message,
+                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+			                    }else{
+                                    	Ext.MessageBox.show({title: 'Status',msg:'Successfull',fn: showReloadResult,
+	                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+			                    }
+                              },
+                             failure: function(form, action) {
+                            	 Ext.MessageBox.show({title: 'Status',msg:action.response.responseText,
+                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+                             }
+	                    });
+	                }
+	            }
+	        }]
+	    });
+    	
+    });
+    	
+    </script>
+</head>
 <body>
-Done
+    <div id="fi-form">中文</div> 
 </body>
 </html>

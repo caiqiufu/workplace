@@ -27,6 +27,16 @@ public interface ConfigHandler {
 	 * @throws Exception
 	 */
 	public void dealNode(Node node, ServletContext servlet, String appName) throws Exception;
+	/**
+	 * @param parameters
+	 * @throws Exception
+	 */
 	public void deal(String parameters)throws Exception;
-
+	
+	/**
+	 * whether need to relaod auto
+	 * @return
+	 */
+	public boolean reload();
+	
 }

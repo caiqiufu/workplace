@@ -2,7 +2,7 @@ package com.apps.esb.service.bss.app.vo;
 
 import java.util.List;
 
-import com.apps.esb.service.bss.app.cbs.vo.querybalance.BalanceResultVO;
+import com.apps.esb.service.bss.app.cbs.vo.queryaccountbalance.BalanceResultVO;
 import com.apps.esb.service.bss.app.cbs.vo.queryfreeunit.FreeUnitItemVO;
 
 public class BalanceInfoVO {

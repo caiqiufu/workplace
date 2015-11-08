@@ -9,7 +9,7 @@
     	 var queryPara;
     	 var queryform = Ext.create('Ext.form.Panel',{
  			fieldDefaults:
- 			{ labelAlign: 'left', labelWidth: 90 },
+ 			{ labelAlign: 'left', labelWidth: 60 },
  	        layout: 'fit',
  	        width : '100%',
       	   	frame : true,
@@ -27,10 +27,13 @@
  	        },
       	    items:[
       	           { id:'queryFieldset', width: '100%',xtype:'fieldset',title: '<%=UnieapConstants.getMessage("comm.search")%>',
-   	                 startCollapsed: true,collapsible: true, defaultType: 'textfield',
+   	                 collapsible: true,collapsed :true, defaultType: 'textfield',
    	                	items:
    	                		[
  								{ xtype: 'fieldcontainer',layout: 'hbox',
+ 									defaults : { 
+ 										margins : "5" 
+ 									},
  								    items: 
  								    [
  								        { xtype:'textfield',name: 'userCode',fieldLabel: '<%=UnieapConstants.getMessage("mdm.user.display.userCode")%>'},
@@ -43,27 +46,15 @@
  				                                fields : ['dicCode', 'dicName'],
  				                                data:UnieapDicdata ._activeFlagOpt
  				                             })
- 				    	                }
- 								    ]
- 								},
- 								{xtype: 'fieldcontainer',layout: 'hbox',
- 					                items: 
- 					                [
- 						               	{name: 'createDatetime', fieldLabel: '<%=UnieapConstants.getMessage("comm.createDate")%>',format: 'Y-m-d', xtype: 'datefield'},
- 						                {name: 'modifyDatetime', fieldLabel: '<%=UnieapConstants.getMessage("comm.modifyDate")%>', format: 'Y-m-d',xtype: 'datefield'},
- 						                { xtype:'button',iconCls:'search-trigger',text:'<%=UnieapConstants.getMessage("comm.search")%>',iconAlign: 'right',
+ 				    	                },{ xtype:'button',iconCls:'search-trigger',text:'<%=UnieapConstants.getMessage("comm.search")%>',iconAlign: 'right',
  					    	                handler: function (){
  					    	                	var userCode=queryform.getForm().findField("userCode").getValue(); 
  					    	                    var userName=queryform.getForm().findField("userName").getValue(); 
- 					    	                    var createDatetime=dateFormat(queryform.getForm().findField("createDatetime").getValue()); 
- 					    	                    var modifyDatetime=dateFormat(queryform.getForm().findField("modifyDatetime").getValue()); 
  					    	                    var enable=queryform.getForm().findField("enable").getValue();
  					    	                    queryPara = 
  					    	                    	{
  					    	                         	userCode:userCode,
  					    	                         	userName:userName,
- 					    	                         	createDatetime:createDatetime,
- 					    	                         	modifyDatetime:modifyDatetime,
  					    	                         	enable:enable
  					   	                        	};
  					    	                    gridstore.load({params:queryPara});
@@ -74,8 +65,8 @@
  					    	                	queryform.getForm().reset(); 
  					    	                }
  						                }
- 					                ]
- 					            }
+ 								    ]
+ 								}
  					  	     ]
  					     }
       	           ]
@@ -85,7 +76,7 @@
             extend: 'Ext.data.Model',
             fields:
             [
-            	'userId','userCode','userName','password','enable','enableDesc','expired','expiredDesc','locked','lockedDesc','createBy','createDate','modifyBy','modifyDate','remark'
+            	'userId','userCode','userName','password','enable','enableDesc','expired','expiredDesc','locked','lockedDesc','createBy','createDate','modifyBy','modifyDate','remark','email'
             ],
             idProperty: 'userId'
         });
@@ -93,7 +84,7 @@
             model: 'datamodel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'MdmController.do?method=userGrid',
+            proxy:{ type: 'ajax', url: 'mdmController.do?method=userGrid',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -119,7 +110,7 @@
        	}
        	var selModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single',listeners:{
   			select:function(model,record,index){
-  				roleGridStore.reload();
+  					roleGridStore.reload();
 	  			}
 			}
 		});
@@ -127,6 +118,7 @@
         var datagrid = Ext.create('Ext.grid.Panel', 
                {el : 'datagrid',layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
        	   	 	selModel:selModel,
+       	   		region: 'center', flex: true,
           	   	store : gridstore,
        	   	   	columns:
        	   	   	[
@@ -136,14 +128,20 @@
        	   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'enableDesc',sortable: false},
        	   	   		{ text: "<%=UnieapConstants.getMessage("comm.createDate")%>",width: 150, dataIndex: 'createDate',sortable: false},
        	   	   		{ text: "<%=UnieapConstants.getMessage("comm.modifyDate")%>",width: 150, dataIndex: 'modifyDate',sortable: false},
-       	   	   		{ text: "<%=UnieapConstants.getMessage("comm.remark")%>", dataIndex: 'remark',width: 200, sortable: false}
+       	   	   		{ text: "<%=UnieapConstants.getMessage("comm.remark")%>", dataIndex: 'remark',flex: true,width: 200, sortable: false,
+		       	   	   	renderer: function (value, meta, record){
+							var max = 150;
+							meta.tdAttr = 'data-qtip="' + value + '"';
+							return value.length < max ? value : value.substring(0, max - 3) + '...';
+						}	
+       	   	   		}
        	   	   	],
 	       	   	tbar:[queryform],
            	   	bbar:new Ext.PagingToolbar(
            	   	{ store : gridstore,displayInfo: true})
                	
                });
-    	datagrid.render();
+    	//datagrid.render();
     	gridstore.loadPage(1);
     	
     	/***function******************************************/
@@ -177,7 +175,7 @@
 								    				return true;
 								    			}
 									    		Ext.Ajax.request({
-									                url: 'MdmController.do?method=userDeal',
+									                url: 'mdmController.do?method=userDeal',
 									                params:{'operType':'checkExist','userCode':value},
 									                success: function(response, opts){
 									                	var result = Ext.JSON.decode(response.responseText);
@@ -229,7 +227,7 @@
 		                                     clientValidation: true,
 		                                     method: 'POST',
 		                                     params:{'operType':operType},
-		                                     url: 'MdmController.do?method=userDeal',
+		                                     url: 'mdmController.do?method=userDeal',
 		                                     success: function(form, action) {
 		                                    	var result = Ext.JSON.decode(action.response.responseText);
 							                    if(result.isSuccess == 'failed'){
@@ -278,7 +276,7 @@
         	if(btn=='yes'){
 	        	var userId= selectedRecord.get("userId");
 	        	Ext.Ajax.request({
-	                url: 'MdMController.do?method=userDeal',
+	                url: 'mdmController.do?method=userDeal',
 	                params:{'operType':"Delete","userId":userId},
 	                success: function(response, opts){
 	                	if(result.isSuccess == 'failed'){
@@ -314,7 +312,7 @@
             model: 'roleModel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'MdmController.do?method=userRoleGrid',
+            proxy:{ type: 'ajax', url: 'mdmController.do?method=userRoleGrid',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -350,7 +348,7 @@
 	        });
     	}
     	var roleDatagrid = Ext.create('Ext.grid.Panel', 
-    	        {layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
+    	        {flex: true,region: 'center', columnLines: true,autoScroll:true,autoExpandColumn:'action',
     		   	 	selModel:roleSelModel,title: '<%=UnieapConstants.getMessage("mdm.role.title.list")%>',
     	   	   		store : roleGridStore,
 	    	   	   	listeners:{
@@ -365,7 +363,7 @@
 						{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:roleUserOperationItems},
     		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleId")%>",dataIndex: 'roleId',width:60},
     		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleCode")%>", dataIndex: 'roleCode',width:120},
-    		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleName")%>", dataIndex: 'roleName',width:120},
+    		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleName")%>", dataIndex: 'roleName',flex: true,width:120},
     		   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false,width:60}
     		   	   	],
     	 		   	tbar:[{ pressed :true,iconCls:'add',
@@ -377,7 +375,7 @@
         	if(btn=='yes'){
 	        	var userRoleId= selectedUserRoleRecord.get("userRoleId");
 	        	Ext.Ajax.request({
-	                url: 'MdmController.do?method=userDeal',
+	                url: 'mdmController.do?method=userDeal',
 	                params:{'operType':"User_Role_Delete","userRoleId":userRoleId},
 	                success: function(response, opts){
 	                	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
@@ -397,7 +395,7 @@
 	          pageSize: 1000,
 	          remoteSort: true,
 	          proxy: 
-	          { type: 'ajax', url: 'MdmController.do?method=chooseUserRoleGrid',
+	          { type: 'ajax', url: 'mdmController.do?method=chooseUserRoleGrid',
 	              reader: 
 	              {root: 'rows', totalProperty: 'totalCount'},
 	              simpleSortMode: false
@@ -463,7 +461,7 @@
 									datas.push(record.data); 
 								});
 						    	Ext.Ajax.request({
-					                url: 'MdmController.do?method=assignUserRole',
+					                url: 'mdmController.do?method=assignUserRole',
 					                params:{'userId':userId,'datas':Ext.JSON.encode(datas)},
 					                success: function(response, opts){
 					                	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
@@ -524,7 +522,7 @@
             proxy: {
             	type: 'ajax',
             	reader: 'json',
-                url: 'MdmController.do?method=getRoleDicTreeData'
+                url: 'mdmController.do?method=getRoleDicTreeData'
             },
             nodeParam : "id",
             root:{  
@@ -538,7 +536,8 @@
    	 
 	   	var dicTreePanel = Ext.create('Ext.tree.Panel', {
 	   		title: '<%=UnieapConstants.getMessage("mdm.dic.data.title.list")%>',
-	   		layout:'fit',
+	   		region: 'east',
+		    width: 600,
 	        collapsible: false,
 	        useArrows: true,
 	        rootVisible: true,
@@ -558,34 +557,24 @@
         
        
         
-        var resourceTabPanel = Ext.create('Ext.tab.Panel',{
-	     	renderTo:'resourceTab',activeTab:0,layout: 'fit',
-	        bodyStyle: 'padding:0px',
-	        items:[
-	               	{
-	            	   xtype: 'panel',title:'<%=UnieapConstants.getMessage("comm.data")%>',closable: false,
-	            	   items : [
-		            	            {
-		            	            	layout: 'column',
-		            	                items: [{
-		            	                    columnWidth: 1/2,
-		            	                    padding: '5 0 5 5',
-		            	                    items:[roleDatagrid]
-		            	                },{
-		            	                    columnWidth: 1/2,
-		            	                    padding: '5 0 5 5',
-		            	                    items:[dicTreePanel]
-		            	                }]
-		            	            }
-	            	            ]
-	            	}
-               ]
-	   });
+   		var viewport = Ext.create('Ext.Viewport', {
+   				el : 'datalayou',
+           		layout: 'border',
+           		items: [datagrid,
+           		       		{
+			           			region: 'south',
+			                    split: true,
+			                    height: 300,
+			                    layout:'border',
+			                    items:[roleDatagrid,dicTreePanel]
+           		       		}
+           		       ]
+       	});
+	   	
 	});
     </script>
 </head>
 <body>
-    <div id="datagrid"></div>
-    <div id="resourceTab"></div>
+    <div id="datalayou"></div>
 </body>
 </html>

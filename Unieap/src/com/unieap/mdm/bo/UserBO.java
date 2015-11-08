@@ -10,7 +10,11 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.unieap.BaseBO;
 import com.unieap.UnieapConstants;
@@ -26,25 +30,29 @@ import com.unieap.tools.Propertyholder;
 
 @Service("userBO")
 public class UserBO extends BaseBO {
+	@Autowired
+	private PasswordEncoder passwordEncoder;  
+	
 	public void getUserList(PaginationSupport page, User vo) throws Exception {
 		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
 		setCriteria(criteria, vo);
 		getPaginationDataByDetachedCriteria(criteria, page);
-		// page.po2vo(UserVO.class);
 	}
-
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Map<String, String> userDeal(String operType, User vo, UserRole ur) throws Exception {
 		if (StringUtils.equals(operType, UnieapConstants.ADD)) {
-			Map result = checkExist(
+			Map<String, String> result = checkExist(
 					UnieapConstants.getMessage("mdm.role.check.userCode", new Object[] { vo.getUserCode() }),
 					"userCode", vo.getUserCode(), User.class, null);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
-				return save(vo);
+				save(vo);
+				assignDefaultRole(vo);
+				return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 			} else {
 				return result;
 			}
 		} else if (StringUtils.equals(operType, UnieapConstants.MODIFY)) {
-			Map result = checkExistForUpdate(
+			Map<String, String> result = checkExistForUpdate(
 					UnieapConstants.getMessage("mdm.role.check.userCode", new Object[] { vo.getUserCode() }), "userId",
 					vo.getUserId(), "userCode", vo.getUserCode(), User.class, null);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
@@ -90,8 +98,9 @@ public class UserBO extends BaseBO {
 	}
 
 	public Map<String, String> save(User vo) throws Exception {
+		String encodedPassword = passwordEncoder.encodePassword(vo.getPassword(), null);
 		vo.setUserId(getSequence(null, "unieap"));
-		vo.setPassword(vo.getUserCode());
+		vo.setPassword(encodedPassword);
 		vo.setLocked(UnieapConstants.NO);
 		vo.setExpired(UnieapConstants.NO);
 		vo.setCreateDate(UnieapConstants.getDateTime(null));
@@ -100,7 +109,16 @@ public class UserBO extends BaseBO {
 		//sendEmailToNewUser(vo);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
-
+	public void assignDefaultRole(User vo){
+		UserRole ur = new UserRole();
+		ur.setUserRoleId(getSequence(null, UnieapConstants.UNIEAP));
+		ur.setUserId(vo.getUserId());
+		ur.setRoleId(Integer.valueOf("2"));
+		ur.setActiveFlag(UnieapConstants.YES);
+		ur.setCreateDate(UnieapConstants.getDateTime(null));
+		ur.setCreateBy(UnieapConstants.getUser().getUserCode());
+		DBManager.getHT(null).save(ur);
+	}
 	public Map<String, String> update(User vo)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, IntrospectionException {
 		User ouser = DBManager.getHT(null).get(User.class, vo.getUserId());
@@ -138,7 +156,7 @@ public class UserBO extends BaseBO {
 		sql.append("r.role_code as roleCode,r.role_name as roleName");
 		sql.append(" from unieap.user_role ur,unieap.role r where ur.role_id = r.role_id ");
 		sql.append("and ur.user_id = ? and ur.active_flag = ?");
-		List items = DBManager.getJT(null).query(sql.toString(), new Object[] { user.getUserId(), UnieapConstants.YES },
+		List<Object> items = DBManager.getJT(null).query(sql.toString(), new Object[] { user.getUserId(), UnieapConstants.YES },
 				new EntityRowMapper(UserRoleVO.class));
 		page.setItems(items);
 		if (items == null) {
@@ -153,7 +171,7 @@ public class UserBO extends BaseBO {
 		sql.append("select r.role_id as roleId, r.role_code as roleCode, r.role_name as roleName ");
 		sql.append(" from unieap.role r where not exists (select ur.role_id from unieap.user_role ur ");
 		sql.append(" where  ur.role_id = r.role_id and ur.user_id = ? and ur.active_flag = ?)");
-		List items = DBManager.getJT(null).query(sql.toString(), new Object[] { vo.getUserId(), UnieapConstants.YES },
+		List<Object> items = DBManager.getJT(null).query(sql.toString(), new Object[] { vo.getUserId(), UnieapConstants.YES },
 				new EntityRowMapper(UserRoleVO.class));
 		page.setItems(items);
 		if (items == null) {

@@ -1,3 +1,3 @@
 <script type="text/javascript">
-	window.location.href = "LoginController.do?method=login";
+	window.top.location.href= "loginController.do?method=login";
 </script>

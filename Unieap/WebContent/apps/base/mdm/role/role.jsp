@@ -19,7 +19,7 @@
             model: 'roleModel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'MdmController.do?method=roleGrid',
+            proxy:{ type: 'ajax', url: 'mdmController.do?method=roleGrid',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -42,13 +42,19 @@
     	}
     	var selModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single',listeners:{
 	  			select:function(model,record,index){
-	  				 dicTreePanel.getStore().load();
+	  				var roleId = record.data.roleId;
+	  				if(roleId=='1' || roleId== '2'){
+	  					Ext.getCmp('Role_Dic_Add').disable();
+	  				}else{
+	  					Ext.getCmp('Role_Dic_Add').enable();
+	  				}
+	  				dicTreePanel.getStore().load();
 	  			}
   			}
   		});
     	
     	var datagrid = Ext.create('Ext.grid.Panel', 
-	        {layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
+	        {region: 'center',flex: true,layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
 		   	 	selModel:selModel,title: '<%=UnieapConstants.getMessage("mdm.role.title.list")%>',
 		 		listeners:{
 		 		   		afterRender:function(thisForm, options){
@@ -63,7 +69,7 @@
 		   	   		{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:operationItems},
 		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleId")%>",dataIndex: 'roleId',width:60},
 		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleCode")%>", dataIndex: 'roleCode',width:120},
-		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleName")%>", dataIndex: 'roleName',width:120},
+		   	   		{ text: "<%=UnieapConstants.getMessage("mdm.role.display.roleName")%>",flex: true, dataIndex: 'roleName',width:120},
 		   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false,width:60}
 		   	   	],
 	 		   	tbar:[{ pressed :true,iconCls:'add',
@@ -121,7 +127,8 @@
 		                                     clientValidation: true,
 		                                     method: 'POST',
 		                                     params:{'operType':operType},
-		                                     url: 'MdmController.do?method=roleDeal',
+		                                     waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+		                                     url: 'mdmController.do?method=roleDeal',
 		                                     success: function(form, action) {
 		                                    	var result = Ext.JSON.decode(action.response.responseText);
 							                    if(result.isSuccess == 'failed'){
@@ -159,7 +166,7 @@
 	     	if(btn=='yes'){
 		        	var roleId= selectedRecord.get("roleId");
 		        	Ext.Ajax.request({
-		                url: 'MdmController.do?method=roleDeal',
+		                url: 'mdmController.do?method=roleDeal',
 		                params:{'operType':"Delete","roleId":roleId},
 		                success: function(response, opts){
 		                	var result = Ext.JSON.decode(action.response.responseText);
@@ -204,7 +211,7 @@
             proxy: {
             	type: 'ajax',
             	reader: 'json',
-                url: 'MdmController.do?method=getRoleDicTreeData'
+                url: 'mdmController.do?method=getRoleDicTreeData'
             },
             nodeParam : "id",
             root:{  
@@ -218,7 +225,7 @@
    	 
 	   	var dicTreePanel = Ext.create('Ext.tree.Panel', {
 	   		title: '<%=UnieapConstants.getMessage("mdm.dic.data.title.list")%>',
-	   		layout:'fit',
+	   		region: 'east',width: 500,layout:'fit',
 	        collapsible: false,
 	        useArrows: true,
 	        rootVisible: true,
@@ -282,7 +289,7 @@
 				}
 			});
 			Ext.Ajax.request({
-                url: 'MdmController.do?method=assignDicResource',
+                url: 'mdmController.do?method=assignDicResource',
                 params:{'roleId':roleId,'datas':Ext.JSON.encode(datas)},
                 success: function(response, opts){
                 	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
@@ -296,16 +303,8 @@
 	   	}
     	var viewport = Ext.create('Ext.Viewport', {
     		el : 'datalayou',
-            layout: 'column',
-            items: [{
-                columnWidth: 1/2,
-                padding: '5 0 5 5',
-                items:[datagrid]
-            },{
-                columnWidth: 1/2,
-                padding: '5 0 5 5',
-                items:[dicTreePanel]
-            }]
+            layout: 'border',
+            items: [datagrid,dicTreePanel]
         });
 	});
     </script>

@@ -23,6 +23,7 @@ import com.unieap.db.EntityRowMapper;
 import com.unieap.mdm.vo.DicDataVO;
 import com.unieap.pojo.DicDataTree;
 import com.unieap.pojo.Role;
+import com.unieap.pojo.RoleResource;
 import com.unieap.tools.TreeUtils;
 
 @Service("dicBO")
@@ -78,11 +79,12 @@ public class DicBO extends BaseBO {
 		DBManager.getHT(null).update(vo);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
-
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Map<String, String> dicDataDeal(String operType, DicDataTree vo) throws Exception {
 		if (StringUtils.equals(operType, UnieapConstants.ADD)) {
 			Map result = checkDicCodeExist(vo);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
+				saveRoleResource(vo);
 				return save(vo);
 			} else {
 				return result;
@@ -103,7 +105,20 @@ public class DicBO extends BaseBO {
 			throw new Exception(UnieapConstants.getMessage("comm.operation.error", new Object[] { operType }));
 		}
 	}
-
+	public void saveRoleResource(DicDataTree vo){
+		RoleResource rr = new RoleResource();
+		rr.setRoleResourceId(getSequence(null,UnieapConstants.UNIEAP));
+		rr.setRoleId(Integer.valueOf("1"));
+		rr.setResourceId(vo.getDicCode());
+		rr.setResourceType(vo.getDicType());
+		if(vo.getParentId()!=null){
+			rr.setCategory(vo.getParentId().toString());
+		}
+		rr.setActiveFlag(UnieapConstants.YES);
+		rr.setCreateDate(UnieapConstants.getDateTime(null));
+		rr.setCreateBy(UnieapConstants.getUser().getUserCode());
+		DBManager.getHT(null).save(rr);
+	}
 	public Map<String, String> checkDicCodeExist(DicDataTree vo) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(DicDataTree.class);
 		Property parentId = Property.forName("parentId");

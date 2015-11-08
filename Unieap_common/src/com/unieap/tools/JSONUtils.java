@@ -45,13 +45,11 @@ public final class JSONUtils {
 	 * <p>
 	 * Discription:[把数据对象转换成JSON对象,List中可以包含Map,Bean]
 	 * </p>
-	 * 
 	 * @param list
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	public static JSONObject getJsonObject(List<Object> list) throws Exception {
+	/*public static JSONObject getJsonObject(List<Object> list) throws Exception {
 		if (list != null && !list.isEmpty()) {
 			JSONObject jsonResult = new JSONObject();
 			JSONArray ja = new JSONArray();
@@ -69,21 +67,20 @@ public final class JSONUtils {
 		} else {
 			return null;
 		}
-	}
+	}*/
 
 	/**
 	 * @param list
 	 * @return JSONArray
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public static JSONArray getJSONArray(List<?> list) throws Exception {
 		if (list != null && !list.isEmpty()) {
 			JSONArray ja = new JSONArray();
 			JSONObject jsonObj = null;
 			for (Object value : list) {
 				if (value instanceof Map) {
-					jsonObj = mapToJSON((Map) value);
+					jsonObj = mapToJSON((Map<String, Object>) value);
 				} else {
 					jsonObj = convertBean2JSON(value);
 				}
@@ -100,7 +97,6 @@ public final class JSONUtils {
 	 * @return String
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public static String getMap2JsonString(Map<String, String> map) throws Exception {
 		if (map != null) {
 			JSONArray ja = new JSONArray();
@@ -124,14 +120,14 @@ public final class JSONUtils {
 	 * @return String
 	 * @throws Exception
 	 */
-	public static String getList2JsonString(List<Object> list) throws Exception {
+	/*public static String getList2JsonString(List<Object> list) throws Exception {
 		JSONObject jo = getJsonObject(list);
 		if (jo == null) {
 			return "";
 		} else {
 			return getJsonObject(list).toString();
 		}
-	}
+	}*/
 
 	/**
 	 * @param list
@@ -139,7 +135,7 @@ public final class JSONUtils {
 	 * @return String
 	 * @throws Exception
 	 */
-	public static String getJsonString(List<Object> list, String totalCount) throws Exception {
+	/*public static String getJsonString(List<Object> list, String totalCount) throws Exception {
 		JSONObject jsonResult;
 		jsonResult = getJsonObject(list);
 		if (jsonResult == null) {
@@ -147,7 +143,7 @@ public final class JSONUtils {
 		}
 		jsonResult.put("totalCount", totalCount);
 		return jsonResult.toString();
-	}
+	}*/
 
 	/**
 	 * 
@@ -193,7 +189,7 @@ public final class JSONUtils {
 				} else if (retType.getName().startsWith("[")) {
 					json.put(property, arrayToJarr(value));
 				} else if (value instanceof Map) {
-					json.put(property, mapToJSON((Map) value));
+					json.put(property, mapToJSON((Map<String, Object>) value));
 				} else {
 					json.put(property, value == null ? null : convertBean2JSON(value));
 				}
@@ -437,14 +433,14 @@ public final class JSONUtils {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static Object convertJSON2Bean(JSONObject json, Class<?> beanClass, Map collectionComponentTypes)
+	public static Object convertJSON2Bean(JSONObject json, Class<?> beanClass, Map<String, Object> collectionComponentTypes)
 			throws Exception {
 		Object bean = beanClass.newInstance();
 		if (json == null || json.length() == 0) {
 			return null;
 		}
 		if (collectionComponentTypes == null) {
-			collectionComponentTypes = new HashMap<String, String>(3);
+			collectionComponentTypes = new HashMap<String, Object>();
 		}
 		String parKey = StringUtils.defaultString((String) collectionComponentTypes.get(typeKey));
 		BeanInfo beanInfo = Introspector.getBeanInfo(beanClass);
@@ -497,9 +493,9 @@ public final class JSONUtils {
 				Class<?> componentType = (Class<?>) collectionComponentTypes.get(nowKey);
 				collectionComponentTypes.put(typeKey, nowKey);
 				JSONArray jarr = json.getJSONArray(key);
-				java.util.Set s = null;
+				java.util.Set<Object> s = null;
 				if (jarr != null && jarr != JSONObject.NULL) {
-					s = new java.util.HashSet();
+					s = new java.util.HashSet<Object>();
 					initCollection(s, json.getJSONArray(key), componentType, collectionComponentTypes);
 				}
 				setter.invoke(bean, new Object[] { s });
@@ -508,9 +504,9 @@ public final class JSONUtils {
 				Class componentType = (Class) collectionComponentTypes.get(nowKey);
 				collectionComponentTypes.put(typeKey, nowKey);
 				JSONArray jarr = json.getJSONArray(key);
-				java.util.ArrayList l = null;
+				java.util.ArrayList<Object> l = null;
 				if (jarr != null && jarr != JSONObject.NULL) {
-					l = new java.util.ArrayList();
+					l = new java.util.ArrayList<Object>();
 					initCollection(l, json.getJSONArray(key), componentType, collectionComponentTypes);
 				}
 				setter.invoke(bean, new Object[] { l });
@@ -558,7 +554,7 @@ public final class JSONUtils {
 	 * @throws Exception
 	 */
 	public static Object[] toObjectArray(Class<?> paramType, JSONArray jarr,
-			Map<String, String> collectionComponentTypes) throws Exception {
+			Map<String, Object> collectionComponentTypes) throws Exception {
 		if (jarr == null || jarr == JSONObject.NULL)
 			return (Object[]) null;
 		Object[] objs = new Object[jarr.length()];
@@ -585,7 +581,7 @@ public final class JSONUtils {
 	 * @throws Exception
 	 */
 	public static List<Object> jsonArrayToList(Class<?> paramType, JSONArray jarr,
-			Map<String, String> collectionComponentTypes) throws Exception {
+			Map<String, Object> collectionComponentTypes) throws Exception {
 		List<Object> list = new ArrayList<Object>(jarr.length());
 		Class<?> beanClass = Class.forName(paramType.getName());
 		for (int i = 0; i < jarr.length(); i++) {
@@ -598,8 +594,7 @@ public final class JSONUtils {
 	}
 
 	// 把jsArray转换为制定Class类型的集合
-	@SuppressWarnings("unchecked")
-	public static void initCollection(Collection c, JSONArray jarr, Class componentType, Map collectionComponentTypes)
+	public static void initCollection(Collection<Object> c, JSONArray jarr, Class componentType, Map<String, Object> collectionComponentTypes)
 			throws Exception {
 		// component of collection is primitive
 		if (componentType == null || isPrimitive(componentType)) {
@@ -646,8 +641,7 @@ public final class JSONUtils {
 		return s;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static boolean isPrimitive(Class clazz) {
+	public static boolean isPrimitive(Class<?> clazz) {
 		for (int i = 0; i < classes.length; i++) {
 			if (classes[i] == clazz)
 				return true;
@@ -662,8 +656,7 @@ public final class JSONUtils {
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static boolean isPrimitiveArray(Class clazz) {
+	public static boolean isPrimitiveArray(Class<?> clazz) {
 		for (int i = 0; i < arrayClasses.length; i++) {
 			if (arrayClasses[i] == clazz)
 				return true;
@@ -674,12 +667,10 @@ public final class JSONUtils {
 
 	/**
 	 * 判断类是否是时间类集合
-	 * 
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static boolean isPrimitiveTime(Class clazz) {
+	public static boolean isPrimitiveTime(Class<?> clazz) {
 		for (int i = 0; i < timeClasses.length; i++) {
 			if (timeClasses[i] == clazz)
 				return true;
@@ -693,8 +684,7 @@ public final class JSONUtils {
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static boolean isPrimitiveCollection(Class clazz) {
+	public static boolean isPrimitiveCollection(Class<?> clazz) {
 		for (int i = 0; i < collectionClasses.length; i++) {
 			if (collectionClasses[i] == clazz)
 				return true;
@@ -708,8 +698,7 @@ public final class JSONUtils {
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static boolean isPrimitiveMap(Class clazz) {
+	public static boolean isPrimitiveMap(Class<?> clazz) {
 		for (int i = 0; i < mapClasses.length; i++) {
 			if (mapClasses[i] == clazz)
 				return true;
@@ -723,20 +712,17 @@ public final class JSONUtils {
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static boolean isSpecificClass(Class clazz) {
+	public static boolean isSpecificClass(Class<?> clazz) {
 		return isPrimitive(clazz) || isPrimitiveArray(clazz) || isPrimitiveTime(clazz);
 	}
 
 	/**
 	 * 基本数据类型
 	 */
-	@SuppressWarnings("unchecked")
 	public static Class[] classes = { byte.class, short.class, int.class, long.class, float.class, double.class,
 			boolean.class, char.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
 			Boolean.class, Character.class, String.class, BigDecimal.class };
 
-	@SuppressWarnings("unchecked")
 	public static Class[] arrayClasses = { byte[].class, short[].class, int[].class, long[].class, float[].class,
 			double[].class, boolean[].class, char[].class, Byte[].class, Short[].class, Integer[].class, Long[].class,
 			Float[].class, Double[].class, Boolean[].class, Character[].class, String[].class, BigDecimal[].class };
@@ -744,7 +730,6 @@ public final class JSONUtils {
 	/**
 	 * 时间类
 	 */
-	@SuppressWarnings("unchecked")
 	public static Class[] timeClasses = { java.util.Date.class, java.sql.Date.class, java.sql.Time.class,
 			java.sql.Timestamp.class, java.util.Calendar.class, java.util.Date[].class, java.sql.Date[].class,
 			java.sql.Time[].class, java.sql.Timestamp[].class, java.util.Calendar[].class };
@@ -752,14 +737,12 @@ public final class JSONUtils {
 	/**
 	 * collection集合类
 	 */
-	@SuppressWarnings("unchecked")
 	public static Class[] collectionClasses = { Collection.class, List.class, ArrayList.class, LinkedList.class,
 			Vector.class, Stack.class, Set.class, HashSet.class, LinkedHashSet.class, SortedSet.class, TreeSet.class };
 
 	/**
 	 * map集合类
 	 */
-	@SuppressWarnings("unchecked")
 	public static Class[] mapClasses = { Map.class, HashMap.class, Hashtable.class, TreeMap.class, WeakHashMap.class };
 
 	/**
@@ -768,7 +751,6 @@ public final class JSONUtils {
 	 * @param paramType
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static Class getType(Class paramType) {
 		Class type = null;
 		for (int i = 0; i < arrayClasses.length; i++) {
