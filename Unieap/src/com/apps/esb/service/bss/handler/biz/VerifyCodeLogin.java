@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.app.crm.handler.GetCustomerData;
-import com.apps.esb.service.bss.app.crm.handler.GetSubscriberData;
+import com.apps.esb.service.bss.app.crm.handler.GetSubscriptionData;
 import com.apps.esb.service.bss.app.crm.vo.querycustomerinfo.CustomerInfoVO;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.ActualCustomerVO;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.AddressInfoVO;
@@ -55,9 +55,9 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 		SmsBO smsBO = (SmsBO) ServiceUtils.getBean("smsBO");
 		String returnCode = smsBO.checkVerifyCode("V", requestInfo.getRequestBody().getServiceNumber(), verifyCode);
 		ProcessResult processResult = new ProcessResult();
-		if (UnieapConstants.C1.equals(returnCode)) {
-			GetSubscriberData getSubscriberData = (GetSubscriberData) ServiceUtils.getBean("getSubscriberData");
-			ProcessResult processResultSubscriberData = getSubscriberData.process(requestInfo, parameters,
+		if (UnieapConstants.C0.equals(returnCode)) {
+			GetSubscriptionData getSubscriptionData = (GetSubscriptionData) ServiceUtils.getBean("getSubscriptionData");
+			ProcessResult processResultSubscriberData = getSubscriptionData.process(requestInfo, parameters,
 					extParameters);
 			QuerySubscriberInfoVO querySubscriberInfoVO = (QuerySubscriberInfoVO) processResultSubscriberData.getVo();
 

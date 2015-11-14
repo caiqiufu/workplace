@@ -48,9 +48,8 @@ public class ComplainBO extends BaseBO {
 
 	public void getComplainList(PaginationSupport page, ComplainVO vo) throws Exception {
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT c.id,evalution,text,url,file_name as fileName,c.submit_date as submitDate,c.submit_by as submitBy ");
-		sql.append("FROM app_complain c left join file_archive fa  ");
-		sql.append(" on  c.file_id = fa.id where ");
+		sql.append("SELECT id,evalution,text,url ,url as fileName,c.submit_date as submitDate,c.submit_by as submitBy ");
+		sql.append("FROM app_complain c where ");
 		sql.append(" submit_date > '").append(vo.getSubmitDateStart()).append("' and submit_date < '")
 				.append(vo.getSubmitDateEnd()).append("' ");
 		if (!StringUtils.isEmpty(vo.getSubmitBy())) {
@@ -58,12 +57,11 @@ public class ComplainBO extends BaseBO {
 		}
 		sql.append(" order by c.id desc ");
 		StringBuffer totalSql = new StringBuffer();
-		totalSql.append("SELECT count(*) FROM app_complain c left join file_archive fa ");
-		totalSql.append(" on  c.file_id = fa.id where ");
+		totalSql.append("SELECT count(*) FROM app_complain where ");
 		totalSql.append(" submit_date > '").append(vo.getSubmitDateStart()).append("' and submit_date < '")
 				.append(vo.getSubmitDateEnd()).append("' ");
 		if (!StringUtils.isEmpty(vo.getSubmitBy())) {
-			totalSql.append(" and c.submit_by ='").append(vo.getSubmitBy()).append("' ");
+			totalSql.append(" and submit_by ='").append(vo.getSubmitBy()).append("' ");
 		}
 		this.getPaginationDataByMysql(ComplainVO.class, sql.toString(), totalSql.toString(), null, page);
 	}

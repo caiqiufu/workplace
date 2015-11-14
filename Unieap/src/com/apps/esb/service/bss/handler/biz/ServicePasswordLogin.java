@@ -8,9 +8,10 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.app.crm.handler.CheckPassword;
 import com.apps.esb.service.bss.app.crm.handler.GetCustomerData;
-import com.apps.esb.service.bss.app.crm.handler.GetSubscriberData;
+import com.apps.esb.service.bss.app.crm.handler.GetSubscriptionData;
 import com.apps.esb.service.bss.app.crm.vo.querycustomerinfo.CustomerInfoVO;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.QuerySubscriberInfoVO;
 import com.apps.esb.service.bss.app.vo.CustomerProfileVO;
@@ -48,9 +49,13 @@ public class ServicePasswordLogin extends SoapMessageHandler implements BizHandl
 		ProcessResult processResultCheckPassword = checkPassword.process(requestInfo,parameters,extParameters);
 		ProcessResult processResult = new ProcessResult();
 		if(UnieapConstants.C0.equals(processResultCheckPassword.getResultCode())){
-			GetSubscriberData getSubscriberData = (GetSubscriberData) ServiceUtils.getBean("getSubscriberData");
-			ProcessResult processResultSubscriberData = getSubscriberData.process(requestInfo, parameters, extParameters);
+			GetSubscriptionData getSubscriptionData = (GetSubscriptionData) ServiceUtils.getBean("getSubscriptionData");
+			ProcessResult processResultSubscriberData = getSubscriptionData.process(requestInfo, parameters, extParameters);
 			QuerySubscriberInfoVO querySubscriberInfoVO = (QuerySubscriberInfoVO) processResultSubscriberData.getVo();
+			
+			JSONObject customerObj = new JSONObject("{customerId:"+querySubscriberInfoVO.getCustomerId()+"}");
+			JSONObject newExtParameters = BssServiceUtils.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
+			requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());
 			
 			GetCustomerData getCustomerData = (GetCustomerData) ServiceUtils.getBean("getCustomerData");
 			ProcessResult processResultGetCustomerData = getCustomerData.process(requestInfo, parameters, extParameters);

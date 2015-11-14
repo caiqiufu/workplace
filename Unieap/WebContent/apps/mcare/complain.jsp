@@ -19,6 +19,9 @@
    	                	items:
    	                		[
  								{ xtype: 'fieldcontainer',layout: 'hbox',
+ 									defaults : { 
+ 										margins : "5" 
+ 									},
  								    items: 
  								    [
  								        { xtype:'textfield',name: 'submitBy',fieldLabel: '<%=UnieapConstants.getMessage("mcare.complain.display.submitBy")%>'},

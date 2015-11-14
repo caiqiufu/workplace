@@ -9,8 +9,11 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.axis.utils.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.apps.esb.service.bss.BssServiceUtils;
+import com.apps.esb.service.bss.app.cbs.vo.xchange.XchangePromotionVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
@@ -53,51 +56,75 @@ public class XchangePromotion extends SoapMessageHandler implements BizHandler{
 		String exchangeAmount = "";
 		if (!StringUtils.isEmpty(requestInfo.getRequestBody().getExtParameters())) {
 			JSONObject extParametersJson = new JSONObject(requestInfo.getRequestBody().getExtParameters());
-			if (extParametersJson.has("xChangeType")) {
-				xChangeType = extParametersJson.getString("xChangeType");
+			if (extParametersJson.has("XchangeType")) {
+				xChangeType = extParametersJson.getString("XchangeType");
+			} else {
+				throw new Exception("XchangeType is null");
+			}
+			if (extParametersJson.has("applierNumber")) {
+				applierNumber = extParametersJson.getString("applierNumber");
 			} else {
 				throw new Exception("applierNumber is null");
 			}
 			if (extParametersJson.has("receiverNumber")) {
 				receiverNumber = extParametersJson.getString("receiverNumber");
 			} else {
-				throw new Exception("transfereeNumber is null");
+				throw new Exception("applierNumber is null");
 			}
 			if (extParametersJson.has("exchangeAmount")) {
 				exchangeAmount = extParametersJson.getString("exchangeAmount");
-				if (Double.parseDouble(exchangeAmount) <= 0) {
-					throw new Exception("exchangeAmount is negative value");
-				}
 			} else {
 				throw new Exception("exchangeAmount is null");
 			}
 		}
 		
-		
 		SOAPMessage message = messageFactory.createMessage();
-		this.getCBSArsHeader("ExchangeAcctRequestMsg", message);
+		this.getCBSArsHeader("XchangePromotionRequestMsg", message);
 		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
-		SOAPElement reqestElement = bodyElement.addChildElement("ExchangeAcctRequest");
-		reqestElement.addChildElement("ExchangeAmt").addTextNode(exchangeAmount);
-		SOAPElement exchangeObjElement = reqestElement.addChildElement("ExchangeObj");
-		SOAPElement subAccessCodeElement = exchangeObjElement.addChildElement("SubAccessCode");
-		SOAPElement primaryIdentityElement = subAccessCodeElement
-				.addChildElement("PrimaryIdentity");
-		primaryIdentityElement.addTextNode(transferorNumber);
-		SOAPElement transfereeObjElement = reqestElement.addChildElement("TransfereeObj");
-		SOAPElement transfereeSubAccessCodeElement = transfereeObjElement.addChildElement("SubAccessCode");
-		SOAPElement transfereePrimaryIdentityElement = transfereeSubAccessCodeElement
-				.addChildElement("PrimaryIdentity");
-		transfereePrimaryIdentityElement.addTextNode(transfereeNumber);
-		
-		
-		return null;
+		SOAPElement reqestElement = bodyElement.addChildElement("XchangePromotionRequest");
+		reqestElement.addChildElement("XchangeType", "arc").addTextNode(xChangeType);
+		reqestElement.addChildElement("applierNumber", "arc").addTextNode(applierNumber);;
+		reqestElement.addChildElement("receiverNumber", "arc").addTextNode(receiverNumber);;
+		reqestElement.addChildElement("exchangeAmount", "arc").addTextNode(exchangeAmount);;
+		return message;
 	}
 
 	@Override
 	public ProcessResult getResposeResult(SOAPMessage response) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ProcessResult result = new ProcessResult();
+		XchangePromotionVO xchangePromotionVO = new XchangePromotionVO();
+		result.setVo(xchangePromotionVO);
+		org.w3c.dom.Document document = BssServiceUtils.getSoapMessageDocument(response);
+		if (document.getElementsByTagName("cbs:ResultCode").getLength() > 0) {
+
+			String retCode = document.getElementsByTagName("cbs:ResultCode").item(0).getTextContent();
+			result.setResultCode(retCode);
+		}
+		if (document.getElementsByTagName("cbs:ResultDesc").getLength() > 0) {
+
+			String retMsg = document.getElementsByTagName("cbs:ResultDesc").item(0).getTextContent();
+			result.setResultDesc(retMsg);
+		}
+		if (document.getElementsByTagName("XchangePromotionResult").getLength() > 0){
+			NodeList xchangePromotionResultNodes = document.getElementsByTagName("XchangePromotionResult").item(0).getChildNodes();
+			for(int i = 0 ; i < xchangePromotionResultNodes.getLength() ; i++){
+				Node node = xchangePromotionResultNodes.item(i);
+				if ("arc:applierNumber".equals(node.getNodeName())) {
+					xchangePromotionVO.setApplierNumber(node.getTextContent());
+				} else if ("arc:receiverNumber".equals(node.getNodeName())) {
+					xchangePromotionVO.setReceiverNumber(node.getTextContent());
+				}else if ("arc:deductAmount".equals(node.getNodeName())) {
+					xchangePromotionVO.setDeductAmount(node.getTextContent());
+				}else if ("arc:transferFee".equals(node.getNodeName())) {
+					xchangePromotionVO.setTransferFee(node.getTextContent());
+				}else if ("arc:bonusAmount".equals(node.getNodeName())) {
+					xchangePromotionVO.setBonusAmount(node.getTextContent());
+				}else if ("arc:bonusExpTime".equals(node.getNodeName())) {
+					xchangePromotionVO.setBonusExpTime(node.getTextContent());
+				}
+			}
+		}
+		return result;
 	}
 
 }

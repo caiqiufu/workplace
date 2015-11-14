@@ -50,6 +50,9 @@ public class ChangePrimaryOffering extends SoapMessageHandler implements BizHand
 	@Override
 	public SOAPMessage getRequestSOAPMessage(String serviceNumber, RequestInfo requestInfo) throws Exception {
 		JSONObject json = new JSONObject(requestInfo.getRequestBody().getExtParameters());
+		if(!json.has("offeringInfo")){
+			throw new Exception("offeringInfo is null");
+		}
 		JSONObject offeringInfo = json.getJSONObject("offeringInfo");
 		if(!offeringInfo.has("primaryOfferingId")){
 			throw new Exception("primaryOfferingId is null");
@@ -71,7 +74,19 @@ public class ChangePrimaryOffering extends SoapMessageHandler implements BizHand
 		SOAPElement subscriberElement = orderItemElement.addChildElement("Subscriber","bas");
 		subscriberElement.addChildElement("ServiceNumber","bas").addTextNode(serviceNumber);
 		SOAPElement primaryOfferingInfoElement = subscriberElement.addChildElement("PrimaryOfferingInfo","bas");
+		/**
+		 * 1 add, 2 modify,3 delete, 4 upgrade , 5 downgrade, 9 migrate , 10 continue(reserved) 
+		 */
 		primaryOfferingInfoElement.addChildElement("ActionType","bas").addTextNode("2");
+		primaryOfferingInfoElement.addChildElement("ActiveMode","bas").addTextNode("M");
+		/**
+		 * 0 immediate, 1 next bill cycle, 2 absolute date
+		 */
+		primaryOfferingInfoElement.addChildElement("EffectMode","bas").addTextNode("0");
+		/**
+		 * 0 immediate, 1 next bill cycle, 2 absolute date
+		 */
+		primaryOfferingInfoElement.addChildElement("ExpireMode","bas").addTextNode("0");
 		SOAPElement offeringIdElement = primaryOfferingInfoElement.addChildElement("OfferingId","bas");
 		offeringIdElement.addChildElement("OfferingId","bas").addTextNode(primaryOfferingId.trim());
 		if(offeringInfo.has("supplementaryOfferings")){

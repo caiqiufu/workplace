@@ -96,10 +96,10 @@ public class QueryDataBalance extends SoapMessageHandler implements BizHandler {
 				FreeUnitItemVO freeUnitItemVO = freeUnitItemVOList.get(i);
 				if ("1108".equals(freeUnitItemVO.getMeasureUnit())) {
 					if (!StringUtils.isEmpty(freeUnitItemVO.getTotalInitialAmount())) {
-						totalAmount =  Double.parseDouble(freeUnitItemVO.getTotalInitialAmount());
+						totalAmount = totalAmount + Double.parseDouble(freeUnitItemVO.getTotalInitialAmount());
 					}
 					if (!StringUtils.isEmpty(freeUnitItemVO.getTotalUnusedAmount())) {
-						remaningAmount = Double.parseDouble(freeUnitItemVO.getTotalUnusedAmount());
+						remaningAmount = remaningAmount + Double.parseDouble(freeUnitItemVO.getTotalUnusedAmount());
 					}
 					MyBalanceDetailVO balanceDetailVO = new MyBalanceDetailVO();
 					balanceDetails.add(balanceDetailVO);

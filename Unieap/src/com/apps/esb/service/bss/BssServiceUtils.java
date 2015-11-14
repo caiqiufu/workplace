@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -142,13 +143,27 @@ public class BssServiceUtils {
 		return requestInfo;
 	}
 
+	public static String checkServiceNumber(String serviceNumber) {
+		if (StringUtils.isNotEmpty(serviceNumber)) {
+			String prefix = StringUtils.substring(serviceNumber, 0, 1);
+			if ("0".equals(prefix)) {
+				return StringUtils.substring(serviceNumber, 1);
+			} else {
+				return serviceNumber;
+			}
+		} else {
+			return serviceNumber;
+		}
+	}
+
 	public static String getResposeInfoString(ResponsetInfo responseInfo) throws Exception {
 		JSONObject jsonResult = new JSONObject();
 		ResponsetHeader header = responseInfo.getResponsetHeader();
-		if(!UnieapConstants.C0.equals(header.getResultCode())){
-			String resultDesc = UnieapConstants.getMessage("99998");
-			header.setResultDesc(resultDesc);
-		}
+		/*
+		 * if(!UnieapConstants.C0.equals(header.getResultCode())){ String
+		 * resultDesc = UnieapConstants.getMessage("99998");
+		 * header.setResultDesc(resultDesc); }
+		 */
 		ResponseBody body = responseInfo.getResponseBody();
 		JSONObject headerJsonResult = new JSONObject();
 		headerJsonResult.put("bizCode", header.getBizCode());
@@ -319,12 +334,13 @@ public class BssServiceUtils {
 			double money = (new Double(amount).doubleValue()) / (new Double(moneyaccruacy).doubleValue());
 			DecimalFormat df = new DecimalFormat(moneylength);
 			return df.format(money);
-			//return UnieapConstants.getMessage("mcare.unit.money", new Object[] { df.format(money) });
+			// return UnieapConstants.getMessage("mcare.unit.money", new
+			// Object[] { df.format(money) });
 		}
 	}
 
 	public static String dateFormat(String datetime) {
-		if(StringUtils.isEmpty(datetime)){
+		if (StringUtils.isEmpty(datetime)) {
 			return "";
 		}
 		String datetimeFormat = SYSConfig.getConfig().get("mcare.unit.format.datetime");
@@ -341,22 +357,44 @@ public class BssServiceUtils {
 
 	public static String dataMBFormat(String data) {
 		return data;
-		//return UnieapConstants.getMessage("mcare.unit.datamb", new Object[] { data });
+		// return UnieapConstants.getMessage("mcare.unit.datamb", new Object[] {
+		// data });
 	}
+
 	public static String dataMBFormat(double data) {
 		return Double.toString(data);
-		//return UnieapConstants.getMessage("mcare.unit.datamb", new Object[] { data });
+		// return UnieapConstants.getMessage("mcare.unit.datamb", new Object[] {
+		// data });
 	}
+
 	public static String voiceFormat(String voice) {
-		int amount = Integer.parseInt(voice)/60;
+		int amount = Integer.parseInt(voice) / 60;
 		return Integer.toString(amount);
-		//return UnieapConstants.getMessage("mcare.unit.voice", new Object[] { amount });
+		// return UnieapConstants.getMessage("mcare.unit.voice", new Object[] {
+		// amount });
 	}
 
 	public static String dataGBFormat(double data) {
 		String datalength = SYSConfig.getConfig().get("mcare.unit.format.datalength");
 		DecimalFormat df = new DecimalFormat(datalength);
-		return df.format( data / 1024);
-		//return UnieapConstants.getMessage("mcare.unit.datagb", new Object[] {df.format( data / 1024)});
+		return df.format(data / 1024);
+		// return UnieapConstants.getMessage("mcare.unit.datagb", new Object[]
+		// {df.format( data / 1024)});
+	}
+
+	public static JSONObject modifyExtParameters(String extParameters, JSONObject parameters) throws Exception {
+		if (StringUtils.isEmpty(extParameters)) {
+			JSONObject json = new JSONObject();
+			json.put("extParameters", parameters);
+			return json;
+		} else {
+			JSONObject json = new JSONObject(extParameters);
+			Iterator<?> keys = parameters.keys();
+			while (keys.hasNext()) {
+				String key = (String) keys.next();
+				json.put(key, parameters.get(key));
+			}
+			return json;
+		}
 	}
 }

@@ -141,7 +141,7 @@ public class UnieapConstants {
 
 	public synchronized final static Integer getSequence(String dsName, String serialName) {
 		if (StringUtils.isEmpty(serialName)) {
-			serialName = "unieap";
+			serialName = UNIEAP;
 		}
 		return DBManager.getJT(dsName).queryForInt("SELECT NEXTVAL('" + serialName + "') SEQ");
 	}

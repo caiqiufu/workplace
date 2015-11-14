@@ -82,9 +82,6 @@ public class AccountTransfer extends SoapMessageHandler implements BizHandler {
 			}
 			if (extParametersJson.has("transferAmount")) {
 				transferAmount = extParametersJson.getString("transferAmount");
-				if (Double.parseDouble(transferAmount) <= 0) {
-					throw new Exception("transferAmount is negative value");
-				}
 			} else {
 				throw new Exception("transferAmount is null");
 			}

@@ -23,7 +23,7 @@
 	            text: 'Upload',
 	            handler: function() {
 	                var form = this.up('form').getForm();
-	                var defectId = Ext.getDom("defect_id_value").value;
+	                var defectId = '1222';
 	                if(form.isValid()){
 	                    form.submit({
 	                        url: 'UploadController.do?method=upload',
@@ -55,6 +55,6 @@
     </script>
 </head>
 <body>
-    <div id="fi-form">中文</div> 
+    <div id="fi-form">file upload test</div> 
 </body>
 </html>

@@ -1,7 +1,5 @@
 package com.unieap.mdm;
 
-import java.beans.PropertyEditor;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,12 +34,6 @@ import com.unieap.pojo.UserRole;
 @Controller
 @RequestMapping("mdmController.do")
 public class MdmController extends BaseController{
-	@InitBinder
-	protected void initBinder(HttpServletRequest request,
-	                              ServletRequestDataBinder binder) throws Exception {
-	    //对于需要转换为Date类型的属性，使用DateEditor进行处理
-	    binder.registerCustomEditor(Date.class, (PropertyEditor) new com.unieap.exttools.DateEditor());
-	}
 	/**
 	 * Dictionary management index page
 	 * @param request

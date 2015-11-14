@@ -1,10 +1,13 @@
 package com.unieap.file;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.springframework.stereotype.Controller;
 //import org.apache.batik.transcoder.TranscoderInput;
 //import org.apache.batik.transcoder.TranscoderOutput;
 //import org.apache.batik.transcoder.image.JPEGTranscoder;
@@ -19,14 +22,16 @@ import com.unieap.file.bo.ExcelBO;
 import com.unieap.file.bo.FileBO;
 import com.unieap.file.vo.FileUploadVO;
 import com.unieap.pojo.HandlerConfig;
+@Controller
 @RequestMapping(value="UploadController.do")  
 public class UploadController extends MultiActionController{
-	@RequestMapping(value="UploadController.do",params="method=upload",method = RequestMethod.POST)  
+	@RequestMapping(params="method=upload")
     public @ResponseBody Map upload(String parameters,HandlerConfig handlerConfig, FileUploadVO vo, HttpServletRequest request,HttpServletResponse response) throws Exception{  
 		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
-		Map model = fileBO.SaveFile(parameters,handlerConfig,vo);
-		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
-        return model;  
+		List<FileItem> items = fileBO.getFileItems(request);
+		//Map model = fileBO.SaveFile(parameters,handlerConfig,vo);
+		//model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+        return null;  
     }
 	@RequestMapping(value="UploadController.do",params="method=uploadExcel",method = RequestMethod.POST)  
     public @ResponseBody Map uploadExcel(String parameters,HandlerConfig handlerConfig, FileUploadVO vo, HttpServletRequest request,HttpServletResponse response) throws Exception{  

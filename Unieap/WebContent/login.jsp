@@ -37,7 +37,7 @@ body
     background-image: -ms-linear-gradient(top, #ebeef2, #d9dee2);
     background-image: -o-linear-gradient(top, #ebeef2, #d9dee2);
     background-image: linear-gradient(top, #ebeef2, #d9dee2);  
-    background-image: url(unieap/web_home-page0.jpg);  
+    background-image: url(unieap/web_home-page31.jpg);  
 }
 
 .lg-container {

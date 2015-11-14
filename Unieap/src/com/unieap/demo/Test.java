@@ -21,10 +21,10 @@ public class Test {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		String sKey = "1234567890111110";
 		String sSrc = "123456";
-		String enString = EncryptionUtils.encrypt(sSrc, sKey);
-		System.out.println("enString=" + enString);
-		String deString = EncryptionUtils.decrypt(enString, sKey);
-		System.out.println("deString=" + deString);
+		//String enString = EncryptionUtils.encrypt(sSrc, sKey);
+		//System.out.println("enString=" + enString);
+		//String deString = EncryptionUtils.decrypt(enString, sKey);
+		//System.out.println("deString=" + deString);
 	}
 
 }

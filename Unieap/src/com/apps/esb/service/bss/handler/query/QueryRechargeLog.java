@@ -46,7 +46,7 @@ public class QueryRechargeLog extends SoapMessageHandler implements BizHandler {
 		}
 		QueryRechargeLogs queryRechargeLogs = (QueryRechargeLogs) ServiceUtils.getBean("queryRechargeLogs");
 		ProcessResult processResult = queryRechargeLogs.process(requestInfo, parameters, extParameters);
-		if(!UnieapConstants.C0.equals(processResult.getResultCode())){
+		if(!UnieapConstants.C1.equals(processResult.getResultCode())){
 			return processResult;
 		}
 		QueryRechargeLogVO queryRechargeLogVO = (QueryRechargeLogVO) processResult.getVo();

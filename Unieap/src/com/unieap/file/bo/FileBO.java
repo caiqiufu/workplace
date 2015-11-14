@@ -65,30 +65,32 @@ public class FileBO extends BaseBO {
 			for (int i = 0; i < files.size(); i++) {
 				FileItem fileItem = files.get(i);
 				String fileName = fileItem.getName();
-				String fileSize = df.format(fileItem.getSize() / 1024);
-				String fileType = StringUtils.split(fileName, ".")[1];
-				// String filePath = SYSConfig.filePath +
-				// "\\complain\\"+fileName;
-				File uploadFile = new File(uploadPath);
-				if (!uploadFile.exists()) {
-					uploadFile.mkdirs();
+				if(!StringUtils.isEmpty(fileName)){
+					String fileSize = df.format(fileItem.getSize() / 1024);
+					String fileType = StringUtils.split(fileName, ".")[1];
+					// String filePath = SYSConfig.filePath +
+					// "\\complain\\"+fileName;
+					File uploadFile = new File(uploadPath);
+					if (!uploadFile.exists()) {
+						uploadFile.mkdirs();
+					}
+					File fullFile = new File(fileItem.getName());
+					File savedFile = new File(uploadPath, fullFile.getName());
+					fileItem.write(savedFile);
+					FileArchive fileArchive = new FileArchive();
+					fileArchive.setArchiveDate(UnieapConstants.getDateTime(null));
+					fileArchive.setExtKey(extKey);
+					fileArchive.setFileCategory(fileCategory);
+					fileArchive.setFileName(fileName);
+					fileArchive.setFilePath(uploadPath);
+					fileArchive.setFileSize(new Double(fileSize));
+					fileArchive.setFileType(fileType);
+					fileArchive.setId(getSequence(null, null));
+					url = url+File.separator+fileName;
+					fileArchive.setUrl(url);
+					fileIds.append(fileArchive.getId().toString()).append(",");
+					DBManager.getHT(null).save(fileArchive);
 				}
-				File fullFile = new File(fileItem.getName());
-				File savedFile = new File(uploadPath, fullFile.getName());
-				fileItem.write(savedFile);
-				FileArchive fileArchive = new FileArchive();
-				fileArchive.setArchiveDate(UnieapConstants.getDateTime(null));
-				fileArchive.setExtKey(extKey);
-				fileArchive.setFileCategory(fileCategory);
-				fileArchive.setFileName(fileName);
-				fileArchive.setFilePath(uploadPath);
-				fileArchive.setFileSize(new Double(fileSize));
-				fileArchive.setFileType(fileType);
-				fileArchive.setId(getSequence(null, null));
-				url = url+File.separator+fileName;
-				fileArchive.setUrl(url);
-				fileIds.append(fileArchive.getId().toString()).append(",");
-				DBManager.getHT(null).save(fileArchive);
 			}
 		}
 		return fileIds.toString().split(",");
@@ -132,7 +134,7 @@ public class FileBO extends BaseBO {
 	public String getRootPath() {
 		String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 		if (path.indexOf("WEB-INF") > 0) {
-			path = path.substring(0, path.indexOf("WEB-INF" + File.separator + "classes"));
+			path = path.substring(0, path.indexOf("WEB-INF"));
 		}
 		return path;
 		// return SYSConfig.rootPath+File.separator;

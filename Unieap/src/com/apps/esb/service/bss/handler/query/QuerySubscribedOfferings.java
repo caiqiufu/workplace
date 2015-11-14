@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.BssServiceUtils;
-import com.apps.esb.service.bss.app.crm.handler.GetSubscriberData;
+import com.apps.esb.service.bss.app.crm.handler.GetSubscriptionData;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.PrimaryOfferingVO;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.QuerySubscriberInfoVO;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.ServiceVO;
@@ -43,8 +43,8 @@ public class QuerySubscribedOfferings extends SoapMessageHandler implements BizH
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		GetSubscriberData getSubscriberData = (GetSubscriberData) ServiceUtils.getBean("getSubscriberData");
-		ProcessResult processResult = getSubscriberData.process(requestInfo,parameters,extParameters);
+		GetSubscriptionData getSubscriptionData = (GetSubscriptionData) ServiceUtils.getBean("getSubscriptionData");
+		ProcessResult processResult = getSubscriptionData.process(requestInfo,parameters,extParameters);
 		if(!UnieapConstants.C0.equals(processResult.getResultCode())){
 			return processResult;
 		}
@@ -106,7 +106,8 @@ public class QuerySubscribedOfferings extends SoapMessageHandler implements BizH
 		primaryOffering.setExpiryDate(BssServiceUtils.dateFormat(primaryOfferingVO.getExpiredTime()));
 		if(offeringDefine!=null){
 			primaryOffering.setEffectiveType(offeringDefine.getEffectiveType());
-			primaryOffering.setFeeAmount(BssServiceUtils.moneyFormat(offeringDefine.getFeeAmount()));
+			//primaryOffering.setFeeAmount(BssServiceUtils.moneyFormat(offeringDefine.getFeeAmount()));
+			primaryOffering.setFeeAmount(offeringDefine.getFeeAmount());
 			primaryOffering.setOfferCategory(offeringDefine.getOfferCategory());
 		}
 		primaryOffering.setOfferingCode(primaryOfferingVO.getOfferingIdVO().getOfferingCode());
@@ -161,7 +162,8 @@ public class QuerySubscribedOfferings extends SoapMessageHandler implements BizH
 				supplementaryOffer.setExpiryDate(BssServiceUtils.dateFormat(supplementaryOfferingVO.getExpiredTime()));
 				if(offeringDefine!=null){
 					supplementaryOffer.setEffectiveType(offeringDefine.getEffectiveType());
-					supplementaryOffer.setFeeAmount(BssServiceUtils.moneyFormat(offeringDefine.getFeeAmount()));
+					//supplementaryOffer.setFeeAmount(BssServiceUtils.moneyFormat(offeringDefine.getFeeAmount()));
+					supplementaryOffer.setFeeAmount(offeringDefine.getFeeAmount());
 					supplementaryOffer.setOfferCategory(offeringDefine.getOfferCategory());
 				}
 				supplementaryOffer.setOfferingCode(supplementaryOfferingVO.getOfferingIdVO().getOfferingCode());

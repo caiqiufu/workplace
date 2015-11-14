@@ -32,6 +32,8 @@ public class AppResconfig implements java.io.Serializable {
 	private String remark;
 	private String attri1;
 	private String attri2;
+	private Date effectiveDate;
+	private Date expiredDate;
 
 	public AppResconfig() {
 	}
@@ -44,7 +46,7 @@ public class AppResconfig implements java.io.Serializable {
 
 	public AppResconfig(Integer id, String type, String name, String text, String subject, String url, String hyperlink,
 			String groupName, String activeFlag, String pageNum, Date modifyDate, String seq, String modifyBy,
-			String language, String remark,String resolution,String attri1,String attri2) {
+			String language, String remark,String resolution,String attri1,String attri2,Date effectiveDate,Date expiredDate) {
 		this.id = id;
 		this.type = type;
 		this.name = name;
@@ -63,6 +65,8 @@ public class AppResconfig implements java.io.Serializable {
 		this.resolution = resolution;
 		this.attri1 = attri1;
 		this.attri2 = attri2;
+		this.effectiveDate = effectiveDate;
+		this.expiredDate = expiredDate;
 	}
 
 	public Integer getId() {
@@ -221,6 +225,22 @@ public class AppResconfig implements java.io.Serializable {
 
 	public void setAttri2(String attri2) {
 		this.attri2 = attri2;
+	}
+
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	public Date getExpiredDate() {
+		return expiredDate;
+	}
+
+	public void setExpiredDate(Date expiredDate) {
+		this.expiredDate = expiredDate;
 	}
 
 }

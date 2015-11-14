@@ -163,6 +163,10 @@ public class SoapMessageHandler {
 		if (!StringUtils.isEmpty(timeoutConfig) && SYSConfig.getConfig().get(timeoutConfig) != null) {
 			timeout = Integer.parseInt(SYSConfig.getConfig().get(timeoutConfig));
 		}
+		String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		if(UnieapConstants.YES.equals(isdebug)){
+			System.setProperty("java.net.useSystemProxies", "true");
+		}
 		SOAPConnection connection = connectionFactory.createConnection();
 		SOAPMessage response = connection.call(request, getURL(url, timeout));
 		return response;

@@ -26,10 +26,11 @@ public class DicDataHandler extends BaseBO implements ConfigHandler{
 
 	@Override
 	public void deal(String parameters) throws Exception {
+		
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT dic_code as dicCode,dic_name as dicName,parent_code as groupCode,parent_name as groupName,");
-		sql.append(" seq, active_flag as activeFlag FROM unieap.dic_data_tree where language= ? order by parent_code,seq");
-		List<Object> datas = DBManager.getJT(null).query(sql.toString(),new Object[]{SYSConfig.defaultLanguage},new EntityRowMapper(DicDataVO.class));
+		sql.append(" seq, active_flag as activeFlag FROM unieap.dic_data_tree where language= ? and tenant_id = ? or tenant_id is null order by parent_code,seq");
+		List<Object> datas = DBManager.getJT(null).query(sql.toString(),new Object[]{SYSConfig.defaultLanguage,SYSConfig.getConfig().get("tenantId")},new EntityRowMapper(DicDataVO.class));
 		if (datas != null && datas.size() > 0) {
 			Map<String, Map<String,DicDataVO>> dicData = new HashMap<String, Map<String,DicDataVO>>();
 			for (Object data:datas) {

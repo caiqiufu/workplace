@@ -1,17 +1,27 @@
 package com.unieap;
 
+import java.beans.PropertyEditor;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.unieap.db.DBManager;
 import com.unieap.pojo.ExcLog;
 
 public class BaseController  extends MultiActionController{
+	@InitBinder
+	public void initBinder(HttpServletRequest request,
+	                              ServletRequestDataBinder binder) throws Exception {
+	    //对于需要转换为Date类型的属性，使用DateEditor进行处理
+	    binder.registerCustomEditor(Date.class, (PropertyEditor) new com.unieap.exttools.DateEditor());
+	}
 	/** 基于@ExceptionHandler异常处理 */  
     @ExceptionHandler  
     public String exp(HttpServletRequest request, Exception ex) {  
