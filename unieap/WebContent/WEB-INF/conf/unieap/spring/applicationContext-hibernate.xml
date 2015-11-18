@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <!-- 对于多数据源就配置多个sessionFactory-->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!--
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.Oracle9Dialect
+				</prop>
+				-->
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<!-- 开发环境为true,生产环境是false -->
+      			<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">false</prop>
+			</props>
+		</property>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath:/com/unieap/pojo/*.hbm.xml</value>
+				<value>classpath:/com/apps/esb/pojo/*.hbm.xml</value>
+				<value>classpath:/com/apps/mcare/pojo/*.hbm.xml</value>
+			</list>
+		</property>
+		<!--all hibernate config filse
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/unieap/pojo/</value>
+				<value>/WEB-INF/conf/unieap/hibernate/tables/</value>
+			</list>
+		</property>
+		-->
+		<!--
+		<property name="mappingResources">
+			<list>
+				<value>
+					pm/resourcetype/hibernate/TPmResType.hbm.xml
+				</value>
+			</list>
+		</property>
+		-->
+	</bean>
+	<!-- 定义了hibernare类的bean end-->
+	<!-- Spring的HibernateTemplate在Hibernate Session之上提供了一个抽象层，
+		其主要功能是简化打开和关闭Hibernate会话，并且把Hibernate的特定异常转化为表5.1列出的Spring ORM异常之一-->
+	<bean id="hibernateTemplate" 
+		class="org.springframework.orm.hibernate3.HibernateTemplate">		
+		<property name="sessionFactory">		
+		    <ref bean="sessionFactory"/>		
+		</property>		
+	</bean>
+</beans>

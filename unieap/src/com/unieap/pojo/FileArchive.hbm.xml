@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-18 15:09:29 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.unieap.pojo.FileArchive" table="file_archive" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="fileName" type="string">
+            <column name="file_name" not-null="true" />
+        </property>
+        <property name="fileType" type="string">
+            <column name="file_type" length="45" not-null="true" />
+        </property>
+        <property name="fileSize" type="java.lang.Double">
+            <column name="file_size" precision="22" scale="0" />
+        </property>
+        <property name="filePath" type="string">
+            <column name="file_path" length="512" not-null="true" />
+        </property>
+        <property name="url" type="string">
+            <column name="url" />
+        </property>
+        <property name="extKey" type="string">
+            <column name="ext_key" length="45" not-null="true" />
+        </property>
+        <property name="fileCategory" type="string">
+            <column name="file_category" length="45" />
+        </property>
+        <property name="archiveDate" type="timestamp">
+            <column name="archive_date" length="0" not-null="true" />
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" />
+        </property>
+    </class>
+</hibernate-mapping>
