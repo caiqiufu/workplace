@@ -70,9 +70,9 @@ public class ComplainBO extends BaseBO {
 	}
 
 	public List<Map<String, Object>> queryComplains(String serviceNumber) {
-		StringBuffer sql = new StringBuffer(
-				"SELECT c.id,text,file_path,feedback FROM app_complain c left join app_complain_file cf on  c.id = cf.complain_id ");
-		sql.append(" where c.submit_by = ? order by c.id desc");
+		StringBuffer sql = new StringBuffer("SELECT ac.id,ac.text,ac.feedback,ac.submit_date,fa.url ");
+		sql.append("FROM unieap.app_complain ac left join unieap.file_archive fa on  ac.file_id = fa.id ");
+		sql.append("where ac.submit_by = ? order by ac.id desc ");
 		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),
 				new Object[] { serviceNumber });
 		return datas;

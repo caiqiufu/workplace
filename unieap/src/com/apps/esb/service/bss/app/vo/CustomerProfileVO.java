@@ -1,6 +1,7 @@
 package com.apps.esb.service.bss.app.vo;
 
 public class CustomerProfileVO {
+	private String customerId;
 	private String serviceNumber;
 	private String activeDate;
 	private String subscriberType;
@@ -119,6 +120,12 @@ public class CustomerProfileVO {
 	}
 	public void setCustomerLevel(String customerLevel) {
 		this.customerLevel = customerLevel;
+	}
+	public String getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	
 }

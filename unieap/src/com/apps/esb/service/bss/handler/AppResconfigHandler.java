@@ -100,7 +100,7 @@ public class AppResconfigHandler extends BaseBO implements ConfigHandler{
 	}
 	public void getAppPictureResConfigByPage(){
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT type, name,url,hyperlink,text,subject, group_name,resolution,page_num,attri1,attri2 FROM unieap.app_resconfig where active_flag = 'Y' ");
+		sql.append("SELECT id, type, name,url,hyperlink,text,subject, group_name,resolution,page_num,attri1,attri2 FROM unieap.app_resconfig where active_flag = 'Y' ");
 		sql.append(" and ((effective_date <= '").append(UnieapConstants.getCurrentTime(null, UnieapConstants.TIMEFORMAT)).append("'");
 		sql.append(" and expired_date >'").append(UnieapConstants.getCurrentTime(null, UnieapConstants.TIMEFORMAT)).append("') or (effective_date is null and expired_date is null))");
 		sql.append(" order by name");

@@ -61,20 +61,26 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 					extParameters);
 			QuerySubscriberInfoVO querySubscriberInfoVO = (QuerySubscriberInfoVO) processResultSubscriberData.getVo();
 
+			JSONObject customerObj = new JSONObject("{customerId:"+querySubscriberInfoVO.getCustomerId()+"}");
+			JSONObject newExtParameters = BssServiceUtils.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
+			requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());
+			
 			GetCustomerData getCustomerData = (GetCustomerData) ServiceUtils.getBean("getCustomerData");
 			ProcessResult processResultGetCustomerData = getCustomerData.process(requestInfo, parameters,
 					extParameters);
 			CustomerInfoVO customerInfoVO = (CustomerInfoVO) processResultGetCustomerData.getVo();
 
-			CustomerProfileVO customerProfileVO = getCustomerInfo(querySubscriberInfoVO, customerInfoVO);
+			VerifyCodeLogin verifyCodeLogin = (VerifyCodeLogin) ServiceUtils.getBean("verifyCodeLogin");
+			CustomerProfileVO customerProfileVO = verifyCodeLogin.getCustomerInfo(querySubscriberInfoVO,customerInfoVO);
 			customerProfileVO.setContactNo(requestInfo.getRequestBody().getServiceNumber());
 			customerProfileVO.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 			JSONObject customerJson = JSONUtils.convertBean2JSON(customerProfileVO);
 			JSONObject jsonResult = new JSONObject();
 			jsonResult.put("subscriberInfo", customerJson);
 			processResult.setExtParameters(jsonResult.toString());
-			processResult.setResultCode(UnieapConstants.C1);
-			processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C1));
+			processResult.setResultCode(UnieapConstants.C0);
+			processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
+			return processResult;
 		} else {
 			processResult.setResultCode(returnCode);
 			processResult.setResultDesc(UnieapConstants.getMessage(returnCode));

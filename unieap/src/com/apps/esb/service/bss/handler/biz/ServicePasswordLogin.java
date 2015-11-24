@@ -78,7 +78,8 @@ public class ServicePasswordLogin extends SoapMessageHandler implements BizHandl
 			processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 			return processResult;
 		}
-		/*CustomerProfileVO customerProfileVO = new CustomerProfileVO();
+		/*ProcessResult processResult = new ProcessResult();
+		CustomerProfileVO customerProfileVO = new CustomerProfileVO();
 		customerProfileVO.setActiveDate("Active");
 		customerProfileVO.setContactNo("962138386");
 		customerProfileVO.setCustomerName("Chai");

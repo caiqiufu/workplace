@@ -1,11 +1,13 @@
 package com.apps.mcare.bo;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
 import org.springframework.stereotype.Service;
 
+import com.apps.mcare.pojo.AppMessage;
 import com.apps.mcare.pojo.AppPushedList;
 import com.apps.mcare.pojo.AppResconfig;
 import com.unieap.BaseBO;
@@ -15,13 +17,14 @@ import com.unieap.db.DBManager;
 
 @Service("pushMessageBO")
 public class PushMessageBO extends BaseBO {
-	public List<AppResconfig> getPushMessage(String serviceNumber, String imei) {
-		List<AppResconfig> datas = (List<AppResconfig>) CacheMgt.getCacheData().get("PushMessageList");
+	public List<AppMessage> getPushMessage(String serviceNumber, String imei) {
+		Map<String,List<AppMessage>> messages = (Map<String,List<AppMessage>>) CacheMgt.getCacheData().get("messages");
+		List<AppMessage > datas = messages.get("P");
 		StringBuffer pushType = new StringBuffer();
 		if (datas != null && datas.size() > 0) {
 			for (int i = 0; i < datas.size(); i++) {
-				AppResconfig appResconfig = datas.get(i);
-				pushType.append(appResconfig.getId()).append(",");
+				AppMessage appMessage = datas.get(i);
+				pushType.append(appMessage.getId()).append(",");
 			}
 			if (checkPushMessage(imei, pushType.toString())) {
 				AppPushedList appPushedList = new AppPushedList();

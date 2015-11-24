@@ -24,13 +24,13 @@ public class SmsBO  extends BaseBO{
 		}else if(datas.size()==1){
 			Integer id = (Integer)datas.get(0).get("id");
 			String expired = datas.get(0).get("expired").toString();
-			if(UnieapConstants.C0.equals(expired)){
+			if("0".equals(expired)){
 				return "20002";
 			}else{
 				SmsVerfiy smsVerfiy = DBManager.getHT(null).get(SmsVerfiy.class, id);
 				smsVerfiy.setChecked(UnieapConstants.YES);
 				DBManager.getHT(null).update(smsVerfiy);
-				return "1";
+				return UnieapConstants.C0;
 			}
 		}else{
 			return "20001";

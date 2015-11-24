@@ -46,7 +46,7 @@ public class QueryTransferLogs extends SoapMessageHandler implements BizHandler{
 		}
 		QueryAccountTransferLogs queryAccountTransferLogs = (QueryAccountTransferLogs) ServiceUtils.getBean("queryAccountTransferLogs");
 		ProcessResult processResult = queryAccountTransferLogs.process(requestInfo, parameters, extParameters);
-		if(!UnieapConstants.C1.equals(processResult.getResultCode())){
+		if(!UnieapConstants.C0.equals(processResult.getResultCode())){
 			return processResult;
 		}
 		QueryTransferBalanceLogVO queryTransferBalanceLogVO = (QueryTransferBalanceLogVO) processResult.getVo();

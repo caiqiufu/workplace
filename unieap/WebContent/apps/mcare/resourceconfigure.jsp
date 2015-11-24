@@ -29,7 +29,7 @@
             fields:
             [
             	'id','type','name','text','subject','url','hyperlink','groupName','resolution','activeFlag','activeFlagDesc','pageNum','modifyDate','seq','modifyBy','language','remark',
-            	'effectiveDate','expiredDate'
+            	'effectiveDate','expiredDate','createDate','createBy'
             ],
             idProperty: 'id'
         });
@@ -38,7 +38,7 @@
             model: 'datamodel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'mcareController.do?method=groupGrid&groupName=message_center_notification',
+            proxy:{ type: 'ajax', url: 'mcareController.do?method=messageGrid&type=N',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -119,13 +119,14 @@
                     [
                     	{ xtype:'textfield',hidden: true, name:'id'},
                     	{ xtype:'textfield',hidden: true, name:'type'},
+                    	{ xtype:'textfield',hidden: true, name:'createDate'},
+                    	{ xtype:'textfield',hidden: true, name:'createBy'},
                     	{ xtype:'textfield',hidden: true, name:'name'},
                     	{ xtype:'textfield',hidden: true, name:'groupName'},
                     	{ xtype:'textfield',hidden: true, name:'resolution'},
                     	{ xtype:'textfield',hidden: true, name:'pageNum'},
                     	{ xtype:'textfield',hidden: true, name:'seq'},
                     	{ xtype:'textfield',hidden: true, name:'url'},
-                    	{ xtype:'textfield',hidden: true, name:'resolution'},
                     	{ xtype:'textfield',hidden: true, name:'remark'},
                     	{ xtype:'textfield',labelWidth:80, width:450, name:'subject',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.subject")%>',maxLength:45,allowBlank:false},
                     	{ xtype:'textareafield',labelWidth:80, width:450, name:'text',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.text")%>',
@@ -148,7 +149,7 @@
             buttonAlign: 'center',
             buttons: 
             [
-                {id:'formAdd', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:true,
+                {id:'formAdd', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
                     handler: function(){
                     	operType = 'AddNotification';
                     	dataForm.getForm().reset();
@@ -194,7 +195,7 @@
                                  method: 'POST',
                                  params:{'operType':operType},
                                  waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                                 url: 'mcareController.do?method=resourceConfigureDeal',
+                                 url: 'mcareController.do?method=messageDeal',
                                  success: function(form, action) {
                                 	var result = Ext.JSON.decode(action.response.responseText);
 				                    if(result.isSuccess == 'failed'){
@@ -221,7 +222,7 @@
             model: 'datamodel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'mcareController.do?method=groupGrid&groupName=message_center_note',
+            proxy:{ type: 'ajax', url: 'mcareController.do?method=messageGrid&type=B',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -301,13 +302,14 @@
                     [
                     	{ xtype:'textfield',hidden: true, name:'id'},
                     	{ xtype:'textfield',hidden: true, name:'type'},
+                    	{ xtype:'textfield',hidden: true, name:'createDate'},
+                    	{ xtype:'textfield',hidden: true, name:'createBy'},
                     	{ xtype:'textfield',hidden: true, name:'name'},
                     	{ xtype:'textfield',hidden: true, name:'groupName'},
                     	{ xtype:'textfield',hidden: true, name:'resolution'},
                     	{ xtype:'textfield',hidden: true, name:'pageNum'},
                     	{ xtype:'textfield',hidden: true, name:'seq'},
                     	{ xtype:'textfield',hidden: true, name:'url'},
-                    	{ xtype:'textfield',hidden: true, name:'resolution'},
                     	{ xtype:'textfield',hidden: true, name:'remark'},
                     	{ xtype:'textfield',labelWidth:80, width:450, name:'subject',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.subject")%>',maxLength:45,allowBlank:false},
                     	{ xtype:'textareafield',labelWidth:80, width:450, name:'text',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.text")%>',
@@ -330,7 +332,7 @@
             buttonAlign: 'center',
             buttons: 
             [
-                {id:'formAddNote', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:true,
+                {id:'formAddNote', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
                     handler: function(){
                     	operType = 'AddNote';
                     	dataFormNote.getForm().reset();
@@ -376,7 +378,7 @@
                                  method: 'POST',
                                  params:{'operType':operType},
                                  waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                                 url: 'mcareController.do?method=resourceConfigureDeal',
+                                 url: 'mcareController.do?method=messageDeal',
                                  success: function(form, action) {
                                 	var result = Ext.JSON.decode(action.response.responseText);
 				                    if(result.isSuccess == 'failed'){
@@ -398,6 +400,192 @@
                 }
             ]
         });
+    	
+    	/***pop-up notification begin*********************************************************/
+    	var gridstoreForPopup = Ext.create('Ext.data.Store', {
+            model: 'datamodel',
+            pageSize: 15,
+            remoteSort: true,
+            proxy:{ type: 'ajax', url: 'mcareController.do?method=messageGrid&type=P',
+                reader: 
+                {root: 'rows', totalProperty: 'totalCount'},
+                simpleSortMode: true
+            },
+            sorters: [{ property: 'id', direction: 'DESC'}]
+        });
+    	var gridForPopup = Ext.create('Ext.grid.Panel', {
+            store: gridstoreForPopup,
+            columns: [
+                {text: "<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.subject")%>",  dataIndex: 'subject', sortable: false,width:200,
+                	renderer: function (value, meta, record){
+						var max = 150;
+						meta.tdAttr = 'data-qtip="' + value + '"';
+						return value.length < max ? value : value.substring(0, max - 3) + '...';
+					}	
+                },
+                {text: "<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.text")%>", dataIndex: 'text',flex: true, sortable: true,
+                	renderer: function (value, meta, record){
+						var max = 150;
+						meta.tdAttr = 'data-qtip="' + value + '"';
+						return value.length < max ? value : value.substring(0, max - 3) + '...';
+					}	
+                },
+                {text: "<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,width:80},
+                { text: "<%=UnieapConstants.getMessage("comm.effectiveDate")%>", dataIndex: 'effectiveDate',sortable: false,width:100,
+                	renderer: function (value, meta, record){
+						var max = 150;
+						meta.tdAttr = 'data-qtip="' + value + '"';
+						return value.length < max ? value : value.substring(0, max - 3) + '...';
+					}	
+                },
+                { text: "<%=UnieapConstants.getMessage("comm.expiredDate")%>", dataIndex: 'expiredDate',sortable: false,width:100,
+                	renderer: function (value, meta, record){
+						var max = 150;
+						meta.tdAttr = 'data-qtip="' + value + '"';
+						return value.length < max ? value : value.substring(0, max - 3) + '...';
+					}	
+                },
+                { text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false,width:60}
+            ],
+            flex: true,region: 'center',
+            bbar:new Ext.PagingToolbar(
+               	   	{ store : gridstoreForPopup,displayInfo: true})
+        });
+    	gridstoreForPopup.load();
+    	gridForPopup.getSelectionModel().on('selectionchange', function(sm, selectedRecord) {
+            if (selectedRecord.length) {
+            	dataFormPopup.getForm().reset();
+            	dataFormPopup.getForm().setValues(selectedRecord[0].data);
+            	dataFormPopup.getForm().findField('subject').setReadOnly(true);
+            	dataFormPopup.getForm().findField('subject').inputEl.addCls('readonly_field');
+            	dataFormPopup.getForm().findField('text').setReadOnly(true);
+            	dataFormPopup.getForm().findField('text').inputEl.addCls('readonly_field');
+            	dataFormPopup.getForm().findField('hyperlink').setReadOnly(true);
+            	dataFormPopup.getForm().findField('hyperlink').inputEl.addCls('readonly_field');
+            	dataFormPopup.getForm().findField('activeFlag').setReadOnly(true);
+            	dataFormPopup.getForm().findField('activeFlag').inputEl.addCls('readonly_field');
+            	dataFormPopup.getForm().findField('effectiveDate').setReadOnly(true);
+            	dataFormPopup.getForm().findField('effectiveDate').inputEl.addCls('readonly_field');
+            	dataFormPopup.getForm().findField('expiredDate').setReadOnly(true);
+            	dataFormPopup.getForm().findField('expiredDate').inputEl.addCls('readonly_field');
+            	dataFormPopup.getForm().findField('effectiveDate').setValue(Ext.util.Format.date(selectedRecord[0].data.effectiveDate,"Y-m-d h:i:s"));
+            	dataFormPopup.getForm().findField('expiredDate').setValue(Ext.util.Format.date(selectedRecord[0].data.expiredDate,"Y-m-d h:i:s"));
+            	Ext.getCmp('formAddPopup').enable();
+            	Ext.getCmp('formModifyPopup').enable();
+            	Ext.getCmp('formSubmitPopup').disable();
+            }
+        });
+    	var dataFormPopup = Ext.widget('form',
+           {
+    		layout:'fit',defaults:{labelAlign: 'left', labelWidth: 90, anchor: '100%'},
+            bodyPadding:5,
+            items:
+            [
+            	{xtype:'fieldset', title:'<%=UnieapConstants.getMessage("comm.data")%>',
+                    items:
+                    [
+                    	{ xtype:'textfield',hidden: true, name:'id'},
+                    	{ xtype:'textfield',hidden: true, name:'type'},
+                    	{ xtype:'textfield',hidden: true, name:'createDate'},
+                    	{ xtype:'textfield',hidden: true, name:'createBy'},
+                    	{ xtype:'textfield',hidden: true, name:'name'},
+                    	{ xtype:'textfield',hidden: true, name:'groupName'},
+                    	{ xtype:'textfield',hidden: true, name:'resolution'},
+                    	{ xtype:'textfield',hidden: true, name:'pageNum'},
+                    	{ xtype:'textfield',hidden: true, name:'seq'},
+                    	{ xtype:'textfield',hidden: true, name:'url'},
+                    	{ xtype:'textfield',hidden: true, name:'remark'},
+                    	{ xtype:'textfield',labelWidth:80, width:450, name:'subject',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.subject")%>',maxLength:45,allowBlank:false},
+                    	{ xtype:'textareafield',labelWidth:80, width:450, name:'text',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.text")%>',
+                    		preventScrollbars:true,maxLength:1024,height:150,growMin:150,growMax:200,allowBlank:false},
+                   		{name: 'effectiveDate',labelWidth:80, width:300, fieldLabel: '<%=UnieapConstants.getMessage("comm.effectiveDate")%>',format: 'Y-m-d h:i:s', xtype: 'datefield',allowBlank:false,
+                    		value:Ext.util.Format.date(new Date(),"Y-m-d h:i:s")
+                   		},
+   			            {name: 'expiredDate',labelWidth:80, width:300, fieldLabel: '<%=UnieapConstants.getMessage("comm.expiredDate")%>',format: 'Y-m-d h:i:s', xtype: 'datefield',allowBlank:false,
+                   			value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,+7),"Y-m-d h:i:s")
+   			            },
+                    	{ xtype:'combo', labelWidth:80, width:300,forceSelection: true,editable:false,allowBlank:false,
+                            name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
+                            store:Ext.create('Ext.data.Store', 
+                            { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
+						},
+                    	{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>', allowBlank:true}
+                    ]
+                }
+            ],
+            buttonAlign: 'center',
+            buttons: 
+            [
+                {id:'formAddPopup', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
+                    handler: function(){
+                    	operType = 'AddPopup';
+                    	dataFormPopup.getForm().reset();
+                    	dataFormPopup.getForm().findField('subject').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('subject').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('text').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('text').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('hyperlink').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('hyperlink').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('activeFlag').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('activeFlag').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('effectiveDate').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('effectiveDate').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('expiredDate').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('expiredDate').inputEl.removeCls('readonly_field');
+                    	Ext.getCmp('formSubmitPopup').enable();
+                    	Ext.getCmp('formModifyPopup').disable();
+                    }
+                },{id:'formModifyPopup', text: '<%=UnieapConstants.getMessage("comm.modify")%>',disabled:true,
+                    handler: function(){
+                    	operType = 'ModifyPopup';
+                    	dataFormPopup.getForm().findField('subject').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('subject').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('text').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('text').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('hyperlink').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('hyperlink').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('activeFlag').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('activeFlag').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('effectiveDate').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('effectiveDate').inputEl.removeCls('readonly_field');
+                    	dataFormPopup.getForm().findField('expiredDate').setReadOnly(false);
+                    	dataFormPopup.getForm().findField('expiredDate').inputEl.removeCls('readonly_field');
+                    	Ext.getCmp('formSubmitPopup').enable();
+                    }
+                }, 
+                {id:'formSubmitPopup',text: '<%=UnieapConstants.getMessage("comm.submit")%>',disabled:true,
+                    handler: function(){
+                    	var form = dataFormPopup.getForm();
+                    	 if (form.isValid()){
+                             form.submit({
+                                 clientValidation: true,
+                                 method: 'POST',
+                                 params:{'operType':operType},
+                                 waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+                                 url: 'mcareController.do?method=messageDeal',
+                                 success: function(form, action) {
+                                	var result = Ext.JSON.decode(action.response.responseText);
+				                    if(result.isSuccess == 'failed'){
+				                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+				                    }else{
+	                                    	gridstoreForPopup.reload();
+	                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+				                    }
+                                 },
+                                 failure: function(form, action){
+                                	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+                                 }
+                             });
+                    	 }
+                    }
+                }
+            ]
+        });
+    	
+    	
     	/***top round pictures*************************************************/
     	var gridstoreForRound = Ext.create('Ext.data.Store', {
             model: 'datamodel',
@@ -457,6 +645,7 @@
             	dataFormRound.getForm().findField('file').hide();
             	Ext.getCmp('formModifyRound').enable();
             	Ext.getCmp('formSubmitRound').disable();
+            	Ext.getCmp('previewRound').enable();
             }
         });
     	var previewPictureWinRound;
@@ -519,10 +708,9 @@
 							},
 							allowBlank:true,anchor: '100%',buttonText:'<%=UnieapConstants.getMessage("comm.fileupload")%>'
 						},
-						{ xtype:'button',name: 'url',text:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.preview")%>',
+						{ xtype:'button',name: 'url',id:'previewRound',text:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.preview")%>',disabled:true,
 							handler:function(){
 								var url = dataFormRound.getForm().findField('url').getValue();
-								//document.write("<A href='' target=_blank><IMG src="+url+" border=0></A>");
 								window.open(url);
 								
 							}
@@ -622,7 +810,7 @@
             model: 'datamodel',
             pageSize: 15,
             remoteSort: true,
-            proxy:{ type: 'ajax', url: 'mcareController.do?method=namesGrid&names=app_ad_page,chongzhi_ad',
+            proxy:{ type: 'ajax', url: 'mcareController.do?method=groupNamesGrid&groupNames=app_ad_page,chongzhi_ad',
                 reader: 
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
@@ -676,6 +864,7 @@
             	dataFormAd.getForm().findField('file').hide();
             	Ext.getCmp('formModifyAd').enable();
             	Ext.getCmp('formSubmitAd').disable();
+            	Ext.getCmp('previewAd').enable();
             }
         });
     	var previewPictureWin;
@@ -739,18 +928,10 @@
 							},
 							allowBlank:true,anchor: '100%',buttonText:'<%=UnieapConstants.getMessage("comm.fileupload")%>'
 						},
-						{ xtype:'button',name: 'url',text:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.preview")%>',
+						{ xtype:'button',name: 'url',id:'previewAd',text:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.preview")%>',disabled:true,
 							handler:function(){
 								var url = dataFormAd.getForm().findField('url').getValue();
-								var previewPictureWinBeforeUpload = Ext.widget('window', 
-			    	     	              { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'destroy', layout: 'fit', modal: true,
-												width: 400, height:320,
-			    	        			 		items: {
-			    	        			 			xtype:'panel',border:false,crollable:true,
-			    	        			 			html:'<img id="previewImg" src='+url+'></img>'
-			    	        			 		} 
-			    	        			 });
-								previewPictureWinBeforeUpload.show();
+								window.open(url);
 							}
 						}
                     ]
@@ -871,6 +1052,18 @@
 									    region: 'east',
 									    width: 500,
 									    items: [dataFormNote]
+									}
+					             ],
+					    closable: false
+					}, {
+					    xtype: 'panel',layout: 'border',height:530,
+					    title: '<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.popup")%>',
+					    items : [
+									gridForPopup,
+									{
+									    region: 'east',
+									    width: 500,
+									    items: [dataFormPopup]
 									}
 					             ],
 					    closable: false

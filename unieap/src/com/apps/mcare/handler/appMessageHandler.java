@@ -1,13 +1,16 @@
 package com.apps.mcare.handler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
-import com.apps.mcare.pojo.AppResconfig;
+import com.apps.mcare.pojo.AppMessage;
 import com.unieap.BaseBO;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
@@ -15,8 +18,8 @@ import com.unieap.db.DBManager;
 import com.unieap.db.EntityRowMapper;
 import com.unieap.handler.ConfigHandler;
 
-@Service("appPushMessageHandler")
-public class AppPushMessageHandler extends BaseBO implements ConfigHandler{
+@Service("appMessageHandler")
+public class appMessageHandler extends BaseBO implements ConfigHandler{
 
 	@Override
 	public void dealNode(Node node, ServletContext servlet, String appName) throws Exception {
@@ -45,15 +48,29 @@ public class AppPushMessageHandler extends BaseBO implements ConfigHandler{
 		
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT type, name,url,hyperlink,text,subject, group_name as groupName,resolution,page_num as pageNum ,attri1,attri2 FROM unieap.app_resconfig ");
-		sql.append(" where active_flag = 'Y' and  group_name = 'message_push_message' ");
+		sql.append("SELECT id,type,hyperlink,text,subject FROM unieap.app_message ");
+		sql.append(" where active_flag = ? ");
 		sql.append(" and ((effective_date <= '").append(UnieapConstants.getCurrentTime(null, UnieapConstants.TIMEFORMAT)).append("'");
 		sql.append(" and expired_date >'").append(UnieapConstants.getCurrentTime(null, UnieapConstants.TIMEFORMAT)).append("') or (effective_date is null and expired_date is null))");
-		sql.append(" order by name");
+		sql.append(" order by id");
 		
 		List<Object> datas = DBManager.getJT(null).query(sql.toString(), new Object[] { UnieapConstants.YES },
-				new EntityRowMapper(AppResconfig.class));
-		CacheMgt.getCacheData().put("PushMessageList", datas);
+				new EntityRowMapper(AppMessage.class));
+		Map<String,List<AppMessage>> messages = new HashMap<String, List<AppMessage>>();
+		if(datas!=null&&datas.size()>0){
+			List<AppMessage> messageList = null;
+			for(int i = 0 ; i < datas.size() ; i++){
+				AppMessage appMessage = (AppMessage)datas.get(i);
+				if(messages.containsKey(appMessage.getType())){
+					messageList = messages.get(appMessage.getType());
+				}else{
+					messageList = new ArrayList<AppMessage>();
+					messages.put(appMessage.getType(),messageList);
+				}
+				messageList.add(appMessage);
+			}
+		}
+		CacheMgt.getCacheData().put("messages", messages);
 	}
 
 	@Override

@@ -17,6 +17,8 @@ public class CdrInfoVO {
 	private String actualVolume;
 	private String actualChargeAmt;
 	
+	private String chargeDuration;
+	private String destinationNetworkName;
 	private String mainBalanceDeduct;
 	private String mainBalaneLeft;
 	public String getCdrSeq() {
@@ -90,6 +92,18 @@ public class CdrInfoVO {
 	}
 	public void setMainBalaneLeft(String mainBalaneLeft) {
 		this.mainBalaneLeft = mainBalaneLeft;
+	}
+	public String getChargeDuration() {
+		return chargeDuration;
+	}
+	public void setChargeDuration(String chargeDuration) {
+		this.chargeDuration = chargeDuration;
+	}
+	public String getDestinationNetworkName() {
+		return destinationNetworkName;
+	}
+	public void setDestinationNetworkName(String destinationNetworkName) {
+		this.destinationNetworkName = destinationNetworkName;
 	}
 	
 	

@@ -78,11 +78,25 @@
                 {root: 'rows', totalProperty: 'totalCount'},
                 simpleSortMode: true
             },
-            sorters: [{ property: 'submitBy', direction: 'DESC'}]
+            sorters: [{ property: 'id', direction: 'DESC'}]
         });
     	gridstore.on('beforeload', function (store, options){
             Ext.apply(store.proxy.extraParams,queryPara);
         });
+    	
+    	var operationItems = [];
+    	var selectedRecord;
+    	if(UnieapButton.Complain_Modify!=null&&UnieapButton.Complain_Modify.abled==true){
+    		operationItems.push({iconCls :'',tooltip:''});
+	    	operationItems.push({
+	    		iconCls : 'edit',
+	     	   	tooltip: '<%=UnieapConstants.getMessage("comm.modify")%>',
+	           	handler:function(grid, rowIndex, colIndex){	
+	         	   	selectedRecord = grid.getStore().getAt(rowIndex);
+	        		showForm('Modify',selectedRecord);
+	           	}
+	        });
+    	}
     	var selModel = Ext.create('Ext.selection.CheckboxModel');
         var datagrid = Ext.create('Ext.grid.Panel', 
                {el : 'datagrid',layout: 'fit',columnLines: true,autoScroll:true,
@@ -90,6 +104,7 @@
           	   	store : gridstore,
        	   	   	columns:
        	   	   	[
+					{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:operationItems},
        	   	   		{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.evalution")%>", dataIndex: 'evalution',sortable: false,width:50},
        	   			{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.text")%>", dataIndex: 'text',flex: true, sortable: false,width:500,
 		       	   	  	renderer: function (value, meta, record){

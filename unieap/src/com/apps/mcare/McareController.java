@@ -7,15 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
-import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.apps.mcare.bo.ApkUpgradeBO;
+import com.apps.mcare.bo.AppMessageBO;
 import com.apps.mcare.bo.ComplainBO;
 import com.apps.mcare.bo.OfferingCategoryBO;
 import com.apps.mcare.bo.ResourceConfigureBO;
+import com.apps.mcare.pojo.AppMessage;
 import com.apps.mcare.pojo.AppOfferingCategory;
 import com.apps.mcare.pojo.AppResconfig;
 import com.apps.mcare.vo.ComplainVO;
@@ -62,10 +64,26 @@ public class McareController extends BaseController{
 		resourceConfigureBO.getGroupList(page, groupName);
 		return page.getJsonString();
 	}
-	@RequestMapping(params="method=namesGrid")  
-	public @ResponseBody String namesGrid(PaginationSupport page,String names,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	
+	@RequestMapping(params="method=messageGrid")  
+	public @ResponseBody String messageGrid(PaginationSupport page,String type,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		AppMessageBO appMessageBO = (AppMessageBO) ServiceUtils.getBean("appMessageBO");
+		appMessageBO.getMessageGrid(page, type);
+		return page.getJsonString();
+	}
+	
+	@RequestMapping(params="method=messageDeal")  
+	public @ResponseBody Map<String, String> messageDeal(String operType,AppMessage vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		AppMessageBO appMessageBO = (AppMessageBO) ServiceUtils.getBean("appMessageBO");
+		Map<String, String> model = appMessageBO.messageDeal(operType, vo);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
+	}
+	
+	@RequestMapping(params="method=groupNamesGrid")  
+	public @ResponseBody String groupNamesGrid(PaginationSupport page,String groupNames,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ResourceConfigureBO resourceConfigureBO = (ResourceConfigureBO) ServiceUtils.getBean("resourceConfigureBO");
-		resourceConfigureBO.getNamesList(page, names);
+		resourceConfigureBO.getNamesList(page, groupNames);
 		return page.getJsonString();
 	}
 	@RequestMapping(params="method=resourceConfigureDeal")  
@@ -81,6 +99,28 @@ public class McareController extends BaseController{
 		List<FileItem> items = fileBO.getFileItems(request);
 		ResourceConfigureBO resourceConfigureBO = (ResourceConfigureBO) ServiceUtils.getBean("resourceConfigureBO");
 		Map<String, String> model = resourceConfigureBO.resourceConfigurePictureDeal(parameters,items);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
+	}
+	@RequestMapping(params="method=apkUpgrade")  
+	public ModelAndView apkUpgrade(HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		ModelAndView ma = new ModelAndView("apps/mcare/apkupgrade");
+		return ma;
+	}
+	
+	@RequestMapping(params="method=apkUpgradeGrid")  
+	public @ResponseBody String apkUpgradeGrid(PaginationSupport page,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		ApkUpgradeBO apkUpgradeBO = (ApkUpgradeBO) ServiceUtils.getBean("apkUpgradeBO");
+		apkUpgradeBO.getapkUpgradeList(page);
+		return page.getJsonString();
+	}
+	
+	@RequestMapping(params="method=apkUpgradeDeal")  
+	public @ResponseBody Map<String, String> apkUpgradeDeal(String operType,String parameters,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
+		List<FileItem> files = fileBO.getFileItems(request);
+		ApkUpgradeBO apkUpgradeBO = (ApkUpgradeBO) ServiceUtils.getBean("apkUpgradeBO");
+		Map<String, String> model = apkUpgradeBO.apkUpgradeDeal(operType, parameters, files);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}

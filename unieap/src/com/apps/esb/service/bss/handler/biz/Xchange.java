@@ -51,7 +51,7 @@ public class Xchange extends SoapMessageHandler implements BizHandler{
 		}
 		XchangePromotion xchangePromotion = (XchangePromotion) ServiceUtils.getBean("xchangePromotion");
 		ProcessResult processResult = xchangePromotion.process(requestInfo, parameters, extParameters);
-		if (!UnieapConstants.C1.equals(processResult.getResultCode())) {
+		if (!UnieapConstants.C0.equals(processResult.getResultCode())) {
 			return processResult;
 		}
 		XchangePromotionVO xchangePromotionVO = (XchangePromotionVO) processResult.getVo();

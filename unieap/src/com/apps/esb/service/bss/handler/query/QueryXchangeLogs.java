@@ -45,7 +45,7 @@ public class QueryXchangeLogs extends SoapMessageHandler implements BizHandler{
 		}
 		QueryXchangeLogs queryXchangeLogs = (QueryXchangeLogs) ServiceUtils.getBean("queryXchangeLogs");
 		ProcessResult processResult = queryXchangeLogs.process(requestInfo, parameters, extParameters);
-		if(!UnieapConstants.C1.equals(processResult.getResultCode())){
+		if(!UnieapConstants.C0.equals(processResult.getResultCode())){
 			return processResult;
 		}
 		QueryXchangeLogVO queryXchangeLogVO = (QueryXchangeLogVO) processResult.getVo();

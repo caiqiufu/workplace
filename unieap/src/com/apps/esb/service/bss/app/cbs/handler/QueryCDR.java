@@ -41,9 +41,9 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 		ProcessResult processResult = new ProcessResult();
 		processResult.setResultCode(UnieapConstants.C0);
 		processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
-		QueryCdrVO queryCdrVO = queryCDRSummary(newRequestInfo.getRequestBody().getServiceNumber(),newRequestInfo);
+		QueryCdrVO queryCdrVO = queryCDRSummary(newRequestInfo.getRequestBody().getServiceNumber(), newRequestInfo);
 		processResult.setVo(queryCdrVO);
-		return  processResult;
+		return processResult;
 
 	}
 
@@ -96,35 +96,57 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 		firstday = format.format(cale.getTime()) + "000000";
 
 		cale = Calendar.getInstance();
-		cale.add(Calendar.MONTH, -number + 2);
+		cale.add(Calendar.MONTH, -number + 1);
 		cale.set(Calendar.DAY_OF_MONTH, 0);
 		lastday = format.format(cale.getTime()) + "235959";
 		return new String[] { firstday, lastday };
 	}
 
-	public QueryCdrVO queryCDRSummary(String serviceNumber, RequestInfo requestInfo)
-			throws Exception {
+	public QueryCdrVO queryCDRSummary(String serviceNumber, RequestInfo requestInfo) throws Exception {
 		SOAPMessage sOAPMessage1 = getRequestSOAPMessage(1, serviceNumber, requestInfo);
 		ProcessResult processResult1 = process(sOAPMessage1, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO1 = (QueryCdrVO) processResult1.getVo();
-		SOAPMessage sOAPMessage2 = getRequestSOAPMessage(3, serviceNumber, requestInfo);
+		SOAPMessage sOAPMessage2 = getRequestSOAPMessage(2, serviceNumber, requestInfo);
 		ProcessResult processResult2 = process(sOAPMessage2, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO2 = (QueryCdrVO) processResult2.getVo();
-		SOAPMessage sOAPMessage3 = getRequestSOAPMessage(5, serviceNumber, requestInfo);
+		
+		SOAPMessage sOAPMessage3 = getRequestSOAPMessage(3, serviceNumber, requestInfo);
 		ProcessResult processResult3 = process(sOAPMessage3, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO3 = (QueryCdrVO) processResult3.getVo();
+		
+		SOAPMessage sOAPMessage4 = getRequestSOAPMessage(4, serviceNumber, requestInfo);
+		ProcessResult processResult4 = process(sOAPMessage4, requestInfo,
+				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
+				"ws.cbs.query.timeout");
+		QueryCdrVO queryCdrVO4 = (QueryCdrVO) processResult4.getVo();
+		
+		SOAPMessage sOAPMessage5 = getRequestSOAPMessage(5, serviceNumber, requestInfo);
+		ProcessResult processResult5 = process(sOAPMessage5, requestInfo,
+				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
+				"ws.cbs.query.timeout");
+		QueryCdrVO queryCdrVO5 = (QueryCdrVO) processResult5.getVo();
+		
+		SOAPMessage sOAPMessage6 = getRequestSOAPMessage(6, serviceNumber, requestInfo);
+		ProcessResult processResult6 = process(sOAPMessage6, requestInfo,
+				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
+				"ws.cbs.query.timeout");
+		QueryCdrVO queryCdrVO6 = (QueryCdrVO) processResult6.getVo();
+		
 		QueryCdrVO queryCdrVO = new QueryCdrVO();
 		List<CdrSummaryVO> cdrSummaryList = new ArrayList<CdrSummaryVO>();
 		queryCdrVO.setCdrSummaryList(cdrSummaryList);
 		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO1.getCdrSummaryList());
 		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO2.getCdrSummaryList());
 		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO3.getCdrSummaryList());
+		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO4.getCdrSummaryList());
+		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO5.getCdrSummaryList());
+		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO6.getCdrSummaryList());
 		return queryCdrVO;
 	}
 
@@ -177,9 +199,10 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 					Node cDRSummaryNode = cDRSummaryNodes.item(j);
 					if ("bbs:ServiceCategory".equals(cDRSummaryNode.getNodeName())) {
 						cdrSummaryVO.setServiceCategory(cDRSummaryNode.getTextContent());
-						if("4".equals(cDRSummaryNode.getTextContent())){
+						if ("4".equals(cDRSummaryNode.getTextContent())) {
 							cdrSummaryVO.setServiceType("999");
-							cdrSummaryVO.setServiceTypeName(UnieapConstants.getDicName("serviceCategory", cdrSummaryVO.getServiceCategory()));
+							cdrSummaryVO.setServiceTypeName(
+									UnieapConstants.getDicName("serviceCategory", cdrSummaryVO.getServiceCategory()));
 						}
 					} else if ("bbs:SeriveType".equals(cDRSummaryNode.getNodeName())) {
 						cdrSummaryVO.setServiceType(cDRSummaryNode.getTextContent());
@@ -191,14 +214,74 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 						cdrSummaryVO.setBillCycleID(cDRSummaryNode.getTextContent());
 					} else if ("bbs:TotalChargeInfo".equals(cDRSummaryNode.getNodeName())) {
 						Node totalChargeInfoNode = cDRSummaryNode.getFirstChild();
-						if(totalChargeInfoNode!=null){
+						if (totalChargeInfoNode != null) {
 							cdrSummaryVO.setTotalChargeAmt(totalChargeInfoNode.getTextContent());
 						}
 					}
 				}
 			}
 		}
-
+		if (document.getElementsByTagName("bbs:CDRInfo").getLength() > 0) {
+			NodeList nodes = document.getElementsByTagName("bbs:CDRInfo");
+			for (int i = 0; i < nodes.getLength(); i++) {
+				CdrInfoVO cdrInfoVO = new CdrInfoVO();
+				cdrInfoList.add(cdrInfoVO);
+				Node node = nodes.item(i);
+				NodeList cDRInfoNodes = node.getChildNodes();
+				for (int j = 0; j < cDRInfoNodes.getLength(); j++) {
+					Node cDRInfoNode = cDRInfoNodes.item(j);
+					if ("bbs:CdrSeq".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setCdrSeq(cDRInfoNode.getTextContent());
+					}
+					if ("bbs:ServiceCategory".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setServiceCategory(cDRInfoNode.getTextContent());
+						if ("4".equals(cDRInfoNode.getTextContent())) {
+							cdrInfoVO.setServiceType("999");
+							cdrInfoVO.setServiceTypeName(
+									UnieapConstants.getDicName("serviceCategory", cdrInfoVO.getServiceCategory()));
+						}
+					} else if ("bbs:SeriveType".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setServiceType(cDRInfoNode.getTextContent());
+					} else if ("bbs:ServiceType".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setServiceType(cDRInfoNode.getTextContent());
+					} else if ("bbs:ServiceTypeName".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setServiceTypeName(cDRInfoNode.getTextContent());
+					} else if ("bbs:OtherNumber".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setOtherNumber(cDRInfoNode.getTextContent());
+					} else if ("bbs:BillCycleID".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setBillCycleID(cDRInfoNode.getTextContent());
+					} else if ("bbs:StartTime".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setStartTime(cDRInfoNode.getTextContent());
+					} else if ("bbs:EndTime".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setEndTime(cDRInfoNode.getTextContent());
+					} else if ("bbs:ChargeDuration".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setChargeDuration(cDRInfoNode.getTextContent());
+					} else if ("bbs:DestinationNetworkName".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setDestinationNetworkName(cDRInfoNode.getTextContent());
+					} else if ("bbs:TotalChargeInfo".equals(cDRInfoNode.getNodeName())) {
+						NodeList totalChargeInfoNodes = cDRInfoNode.getChildNodes();
+						for (int k = 0; k < totalChargeInfoNodes.getLength(); k++) {
+							Node totalChargeInfoNode = totalChargeInfoNodes.item(k);
+							if ("bbs:ActualChargeAmt".equals(totalChargeInfoNode.getNodeName())) {
+								cdrInfoVO.setActualChargeAmt(totalChargeInfoNode.getTextContent());
+							}
+						}
+					} else if ("bbs:VolumeInfo".equals(cDRInfoNode.getNodeName())) {
+						NodeList volumeInfoNodes = cDRInfoNode.getChildNodes();
+						for (int k = 0; k < volumeInfoNodes.getLength(); k++) {
+							Node volumeInfoNode = volumeInfoNodes.item(k);
+							if ("bbs:ActualVolume".equals(volumeInfoNode.getNodeName())) {
+								cdrInfoVO.setActualChargeAmt(volumeInfoNode.getTextContent());
+							}
+						}
+					} else if ("bbs:MainBalanceDeduct".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setMainBalanceDeduct(cDRInfoNode.getTextContent());
+					} else if ("bbs:MainBalaneLeft".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setMainBalaneLeft(cDRInfoNode.getTextContent());
+					}
+				}
+			}
+		}
 		return result;
 	}
 

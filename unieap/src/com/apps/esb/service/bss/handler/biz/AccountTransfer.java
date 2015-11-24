@@ -52,7 +52,7 @@ public class AccountTransfer extends SoapMessageHandler implements BizHandler {
 
 		AccountTransfer accountTransfer = (AccountTransfer) ServiceUtils.getBean("accountTransfer");
 		ProcessResult processResult = accountTransfer.process(requestInfo, parameters, extParameters);
-		if (!UnieapConstants.C1.equals(processResult.getResultCode())) {
+		if (!UnieapConstants.C0.equals(processResult.getResultCode())) {
 			return processResult;
 		}
 		TransferBalanceResponseVO transferBalanceResponseVO = (TransferBalanceResponseVO) processResult.getVo();

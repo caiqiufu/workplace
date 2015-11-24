@@ -29,8 +29,9 @@ public class QueryUpgardeInfo extends SoapMessageHandler implements BizHandler {
 	public ProcessResult process(RequestInfo requestInfo, String parameters, Map<String, Object> extParameters)
 			throws Exception {
 		String apkVersion = requestInfo.getRequestHeader().getDeviceInfo().getAPKVersion();
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM app_upgrade  where active_flag =? and tenant_id = ? order by id desc");
+		StringBuffer sql = new StringBuffer("SELECT au.version,au.change_desc,fa.url ");
+		sql.append("FROM app_upgrade au, file_archive fa  where au.file_id = fa.id and ");
+		sql.append("au.active_flag = ? and au.tenant_id = ? ");
 		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),
 				new Object[] { UnieapConstants.YES,SYSConfig.getConfig().get("tenantId") });
 		JSONObject upgradeInfo = new JSONObject();
@@ -41,7 +42,7 @@ public class QueryUpgardeInfo extends SoapMessageHandler implements BizHandler {
 			}else{
 				upgradeInfo.put("isUpgrade", UnieapConstants.YES);
 				JSONObject upgradeInfoDetails = new JSONObject();
-				upgradeInfoDetails.put("url", SYSConfig.getConfig().get("upgradeUrl"));
+				upgradeInfoDetails.put("url", (String) data.get("url"));
 				upgradeInfoDetails.put("upgradeDesc", (String) data.get("change_desc"));
 				upgradeInfo.put("upgradeInfo", upgradeInfoDetails);
 			}

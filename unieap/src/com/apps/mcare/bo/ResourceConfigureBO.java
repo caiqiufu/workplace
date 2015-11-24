@@ -34,30 +34,38 @@ public class ResourceConfigureBO extends BaseBO {
 		getPaginationDataByDetachedCriteria(criteria, page);
 	}
 
-	public void getNamesList(PaginationSupport page, String names) throws Exception {
+	public void getNamesList(PaginationSupport page, String groupNames) throws Exception {
 		DetachedCriteria criteria = DetachedCriteria.forClass(AppResconfig.class);
-		Property nameProperty = Property.forName("name");
-		criteria.add(nameProperty.in(names.split(",")));
+		Property groupNameProperty = Property.forName("groupName");
+		criteria.add(groupNameProperty.in(groupNames.split(",")));
 		getPaginationDataByDetachedCriteria(criteria, page);
 	}
 
 	public Map<String, String> resourceConfigureDeal(String operType, AppResconfig vo) throws Exception {
 		AppResconfigHandler appResconfigHandler = (AppResconfigHandler) ServiceUtils.getBean("appResconfigHandler");
 		if (StringUtils.equals(operType, "AddNotification")) {
-			appResconfigHandler.deal(null);
 			saveNotification(vo);
+			appResconfigHandler.deal(null);
 			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 		} else if (StringUtils.equals(operType, "ModifyNotification")) {
-			appResconfigHandler.deal(null);
 			updateNotification(vo);
+			appResconfigHandler.deal(null);
 			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 		} else if (StringUtils.equals(operType, "AddNote")) {
-			appResconfigHandler.deal(null);
 			saveNote(vo);
+			appResconfigHandler.deal(null);
 			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 		} else if (StringUtils.equals(operType, "ModifyNote")) {
-			appResconfigHandler.deal(null);
 			updateNote(vo);
+			appResconfigHandler.deal(null);
+			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
+		}else if (StringUtils.equals(operType, "AddPopup")) {
+			savePopup(vo);
+			appResconfigHandler.deal(null);
+			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
+		} else if (StringUtils.equals(operType, "ModifyPopup")) {
+			updatePopup(vo);
+			appResconfigHandler.deal(null);
 			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 		} else {
 			throw new Exception(UnieapConstants.getMessage("comm.operation.error", new Object[] { operType }));
@@ -87,6 +95,29 @@ public class ResourceConfigureBO extends BaseBO {
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
 
+	public Map<String, String> savePopup(AppResconfig vo) throws Exception {
+		vo.setId(getSequence(null, "unieap"));
+		vo.setType("C");
+		vo.setName(vo.getId().toString());
+		vo.setLanguage(SYSConfig.defaultLanguage);
+		vo.setGroupName("message_push_message");
+		vo.setPageNum("2");
+		vo.setModifyDate(UnieapConstants.getDateTime(null));
+		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
+		vo.setSeq(vo.getId().toString());
+		DBManager.getHT(null).save(vo);
+		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
+	}
+	public Map<String, String> updatePopup(AppResconfig vo) throws Exception {
+		vo.setModifyDate(UnieapConstants.getDateTime(null));
+		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
+		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
+		changeLogBO.save(vo.getId(), vo, "resourceConfigure", UnieapConstants.MODIFY, UnieapConstants.UNIEAP);
+		DBManager.getHT(null).update(vo);
+		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
+	}
+
+	
 	public Map<String, String> saveNote(AppResconfig vo) throws Exception {
 		vo.setId(getSequence(null, "unieap"));
 		vo.setType("C");

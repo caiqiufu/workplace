@@ -29,40 +29,39 @@ import com.unieap.pojo.ExcLog;
 
 @Service("bssServiceBO")
 public class BssServiceBO extends BaseBO {
-	public String queryInfo(String requestInfoString,Map<String,Object> extParameters) throws Exception {
+	public String queryInfo(String requestInfoString, Map<String, Object> extParameters) throws Exception {
 		FlowController.addQueryRequest();
-		if(FlowController.isExpired()){
+		if (FlowController.isExpired()) {
 			return expiredResonse();
-		}else if(FlowController.isQueryOverFlow()){
+		} else if (FlowController.isQueryOverFlow()) {
 			FlowController.deductQueryRequest();
 			return overFlowResonse();
-		}else{
+		} else {
 			FlowController.deductQueryRequest();
-			return process(requestInfoString,extParameters);
+			return process(requestInfoString, extParameters);
 		}
 	}
-	public boolean authenticationCheck(String accessUser,String accessPwd){
-		/*com.unieap.pojo.User user = CacheMgt.getUser(accessUser);
-		if(user==null){
-			return false;
-		}
-		if(user.getPassword().equals(accessPwd)){
-			return true;
-		}else{
-			return true;
-		}*/
+
+	public boolean authenticationCheck(String accessUser, String accessPwd) {
+		/*
+		 * com.unieap.pojo.User user = CacheMgt.getUser(accessUser);
+		 * if(user==null){ return false; }
+		 * if(user.getPassword().equals(accessPwd)){ return true; }else{ return
+		 * true; }
+		 */
 		return true;
 	}
-	public String bizHandle(String requestInfoString,Map<String,Object> extParameters) throws Exception {
+
+	public String bizHandle(String requestInfoString, Map<String, Object> extParameters) throws Exception {
 		FlowController.addBizhandleRequest();
-		if(FlowController.isExpired()){
+		if (FlowController.isExpired()) {
 			return expiredResonse();
-		}else if(FlowController.isBizhandleFlow()){
+		} else if (FlowController.isBizhandleFlow()) {
 			FlowController.deductBizhandleRequest();
 			return overFlowResonse();
-		}else{
+		} else {
 			FlowController.deductBizhandleRequest();
-			return process(requestInfoString,extParameters);
+			return process(requestInfoString, extParameters);
 		}
 	}
 
@@ -70,11 +69,12 @@ public class BssServiceBO extends BaseBO {
 		CacheMgt.addEsblog(vo);
 		batchSaveMore100();
 	}
+
 	public void setDeviceDatas(EsblogDevice esblogDevice) {
 		CacheMgt.addEsblogDeviceData(esblogDevice);
 		batchEsblogDeviceSaveMore100();
 	}
-	
+
 	public void batchSaveMore100() {
 		List<Esblog> datas = CacheMgt.getEsblogDatas();
 		List<Esblog> copyDatas = new ArrayList<Esblog>();
@@ -96,15 +96,16 @@ public class BssServiceBO extends BaseBO {
 
 		}
 	}
-	
-	public String process(String requestInfoString,Map<String,Object> extParameters) {
+
+	public String process(String requestInfoString, Map<String, Object> extParameters) {
 		long beginTime = System.currentTimeMillis();
 		RequestInfo requestInfo = null;
 		try {
 			String transactionId = BssServiceUtils.generateTransactionId();
 			try {
 				requestInfo = BssServiceUtils.getRequestInfo(requestInfoString);
-				if(!authenticationCheck(requestInfo.getRequestHeader().getAccessUser(),requestInfo.getRequestHeader().getAccessPwd())){
+				if (!authenticationCheck(requestInfo.getRequestHeader().getAccessUser(),
+						requestInfo.getRequestHeader().getAccessPwd())) {
 					String errorDesc = UnieapConstants.getMessage("10004");
 					ProcessResult processResult = new ProcessResult();
 					processResult.setResultCode("10004");
@@ -113,7 +114,7 @@ public class BssServiceBO extends BaseBO {
 					long endTime = System.currentTimeMillis();
 					String during = "" + (endTime - beginTime);
 					Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
-							requestInfoString, "", during,"esb");
+							requestInfoString, "", during, "esb");
 					setDatas(esblog);
 					//////////////////////////////////////////
 					ResponsetInfo responsetInfo = new ResponsetInfo();
@@ -167,7 +168,7 @@ public class BssServiceBO extends BaseBO {
 				long endTime = System.currentTimeMillis();
 				String during = "" + (endTime - beginTime);
 				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
-						requestInfoString, "", during,"esb");
+						requestInfoString, "", during, "esb");
 				setDatas(esblog);
 				//////////////////////////////////////////
 				ResponsetInfo responsetInfo = new ResponsetInfo();
@@ -185,28 +186,37 @@ public class BssServiceBO extends BaseBO {
 			BizHandler handler = (BizHandler) ServiceUtils.getBean(handlerObj.get("className"));
 			ProcessResult processResult;
 			try {
-				processResult = handler.process(BssServiceUtils.copyRequestInfo(requestInfo),handlerObj.get("parameters"),extParameters);
+				processResult = handler.process(BssServiceUtils.copyRequestInfo(requestInfo),
+						handlerObj.get("parameters"), extParameters);
 				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 			} catch (Exception e) {
 				processResult = new ProcessResult();
 				processResult.setResultCode(UnieapConstants.C99999);
 				processResult.setResultDesc(e.getLocalizedMessage());
 				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
-				long endTime = System.currentTimeMillis();
-				String during = "" + (endTime - beginTime);
-				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
-						requestInfoString, "", during,"esb");
-				setDatas(esblog);
 				//////////////////////////////////////////////
 				ResponsetInfo responsetInfo = new ResponsetInfo();
 				ResponsetHeader responsetHeader = new ResponsetHeader();
 				responsetHeader.setResultCode(UnieapConstants.C99999);
 				responsetHeader.setResultDesc(e.getLocalizedMessage());
 				responsetHeader.setTransactionId(transactionId);
+				responsetHeader.setBizCode(bizCode);
+				responsetHeader.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
+				responsetHeader.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
+				responsetHeader.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
+				responsetHeader.setResponseTime(UnieapConstants.getCurrentTime(null, null));
+				responsetHeader.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
 				ResponseBody responseBody = new ResponseBody();
+				responseBody.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
+				responseBody.setExtParameters(requestInfo.getRequestBody().getExtParameters());
 				responsetInfo.setResponsetHeader(responsetHeader);
 				responsetInfo.setResponseBody(responseBody);
 				String responsetInfoString = BssServiceUtils.getResposeInfoString(responsetInfo);
+				long endTime = System.currentTimeMillis();
+				String during = "" + (endTime - beginTime);
+				Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult,
+						requestInfoString, "", during, "esb");
+				setDatas(esblog);
 				return responsetInfoString;
 			}
 			ResponsetInfo responsetInfo = BssServiceUtils.getResponsetInfo(requestInfo, processResult);
@@ -217,7 +227,7 @@ public class BssServiceBO extends BaseBO {
 			responsetInfo.getResponsetHeader().setResponseTime(responseTime);
 			requestInfo.getRequestHeader().setResponseTime(responseTime);
 			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,
-					responsetInfoString, during,"esb");
+					responsetInfoString, during, "esb");
 			setDatas(esblog);
 			EsblogDevice esblogDevice = BssServiceUtils.getEsbLogDevice(requestInfo.getRequestHeader(), esblog);
 			setDeviceDatas(esblogDevice);
@@ -230,7 +240,7 @@ public class BssServiceBO extends BaseBO {
 			long endTime = System.currentTimeMillis();
 			String during = "" + (endTime - beginTime);
 			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,
-					"", during,"esb");
+					"", during, "esb");
 			setDatas(esblog);
 			ResponsetInfo responsetInfo = new ResponsetInfo();
 			ResponsetHeader responsetHeader = new ResponsetHeader();
@@ -248,7 +258,8 @@ public class BssServiceBO extends BaseBO {
 			return responsetInfoString;
 		}
 	}
-	public String overFlowResonse() throws Exception{
+
+	public String overFlowResonse() throws Exception {
 		ResponsetInfo ResponsetInfo = new ResponsetInfo();
 		ResponsetHeader responsetHeader = new ResponsetHeader();
 		ResponseBody responseBody = new ResponseBody();
@@ -259,7 +270,8 @@ public class BssServiceBO extends BaseBO {
 		String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
 		return responsetInfoString;
 	}
-	public String expiredResonse() throws Exception{
+
+	public String expiredResonse() throws Exception {
 		ResponsetInfo ResponsetInfo = new ResponsetInfo();
 		ResponsetHeader responsetHeader = new ResponsetHeader();
 		ResponseBody responseBody = new ResponseBody();
@@ -270,24 +282,24 @@ public class BssServiceBO extends BaseBO {
 		String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
 		return responsetInfoString;
 	}
-	
-	public void saveException(Exception ex){
+
+	public void saveException(Exception ex) {
 		ExcLog log = new ExcLog();
-        log.setId(UnieapConstants.getSequence(null,"unieap"));
-        log.setBizModule("unieap");
-        log.setExType("system_exception");
-        log.setExCode("");
-        log.setExInfo(ex.getLocalizedMessage());
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        log.setExTracking(sw.toString().getBytes());
-        if(UnieapConstants.getUser()!=null){
-        	log.setOperator(UnieapConstants.getUser().getUserCode());
-        }else{
-        	log.setOperator("system error");
-        }
-        log.setOperationDate(UnieapConstants.getDateTime(null));
-        DBManager.getHT(null).save(log);
+		log.setId(UnieapConstants.getSequence(null, "unieap"));
+		log.setBizModule("unieap");
+		log.setExType("system_exception");
+		log.setExCode("");
+		log.setExInfo(ex.getLocalizedMessage());
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		ex.printStackTrace(pw);
+		log.setExTracking(sw.toString().getBytes());
+		if (UnieapConstants.getUser() != null) {
+			log.setOperator(UnieapConstants.getUser().getUserCode());
+		} else {
+			log.setOperator("system error");
+		}
+		log.setOperationDate(UnieapConstants.getDateTime(null));
+		DBManager.getHT(null).save(log);
 	}
 }

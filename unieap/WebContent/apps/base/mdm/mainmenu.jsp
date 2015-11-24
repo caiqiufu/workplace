@@ -7,7 +7,14 @@
 %>
 <html>
   <head>
-    <title>UNIEAP</title>
+    <title>mCare</title>
+    <style type="text/css">
+    	.myBody
+		{  
+		    margin: 0;
+		    background-color: #d9dee2; 
+		}
+    </style>
 	<script type="text/javascript">
 			
 			function toManaement(href)
@@ -39,7 +46,7 @@
 			                    html:
 			                    	'<table class="grouble_table" width="100%" >'+
 			                    		'<tr class="grouble_table_tr">'+
-						        			'<td colspan="3" align ="left" style ="font-weight:bolder;font-size:20pt;color:#BDC5B5;">Mobile Care Management Platform</td>'+
+						        			'<td colspan="3" align ="center" style ="font-weight:bolder;font-size:20pt;color:#4F4F4F;">mCare Management Platform</td>'+
 						        			'<td width="20px" align ="right">Welcome : <%=user.getUserName()%></td>'+
 						        		'</tr>'+
 								        '<tr class="grouble_table_tr">'+
@@ -118,5 +125,5 @@
 			
 	</script>
   </head>
-  <body></body>
+  <body class = 'myBody'></body>
 </html>

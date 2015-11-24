@@ -91,23 +91,23 @@ public class GetCustomerData extends SoapMessageHandler implements BizHandler {
 			NodeList nodes = getCustomerBodyNode.getChildNodes();
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
-				if ("quer:cutomerId".equals(node.getNodeName())) {
-					customerInfoVO.setCutomerId(node.getTextContent());
-				} else if ("quer:title".equals(node.getNodeName())) {
+				if ("quer:CustomerId".equals(node.getNodeName())) {
+					customerInfoVO.setCustomerId(node.getTextContent());
+				} else if ("quer:Title".equals(node.getNodeName())) {
 					customerInfoVO.setTitle(node.getTextContent());
-				} else if ("quer:firstName".equals(node.getNodeName())) {
+				} else if ("quer:FirstName".equals(node.getNodeName())) {
 					customerInfoVO.setFirstName(node.getTextContent());
-				} else if ("quer:middleName".equals(node.getNodeName())) {
+				} else if ("quer:MiddleName".equals(node.getNodeName())) {
 					customerInfoVO.setMiddleName(node.getTextContent());
-				} else if ("quer:lastName".equals(node.getNodeName())) {
+				} else if ("quer:LastName".equals(node.getNodeName())) {
 					customerInfoVO.setLastName(node.getTextContent());
-				} else if ("quer:nationality".equals(node.getNodeName())) {
+				} else if ("quer:Nationality".equals(node.getNodeName())) {
 					customerInfoVO.setNationality(node.getTextContent());
-				} else if ("quer:customerLevel".equals(node.getNodeName())) {
+				} else if ("quer:CustomerLevel".equals(node.getNodeName())) {
 					customerInfoVO.setCustomerLevel(node.getTextContent());
-				} else if ("quer:gender".equals(node.getNodeName())) {
+				} else if ("quer:Gender".equals(node.getNodeName())) {
 					customerInfoVO.setGender(node.getTextContent());
-				} else if ("quer:certificateType".equals(node.getNodeName())) {
+				} else if ("quer:CertificateType".equals(node.getNodeName())) {
 					customerInfoVO.setCertificateType(node.getTextContent());
 				} else if ("quer:CertificateNumber".equals(node.getNodeName())) {
 					customerInfoVO.setCertificateNumber(node.getTextContent());

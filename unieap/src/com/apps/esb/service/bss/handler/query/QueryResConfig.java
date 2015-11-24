@@ -20,6 +20,7 @@ import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
 
 @Service("queryResConfig")
 public class QueryResConfig extends SoapMessageHandler implements BizHandler {
@@ -37,15 +38,15 @@ public class QueryResConfig extends SoapMessageHandler implements BizHandler {
 		String resolution = "2";
 		if (requestInfo.getRequestHeader().getDeviceInfo() != null) {
 			String devresolution = requestInfo.getRequestHeader().getDeviceInfo().getResolution();
-			if("480*800".equals(devresolution)){
+			if ("480*800".equals(devresolution)) {
 				resolution = "2";
-			}else if("720*1080".equals(devresolution)){
+			} else if ("720*1080".equals(devresolution)) {
 				resolution = "2";
-			}else if("1080*1920".equals(devresolution)){
+			} else if ("1080*1920".equals(devresolution)) {
 				resolution = "3";
-			}else if("1440*2560".equals(devresolution)){
+			} else if ("1440*2560".equals(devresolution)) {
 				resolution = "3";
-			}else{
+			} else {
 				resolution = "2";
 			}
 		}
@@ -60,7 +61,7 @@ public class QueryResConfig extends SoapMessageHandler implements BizHandler {
 						break;
 					}
 				}
-			}else{
+			} else {
 				all = true;
 			}
 			if (extParametersJson.has("page")) {
@@ -138,7 +139,7 @@ public class QueryResConfig extends SoapMessageHandler implements BizHandler {
 						jsonGroup = new JSONArray();
 						resources.put(groupName, jsonGroup);
 					}
-					if (data.get("resolution")!=null&&!StringUtils.isEmpty(data.get("resolution").toString())) {
+					if (data.get("resolution") != null && !StringUtils.isEmpty(data.get("resolution").toString())) {
 						if (data.get("resolution").toString().equals(resolution)) {
 							jsonData = setValues(data);
 							jsonGroup.put(jsonData);
@@ -148,7 +149,7 @@ public class QueryResConfig extends SoapMessageHandler implements BizHandler {
 						jsonGroup.put(jsonData);
 					}
 				} else {
-					if (data.get("resolution")!=null&&!StringUtils.isEmpty(data.get("resolution").toString())) {
+					if (data.get("resolution") != null && !StringUtils.isEmpty(data.get("resolution").toString())) {
 						if (data.get("resolution").toString().equals(resolution)) {
 							jsonData = setValues(data);
 							resources.put(data.get("name").toString(), jsonData);
@@ -159,21 +160,52 @@ public class QueryResConfig extends SoapMessageHandler implements BizHandler {
 					}
 				}
 			}
+			/**
+			 * add extend system configure data
+			 */
+			addSystemConfig(resources,getSystemConfig());
+			
 			jsonResult.put("resources", resources);
 			processResult.setExtParameters(jsonResult.toString());
 		}
 		return processResult;
 	}
 
+	public List<Map<String, Object>> getSystemConfig() {
+		List<Map<String, Object>> systemConfig = new ArrayList<Map<String, Object>>();
+		Map<String, Object> frequencyTime = new HashMap<String, Object>();
+		frequencyTime.put("id", "");
+		frequencyTime.put("text", SYSConfig.getConfig().get("apk_request_frequency_time"));
+		frequencyTime.put("subject", "");
+		frequencyTime.put("name", "apk_request_frequency_time");
+		frequencyTime.put("hyperlink", "");
+		frequencyTime.put("resolution", "");
+		frequencyTime.put("type", "C");
+		frequencyTime.put("url", "");
+		systemConfig.add(frequencyTime);
+		return systemConfig;
+	}
+
+	public void addSystemConfig(JSONObject resources, List<Map<String, Object>> systemConfig) throws Exception {
+		if (systemConfig != null && systemConfig.size() > 0) {
+			for (int i = 0; i < systemConfig.size(); i++) {
+				Map<String, Object> data = systemConfig.get(i);
+				JSONObject jsonData = setValues(data);
+				resources.put(data.get("name").toString(), jsonData);
+			}
+		}
+	}
+
 	/**
 	 * set values
+	 * 
 	 * @param data
 	 * @param jsonGroup
 	 * @throws Exception
 	 */
-	public JSONObject setValues(Map<String, Object> data)
-			throws Exception {
+	public JSONObject setValues(Map<String, Object> data) throws Exception {
 		JSONObject jsonData = new JSONObject();
+		jsonData.put("id", data.get("id"));
 		jsonData.put("type", data.get("type").toString());
 		jsonData.put("name", data.get("name").toString());
 		if (data.get("url") != null) {

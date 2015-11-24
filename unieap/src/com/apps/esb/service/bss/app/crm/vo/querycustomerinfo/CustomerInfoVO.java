@@ -5,7 +5,7 @@ import java.util.List;
 import com.apps.esb.service.bss.app.crm.vo.querysubscriberinfo.AddressInfoVO;
 
 public class CustomerInfoVO {
-	private String cutomerId;
+	private String customerId;
 	private String title;
     private String firstName;
     private String middleName;
@@ -19,11 +19,12 @@ public class CustomerInfoVO {
     private List<AddressInfoVO> addressList;
     private String dateOfBirth;
     private String status;
-	public String getCutomerId() {
-		return cutomerId;
+	
+	public String getCustomerId() {
+		return customerId;
 	}
-	public void setCutomerId(String cutomerId) {
-		this.cutomerId = cutomerId;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	public String getTitle() {
 		return title;

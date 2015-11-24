@@ -1,5 +1,6 @@
 package com.apps.esb.service.bss.handler.query;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -40,16 +41,19 @@ public class QueryComplains extends SoapMessageHandler implements BizHandler {
 			for (int i = 0; i < datas.size(); i++) {
 				Map<String, Object> data = datas.get(i);
 				JSONObject complain = new JSONObject();
-				complain.put("index", ((Integer) data.get("id")).toString());
+				complain.put("index", data.get("id"));
 				complain.put("text", (String) data.get("text"));
-				complain.put("url", (String) data.get("file_path"));
+				complain.put("url", (String) data.get("url"));
 				complain.put("feedback", (String) data.get("feedback"));
+				SimpleDateFormat sdf = new SimpleDateFormat(UnieapConstants.TIMEFORMAT);
+				String dt = sdf.format(data.get("submit_date"));
+				complain.put("submitDate",dt);
 				complains.put(complain);
 			}
 		}
 		ProcessResult processResult = new ProcessResult();
-		processResult.setResultCode(UnieapConstants.C1);
-		processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C1));
+		processResult.setResultCode(UnieapConstants.C0);
+		processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
 		JSONObject jsonResult = new JSONObject();
 		jsonResult.put("complains", complains);
 		processResult.setExtParameters(jsonResult.toString());
