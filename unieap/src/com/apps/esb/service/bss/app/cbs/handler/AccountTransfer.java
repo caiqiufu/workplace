@@ -30,7 +30,6 @@ import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
-import com.unieap.base.SYSConfig;
 
 @Service("accountTransfer")
 public class AccountTransfer extends SoapMessageHandler implements BizHandler {
@@ -41,11 +40,12 @@ public class AccountTransfer extends SoapMessageHandler implements BizHandler {
 	}
 
 	@Override
-	public ProcessResult process(RequestInfo requestInfo,String parameters,Map<String,Object> extParameters)
+	public ProcessResult process(RequestInfo requestInfo, String parameters, Map<String, Object> extParameters)
 			throws Exception {
 		RequestInfo newRequestInfo = BssServiceUtils.copyRequestInfo(requestInfo);
 		newRequestInfo.getRequestHeader().setBizCode("accountTransfer");
-		return process(this, newRequestInfo, newRequestInfo.getRequestBody().getServiceNumber(),  newRequestInfo.getRequestBody().getExtParameters(), parameters, "ws.cbs.query.timeout");
+		return process(this, newRequestInfo, newRequestInfo.getRequestBody().getServiceNumber(),
+				newRequestInfo.getRequestBody().getExtParameters(), parameters, "ws.cbs.query.timeout");
 
 	}
 
@@ -66,8 +66,8 @@ public class AccountTransfer extends SoapMessageHandler implements BizHandler {
 		String transferorNumber = "";
 		String transfereeNumber = "";
 		String transferAmount = "";
-		String transferHandleFee = "0";
-		String transfeeHandleFee = "0";
+		//String transferHandleFee = "0";
+		//String transfeeHandleFee = "0";
 		if (!StringUtils.isEmpty(requestInfo.getRequestBody().getExtParameters())) {
 			JSONObject extParametersJson = new JSONObject(requestInfo.getRequestBody().getExtParameters());
 			if (extParametersJson.has("transferorNumber")) {
@@ -86,31 +86,27 @@ public class AccountTransfer extends SoapMessageHandler implements BizHandler {
 				throw new Exception("transferAmount is null");
 			}
 		}
-		if (SYSConfig.getConfig().get("cbs.transferbalnce.transferhandlefee") != null) {
+		/*if (SYSConfig.getConfig().get("cbs.transferbalnce.transferhandlefee") != null) {
 			transferHandleFee = SYSConfig.getConfig().get("cbs.transferbalnce.transferhandlefee").toString();
 		}
 		if (SYSConfig.getConfig().get("cbs.transferbalnce.transfeehandlefee") != null) {
 			transfeeHandleFee = SYSConfig.getConfig().get("cbs.transferbalnce.transfeehandlefee").toString();
-		}
+		}*/
 
 		SOAPMessage message = messageFactory.createMessage();
 		this.getCBSArsHeader("TransferBalanceRequestMsg", message);
 		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
 		SOAPElement reqestElement = bodyElement.addChildElement("TransferBalanceRequest");
-		reqestElement.addChildElement("TransferType").addTextNode("2");
-		reqestElement.addChildElement("TransferAmount").addTextNode(transferAmount);
-		reqestElement.addChildElement("TransferHandleFee").addTextNode(transferHandleFee);
-		reqestElement.addChildElement("TransfeeHandleFee").addTextNode(transfeeHandleFee);
-		SOAPElement transferorObjElement = reqestElement.addChildElement("TransferorObj");
-		SOAPElement transferorSubAccessCodeElement = transferorObjElement.addChildElement("SubAccessCode");
-		SOAPElement transferorPrimaryIdentityElement = transferorSubAccessCodeElement
-				.addChildElement("PrimaryIdentity");
+		reqestElement.addChildElement("TransferType", "ars").addTextNode("2");
+		SOAPElement transferorObjElement = reqestElement.addChildElement("TransferorAcct", "ars");
+		SOAPElement transferorPrimaryIdentityElement = transferorObjElement.addChildElement("PrimaryIdentity","arc");
 		transferorPrimaryIdentityElement.addTextNode(transferorNumber);
-		SOAPElement transfereeObjElement = reqestElement.addChildElement("TransfereeObj");
-		SOAPElement transfereeSubAccessCodeElement = transfereeObjElement.addChildElement("SubAccessCode");
-		SOAPElement transfereePrimaryIdentityElement = transfereeSubAccessCodeElement
-				.addChildElement("PrimaryIdentity");
+		SOAPElement transfereeObjElement = reqestElement.addChildElement("TransfereeAcct", "ars");
+		SOAPElement transfereePrimaryIdentityElement = transfereeObjElement.addChildElement("PrimaryIdentity","arc");
 		transfereePrimaryIdentityElement.addTextNode(transfereeNumber);
+		reqestElement.addChildElement("TransferAmount", "ars").addTextNode(transferAmount);
+		//reqestElement.addChildElement("TransferHandleFee", "ars").addTextNode(transferHandleFee);
+		//reqestElement.addChildElement("TransfeeHandleFee", "ars").addTextNode(transfeeHandleFee);
 		return message;
 	}
 

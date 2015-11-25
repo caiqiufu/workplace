@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.BssServiceUtils;
+import com.apps.esb.service.bss.app.cbs.handler.QueryXchangePromotionLogs;
 import com.apps.esb.service.bss.app.cbs.vo.xchangelog.QueryXchangeLogVO;
 import com.apps.esb.service.bss.app.cbs.vo.xchangelog.XchangeInfoVO;
 import com.apps.esb.service.bss.app.vo.XchangeLogVO;
@@ -43,8 +44,8 @@ public class QueryXchangeLogs extends SoapMessageHandler implements BizHandler{
 		if(UnieapConstants.YES.equals(isdebug)){
 			requestInfo.getRequestBody().setServiceNumber("93268659");
 		}
-		QueryXchangeLogs queryXchangeLogs = (QueryXchangeLogs) ServiceUtils.getBean("queryXchangeLogs");
-		ProcessResult processResult = queryXchangeLogs.process(requestInfo, parameters, extParameters);
+		QueryXchangePromotionLogs queryXchangePromotionLogs = (QueryXchangePromotionLogs) ServiceUtils.getBean("queryXchangePromotionLogs");
+		ProcessResult processResult = queryXchangePromotionLogs.process(requestInfo, parameters, extParameters);
 		if(!UnieapConstants.C0.equals(processResult.getResultCode())){
 			return processResult;
 		}
@@ -69,7 +70,7 @@ public class QueryXchangeLogs extends SoapMessageHandler implements BizHandler{
 			jsonResult.put("xChangeLog", logsJson);
 			processResult.setExtParameters(jsonResult.toString());
 		}
-		return null;
+		return processResult;
 	}
 
 	@Override

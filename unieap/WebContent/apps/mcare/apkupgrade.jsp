@@ -116,7 +116,8 @@
 	                        	{ xtype:'textfield',hidden: true, name:'fileId'},
 	                        	{ xtype:'textfield',hidden: true, name:'tenantId'},
 	                        	{ xtype:'textfield',labelWidth:80, width:350, name:'version',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.apkupgrade.display.version")%>',maxLength:45,allowBlank:false},
-	                        	{ xtype:'textareafield',labelWidth:80, width:350, name:'changeDesc',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.apkupgrade.display.changeDesc")%>',maxLength:512,growMin:60,growMax:100,allowBlank:false},
+	                        	{ xtype:'textareafield',labelWidth:80, width:350, name:'changeDesc',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.apkupgrade.display.changeDesc")%>',height:150,
+	                        		maxLength:512,growMin:60,growMax:100,allowBlank:false},
 	                        	{ xtype:'combo', labelWidth:80, width:350,forceSelection: true,editable:false,allowBlank:false,
 	                                name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
 	                                store:Ext.create('Ext.data.Store', 
@@ -168,7 +169,7 @@
                     ]
                 });
                 dataWin = Ext.widget('window', 
-                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 400, height: 350, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'version' });
+                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 400, height: 450, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'version' });
             }
             if(operType=='Add'){
             	dataForm.getForm().reset();

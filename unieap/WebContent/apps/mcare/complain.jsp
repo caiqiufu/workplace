@@ -9,7 +9,7 @@
     	 var queryPara;
     	 var queryform = Ext.create('Ext.form.Panel',{
  			fieldDefaults:
- 			{ labelAlign: 'left', labelWidth: 90 },
+ 			{ labelAlign: 'left', labelWidth: 70 },
  	        layout: 'fit',
  	        width : '100%',
       	   	frame : true,
@@ -65,7 +65,7 @@
             extend: 'Ext.data.Model',
             fields:
             [
-            	'id','evalution','text','url','fileName','submitDate','submitBy'
+            	'id','evalution','text','url','fileName','submitDate','submitBy','feedback','status','statusDesc'
             ],
             idProperty: 'id'
         });
@@ -124,39 +124,110 @@
 	       	   				}
 						}	
 			       	},
-			       	{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.submitDate")%>", dataIndex: 'submitDate', sortable: false,width:150},
-			       	{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.submitBy")%>", dataIndex: 'submitBy', sortable: false,width:120}
+			       	{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.submitDate")%>", dataIndex: 'submitDate', sortable: false,width:120},
+			       	{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.submitBy")%>", dataIndex: 'submitBy', sortable: false,width:100},
+			       	{ text: "<%=UnieapConstants.getMessage("comm.status")%>", dataIndex: 'statusDesc', sortable: false,width:100}
        	   	   	],
 	       	   	tbar:[queryform],
            	   	bbar:new Ext.PagingToolbar(
            	   	{ store : gridstore,displayInfo: true})
             });
     	datagrid.render();
+	   	function showPicture(url){
+	   		window.open(url);
+	   	}
+	   	
+	   var dataWin = null;
+       var dataForm = null;
+       var operType = '';
+       function showForm(status,selectedRecord){
+        	operType = status;
+            if (dataWin==null){
+            	dataForm = Ext.widget('form',
+            	{
+                    defaults:{labelAlign: 'left', labelWidth: 90, anchor: '100%'},
+                    bodyPadding:5,
+                    items:
+                    [
+                    	{xtype:'fieldset', title:'<%=UnieapConstants.getMessage("comm.data")%>',
+	                        items:
+	                        [
+	                        	{ xtype:'textfield',hidden: true, name:'id'},
+	                        	{ xtype:'textfield',labelWidth:100, width:400, name:'evalution',fieldLabel:'<%=UnieapConstants.getMessage("mcare.complain.display.evalution")%>',maxLength:45,allowBlank:false},
+	                        	{ xtype:'textareafield',labelWidth:100, width:400, name:'text',fieldLabel:'<%=UnieapConstants.getMessage("mcare.complain.display.text")%>',maxLength:255,growMin:60,growMax:100,allowBlank:false},
+	                        	{ xtype:'textfield',labelWidth:100, width:400, name:'submitDate',fieldLabel:'<%=UnieapConstants.getMessage("mcare.complain.display.submitDate")%>',maxLength:45,allowBlank:false},
+	                        	{ xtype:'textfield',labelWidth:100, width:400, name:'submitBy',fieldLabel:'<%=UnieapConstants.getMessage("mcare.complain.display.submitBy")%>',maxLength:45,allowBlank:false},
+	                        	{ xtype:'textareafield',labelWidth:100, width:400, name:'feedback',fieldLabel:'<%=UnieapConstants.getMessage("mcare.complain.display.feedback")%>',maxLength:255,growMin:60,growMax:100,allowBlank:false}
+	                        ]
+	                    }
+                    ],
+                    buttons: 
+                    [
+	                    {id:'formCancel', text: '<%=UnieapConstants.getMessage("comm.cancel")%>',
+	                        handler: function(){
+	                        	dataForm.getForm().reset();
+	                        	dataWin.hide();
+	                        }
+	                    }, 
+	                    {id:'formSubmit',text: '<%=UnieapConstants.getMessage("comm.submit")%>',
+	                        handler: function(){
+	                        	var form = dataForm.getForm();
+	                        	 if (form.isValid()){
+	                                 form.submit({
+	                                     clientValidation: true,
+	                                     method: 'POST',
+	                                     params:{'operType':operType},
+	                                     waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+	                                     url: 'mcareController.do?method=complainDeal',
+	                                     success: function(form, action) {
+	                                    	var result = Ext.JSON.decode(action.response.responseText);
+						                    if(result.isSuccess == 'failed'){
+						                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+		                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+						                    }else{
+ 		                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
+	 		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+						                    }
+	                                     },
+	                                     failure: function(form, action){
+	                                    	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+	                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                                     }
+	                                 });
+	                        	 }
+	                        }
+	                    }
+                    ]
+                });
+                dataWin = Ext.widget('window', 
+                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 480, height: 300, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'reply' });
+            }
+            if(operType=='Add'){
+            	dataForm.getForm().reset();
+            	dataWin.show();
+            }else if(operType=='Modify'){
+            	dataWin.show();
+            	dataForm.getForm().reset();
+            	dataForm.getForm().findField('evalution').setReadOnly(true);
+            	dataForm.getForm().findField('evalution').inputEl.addCls('readonly_field');
+            	dataForm.getForm().findField('text').setReadOnly(true);
+            	dataForm.getForm().findField('text').inputEl.addCls('readonly_field');
+            	dataForm.getForm().findField('submitDate').setReadOnly(true);
+            	dataForm.getForm().findField('submitDate').inputEl.addCls('readonly_field');
+            	dataForm.getForm().findField('submitBy').setReadOnly(true);
+            	dataForm.getForm().findField('submitBy').inputEl.addCls('readonly_field');
+            	dataForm.getForm().setValues(selectedRecord.data);
+            }else{
+            	dataWin.show();
+            }
+	    }
+		function showResult(btn){
+	     	dataWin.hide();
+	     	gridstore.reload();
+	    }
+	   	
+	   	
 	});
-    	function showPicture(url){
-    		var path = "<%=path%>";
-    		url = path+url;
-    		alert(url);
-    		var dataWin = Ext.widget('window', 
-    	                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'close',width: 500, height: 550, autoScroll: true,  modal: true, 
-    			 			buttons:[   
-    			            	{text:"<%=UnieapConstants.getMessage("comm.cancel")%>",
-    			            		handler: function(){
-    			            			dataWin.close();
-    		                        }	
-    			            	}   
-    			        	] ,
-    			 			items:
-    			 				[
-										{  
-										    xtype:'panel',  
-										    html:'<img src="'+url+'"/>'  
-										}
-    			 			    ] 
-    	                });
-    		 dataWin.doLayout();
-    		 dataWin.show();
-    	}
     </script>
 </head>
 <body>

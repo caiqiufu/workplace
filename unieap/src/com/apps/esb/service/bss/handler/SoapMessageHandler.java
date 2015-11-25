@@ -100,6 +100,7 @@ public class SoapMessageHandler {
 		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
 		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
 		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+		requestHeaderElement.addChildElement("AccessMode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.channelCode"));
 	}
 	public void getCBSBcHeader(String method, SOAPMessage message) throws Exception {
 		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
@@ -115,6 +116,7 @@ public class SoapMessageHandler {
 		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
 		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
 		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+		requestHeaderElement.addChildElement("AccessMode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.channelCode"));
 	}
 	public void getCBSBbHeader(String method, SOAPMessage message) throws Exception {
 		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
@@ -130,6 +132,7 @@ public class SoapMessageHandler {
 		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
 		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
 		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+		requestHeaderElement.addChildElement("AccessMode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.channelCode"));
 	}
 	public ProcessResult process(Object obj, RequestInfo requestInfo, String serviceNumber, String extParameters,
 			String parameters,String timeoutName) throws Exception {

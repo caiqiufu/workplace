@@ -1,5 +1,10 @@
 package com.apps.mcare.vo;
 
+import org.springframework.util.StringUtils;
+
+import com.unieap.CacheMgt;
+import com.unieap.mdm.vo.DicDataVO;
+
 public class ComplainVO {
 	private String id;
 	private String evalution;
@@ -10,6 +15,9 @@ public class ComplainVO {
 	private String submitDateStart;
 	private String submitDateEnd;
 	private String submitBy;
+	private String feedback;
+	private String status;
+	private String statusDesc;
 	public String getId() {
 		return id;
 	}
@@ -63,6 +71,30 @@ public class ComplainVO {
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	public String getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+		if(!StringUtils.isEmpty(this.status)){
+			DicDataVO dic =  CacheMgt.getDicData("complainStatus",status);
+			if(dic!=null){
+				this.statusDesc = dic.getDicName();
+			}
+		}
+	}
+	public String getStatusDesc() {
+		return statusDesc;
+	}
+	public void setStatusDesc(String statusDesc) {
+		this.statusDesc = statusDesc;
 	}
 	
 }

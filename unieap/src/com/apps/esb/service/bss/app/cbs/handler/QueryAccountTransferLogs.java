@@ -63,10 +63,13 @@ public class QueryAccountTransferLogs extends SoapMessageHandler implements BizH
 		this.getCBSArsHeader("QueryTransferLogRequestMsg", message);
 		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
 		SOAPElement reqestElement = bodyElement.addChildElement("QueryTransferLogRequest");
-		SOAPElement objElement = reqestElement.addChildElement("QueryObj");
-		reqestElement.addChildElement("TotalRowNum").addTextNode("0");
-		reqestElement.addChildElement("BeginRowNum").addTextNode("0");
-		reqestElement.addChildElement("FetchRowNum").addTextNode("1000");
+		SOAPElement objElement = reqestElement.addChildElement("QueryObj","ars");
+		SOAPElement subAccessCodeElement = objElement.addChildElement("SubAccessCode","ars");
+		SOAPElement primaryIdentityElement = subAccessCodeElement.addChildElement("PrimaryIdentity","arc");
+		primaryIdentityElement.addTextNode(serviceNumber);
+		reqestElement.addChildElement("TotalRowNum","ars").addTextNode("0");
+		reqestElement.addChildElement("BeginRowNum","ars").addTextNode("0");
+		reqestElement.addChildElement("FetchRowNum","ars").addTextNode("1000");
 		Date endTime = UnieapConstants.getDateTime(null);
 		Calendar rightNow = Calendar.getInstance();
 		rightNow.setTime(endTime);
@@ -76,11 +79,9 @@ public class QueryAccountTransferLogs extends SoapMessageHandler implements BizH
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
 		String beginTimeStr = sdf.format(beginTime);
 		String endTimeStr = sdf.format(endTime);
-		reqestElement.addChildElement("StartTime").addTextNode(beginTimeStr);
-		reqestElement.addChildElement("EndTime").addTextNode(endTimeStr);
-		SOAPElement subAccessCodeElement = objElement.addChildElement("SubAccessCode");
-		SOAPElement primaryIdentityElement = subAccessCodeElement.addChildElement("PrimaryIdentity");
-		primaryIdentityElement.addTextNode(serviceNumber);
+		reqestElement.addChildElement("StartTime","ars").addTextNode(beginTimeStr);
+		reqestElement.addChildElement("EndTime","ars").addTextNode(endTimeStr);
+		
 		return message;
 	}
 

@@ -2,8 +2,10 @@ package com.apps.esb.service.bss.app.cbs.handler;
 
 import java.util.Map;
 
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.axis.utils.StringUtils;
@@ -19,6 +21,7 @@ import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
+import com.unieap.base.SYSConfig;
 
 @Service("xchangePromotion")
 public class XchangePromotion extends SoapMessageHandler implements BizHandler{
@@ -56,10 +59,10 @@ public class XchangePromotion extends SoapMessageHandler implements BizHandler{
 		String exchangeAmount = "";
 		if (!StringUtils.isEmpty(requestInfo.getRequestBody().getExtParameters())) {
 			JSONObject extParametersJson = new JSONObject(requestInfo.getRequestBody().getExtParameters());
-			if (extParametersJson.has("XchangeType")) {
-				xChangeType = extParametersJson.getString("XchangeType");
+			if (extParametersJson.has("xChangeType")) {
+				xChangeType = extParametersJson.getString("xChangeType");
 			} else {
-				throw new Exception("XchangeType is null");
+				throw new Exception("xChangeType is null");
 			}
 			if (extParametersJson.has("applierNumber")) {
 				applierNumber = extParametersJson.getString("applierNumber");
@@ -87,6 +90,23 @@ public class XchangePromotion extends SoapMessageHandler implements BizHandler{
 		reqestElement.addChildElement("receiverNumber", "arc").addTextNode(receiverNumber);;
 		reqestElement.addChildElement("exchangeAmount", "arc").addTextNode(exchangeAmount);;
 		return message;
+	}
+	
+	public void getCBSArsHeader(String method, SOAPMessage message) throws Exception {
+		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+		envelope.addNamespaceDeclaration("arcl", "http://www.huawei.com/ar/wsservice/arcommon");
+		envelope.addNamespaceDeclaration("cbs", "http://www.huawei.com/bme/cbsinterface/cbscommon");
+		envelope.addNamespaceDeclaration("arc", "http://www.huawei.com/bme/cbsinterface/arcustomizedservices");
+		SOAPBody body = envelope.getBody();
+		SOAPElement bodyElement = body.addChildElement(method,"arc");
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
+		requestHeaderElement.addChildElement("Version","cbs").addTextNode("1.0");
+		requestHeaderElement.addChildElement("MessageSeq","cbs").addTextNode(BssServiceUtils.generateTransactionId());
+		
+		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
+		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
+		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+		requestHeaderElement.addChildElement("AccessMode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.channelCode"));
 	}
 
 	@Override

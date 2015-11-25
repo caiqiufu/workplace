@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.apps.mcare.bo.ApkUpgradeBO;
+import com.apps.mcare.bo.AppDenoBO;
 import com.apps.mcare.bo.AppMessageBO;
 import com.apps.mcare.bo.ComplainBO;
-import com.apps.mcare.bo.OfferingCategoryBO;
+import com.apps.mcare.bo.OfferingBO;
 import com.apps.mcare.bo.ResourceConfigureBO;
+import com.apps.mcare.pojo.AppComplain;
 import com.apps.mcare.pojo.AppMessage;
+import com.apps.mcare.pojo.AppOffering;
 import com.apps.mcare.pojo.AppOfferingCategory;
 import com.apps.mcare.pojo.AppResconfig;
 import com.apps.mcare.vo.ComplainVO;
@@ -37,10 +40,25 @@ public class McareController extends BaseController{
 	}
 	@RequestMapping(params="method=offerCategoryGrid")  
 	public @ResponseBody String offerCategoryGrid(PaginationSupport page,AppOfferingCategory vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
-		OfferingCategoryBO offeringCategoryBO = (OfferingCategoryBO) ServiceUtils.getBean("offeringCategoryBO");
-		offeringCategoryBO.getOfferingCategoryList(page, vo);
+		OfferingBO offeringBO = (OfferingBO) ServiceUtils.getBean("OfferingBO");
+		offeringBO.getOfferingCategoryList(page, vo);
 		return page.getJsonString();
 	}
+	@RequestMapping(params="method=offeringGrid")  
+	public @ResponseBody String offeringGrid(PaginationSupport page,AppOfferingCategory vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		OfferingBO offeringBO = (OfferingBO) ServiceUtils.getBean("OfferingBO");
+		offeringBO.getOfferingList(page, vo);
+		return page.getJsonString();
+	}
+	@RequestMapping(params="method=offeringDeal")  
+	public @ResponseBody Map<String, String> offeringDeal(String operType,AppOffering vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		OfferingBO offeringBO = (OfferingBO) ServiceUtils.getBean("OfferingBO");
+		Map<String, String> model = offeringBO.offeringDeal(operType, vo);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
+	}
+	
+	
 	@RequestMapping(params="method=complain")  
 	public ModelAndView complain(HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ModelAndView ma = new ModelAndView("apps/mcare/complain");
@@ -51,6 +69,14 @@ public class McareController extends BaseController{
 		ComplainBO complainBO = (ComplainBO) ServiceUtils.getBean("complainBO");
 		complainBO.getComplainList(page, vo);
 		return page.getJsonString();
+	}
+	
+	@RequestMapping(params="method=complainDeal")  
+	public @ResponseBody Map<String, String> complainDeal(String operType,AppComplain vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		ComplainBO complainBO = (ComplainBO) ServiceUtils.getBean("complainBO");
+		Map<String, String> model = complainBO.complainDeal(operType, vo);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
 	}
 	
 	@RequestMapping(params="method=resourceConfigure")  
@@ -125,4 +151,19 @@ public class McareController extends BaseController{
 		return model;
 	}
 	
+	
+	@RequestMapping(params="method=denoGrid")  
+	public @ResponseBody String denoGrid(PaginationSupport page,String type,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		AppDenoBO appDenoBO = (AppDenoBO) ServiceUtils.getBean("appDenoBO");
+		appDenoBO.getDenoGrid(page, type);
+		return page.getJsonString();
+	}
+	
+	@RequestMapping(params="method=denoDeal")  
+	public @ResponseBody Map<String, String> denoDeal(String operType,AppMessage vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		AppMessageBO appMessageBO = (AppMessageBO) ServiceUtils.getBean("appMessageBO");
+		Map<String, String> model = appMessageBO.messageDeal(operType, vo);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
+	}
 }

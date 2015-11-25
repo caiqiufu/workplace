@@ -9,6 +9,7 @@ import org.apache.axis.utils.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.apps.esb.service.bss.app.cbs.handler.AccountTransfer;
 import com.apps.esb.service.bss.app.cbs.vo.transferbalance.TransferBalanceResponseVO;
 import com.apps.esb.service.bss.app.cbs.vo.transferbalance.TransferorVO;
 import com.apps.esb.service.bss.app.vo.BalanceChgInfoVO;
@@ -23,9 +24,9 @@ import com.unieap.base.ServiceUtils;
 import com.unieap.tools.JSONUtils;
 
 @Service("transfer")
-public class AccountTransfer extends SoapMessageHandler implements BizHandler {
+public class Transfer extends SoapMessageHandler implements BizHandler {
 
-	public AccountTransfer() throws Exception {
+	public Transfer() throws Exception {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -1023,6 +1023,244 @@
                 });
        	 	}
     	}
+    	/***denomination configure begin*********************************************************/
+    	
+    	Ext.define('denodatamodel', {
+            extend: 'Ext.data.Model',
+            fields:
+            [
+            	'id','index','type','value','denoValue','handleFee','attri1','attri2','activeFlag','activeFlagDesc','modifyDate','modifyBy','remark',
+            	'createDate','createBy','effectiveDate','expiredDate'
+            ],
+            idProperty: 'id'
+        });
+    	
+    	var gridstoreForDeno = Ext.create('Ext.data.Store', {
+            model: 'denodatamodel',
+            pageSize: 15,
+            remoteSort: true,
+            proxy:{ type: 'ajax', url: 'mcareController.do?method=denoGrid',
+                reader: 
+                {root: 'rows', totalProperty: 'totalCount'},
+                simpleSortMode: true
+            },
+            sorters: [{ property: 'id', direction: 'DESC'}]
+        });
+    	var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+            clicksToMoveEditor: 1,
+            autoCancel: false
+        });
+    	var gridForDeno = Ext.create('Ext.grid.Panel', {
+            store: gridstoreForDeno,
+            selModel: {
+                selType: 'cellmodel'
+            },
+            viewConfig: {
+                stripeRows: true
+            },
+            plugins: [rowEditing],
+            columns: [
+						{
+						    text     : '<%=UnieapConstants.getMessage("comm.index")%>',
+						    width    : 100,
+						    sortable : false,
+						    dataIndex: 'index',
+						    editor: {
+						        xtype: 'numberfield'
+						    }
+						},
+						{
+						    text     : '<%=UnieapConstants.getMessage("comm.type")%>',
+						    width    : 100,
+						    sortable : false,
+						    dataIndex: 'type',
+						    editor: {
+						    	xtype:'combo',forceSelection: true,
+	                            displayField:'dicName',valueField:'dicCode',value:'Y',
+	                            store:Ext.create('Ext.data.Store', 
+	                            { fields : ['dicCode', 'dicName'],data:[{'dicCode':'xChange','dicName':'xChange'},{'dicCode':'Transfer','dicName':'Transfer'}]})
+						    }
+						},{
+						    text     : '<%=UnieapConstants.getMessage("mcare.denomination.display.value")%>',
+						    width    : 100,
+						    sortable : false,
+						    dataIndex: 'value',
+						    editor: {
+						        xtype: 'numberfield'
+						    }
+						},{
+						    text     : '<%=UnieapConstants.getMessage("mcare.denomination.display.denoValue")%>',
+						    width    : 100,
+						    sortable : false,
+						    dataIndex: 'denoValue',
+						    editor: {
+						        xtype: 'textfield'
+						    }
+						},{
+				            text     : '<%=UnieapConstants.getMessage("comm.effectiveDate")%>',
+				            width    : 105,
+				            sortable : true,
+				            renderer : Ext.util.Format.date(new Date(),"Y-m-d"),
+				            dataIndex: 'effectiveDate',
+				            editor: {
+				                xtype: 'datefield'
+				            }
+				        },{
+				            text     : '<%=UnieapConstants.getMessage("comm.expiredDate")%>',
+				            width    : 105,
+				            sortable : true,
+				            renderer : Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,+7),"Y-m-d"),
+				            dataIndex: 'expiredDate',
+				            editor: {
+				                xtype: 'datefield'
+				            }
+				        }
+						
+                      
+                      
+                      
+               
+            ],
+            flex: true,region: 'center',
+            bbar:new Ext.PagingToolbar(
+               	   	{ store : gridstoreForPopup,displayInfo: true})
+        });
+    	gridstoreForDeno.load();
+    	gridForDeno.getSelectionModel().on('selectionchange', function(sm, selectedRecord) {
+            if (selectedRecord.length) {
+            	dataFormDeno.getForm().reset();
+            	dataFormDeno.getForm().setValues(selectedRecord[0].data);
+            	dataFormDeno.getForm().findField('subject').setReadOnly(true);
+            	dataFormDeno.getForm().findField('subject').inputEl.addCls('readonly_field');
+            	dataFormDeno.getForm().findField('text').setReadOnly(true);
+            	dataFormDeno.getForm().findField('text').inputEl.addCls('readonly_field');
+            	dataFormDeno.getForm().findField('hyperlink').setReadOnly(true);
+            	dataFormDeno.getForm().findField('hyperlink').inputEl.addCls('readonly_field');
+            	dataFormDeno.getForm().findField('activeFlag').setReadOnly(true);
+            	dataFormDeno.getForm().findField('activeFlag').inputEl.addCls('readonly_field');
+            	dataFormDeno.getForm().findField('effectiveDate').setReadOnly(true);
+            	dataFormDeno.getForm().findField('effectiveDate').inputEl.addCls('readonly_field');
+            	dataFormDeno.getForm().findField('expiredDate').setReadOnly(true);
+            	dataFormDeno.getForm().findField('expiredDate').inputEl.addCls('readonly_field');
+            	dataFormDeno.getForm().findField('effectiveDate').setValue(Ext.util.Format.date(selectedRecord[0].data.effectiveDate,"Y-m-d h:i:s"));
+            	dataFormDeno.getForm().findField('expiredDate').setValue(Ext.util.Format.date(selectedRecord[0].data.expiredDate,"Y-m-d h:i:s"));
+            	Ext.getCmp('formAddDeno').enable();
+            	Ext.getCmp('formModifyDeno').enable();
+            	Ext.getCmp('formSubmitDeno').disable();
+            }
+        });
+    	var dataFormDeno = Ext.widget('form',
+           {
+    		layout:'fit',defaults:{labelAlign: 'left', labelWidth: 90, anchor: '100%'},
+            bodyPadding:5,
+            items:
+            [
+            	{xtype:'fieldset', title:'<%=UnieapConstants.getMessage("comm.data")%>',
+                    items:
+                    [
+                    	{ xtype:'textfield',hidden: true, name:'id'},
+                    	{ xtype:'textfield',hidden: true, name:'type'},
+                    	{ xtype:'textfield',hidden: true, name:'createDate'},
+                    	{ xtype:'textfield',hidden: true, name:'createBy'},
+                    	{ xtype:'textfield',hidden: true, name:'name'},
+                    	{ xtype:'textfield',hidden: true, name:'groupName'},
+                    	{ xtype:'textfield',hidden: true, name:'resolution'},
+                    	{ xtype:'textfield',hidden: true, name:'pageNum'},
+                    	{ xtype:'textfield',hidden: true, name:'seq'},
+                    	{ xtype:'textfield',hidden: true, name:'url'},
+                    	{ xtype:'textfield',hidden: true, name:'remark'},
+                    	{ xtype:'textfield',labelWidth:80, width:450, name:'subject',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.subject")%>',maxLength:45,allowBlank:false},
+                    	{ xtype:'textareafield',labelWidth:80, width:450, name:'text',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.resourceConfigure.display.text")%>',
+                    		preventScrollbars:true,maxLength:1024,height:150,growMin:150,growMax:200,allowBlank:false},
+                   		{name: 'effectiveDate',labelWidth:80, width:300, fieldLabel: '<%=UnieapConstants.getMessage("comm.effectiveDate")%>',format: 'Y-m-d h:i:s', xtype: 'datefield',allowBlank:false,
+                    		value:Ext.util.Format.date(new Date(),"Y-m-d h:i:s")
+                   		},
+   			            {name: 'expiredDate',labelWidth:80, width:300, fieldLabel: '<%=UnieapConstants.getMessage("comm.expiredDate")%>',format: 'Y-m-d h:i:s', xtype: 'datefield',allowBlank:false,
+                   			value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,+7),"Y-m-d h:i:s")
+   			            },
+                    	{ xtype:'combo', labelWidth:80, width:300,forceSelection: true,editable:false,allowBlank:false,
+                            name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
+                            store:Ext.create('Ext.data.Store', 
+                            { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
+						},
+                    	{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>', allowBlank:true}
+                    ]
+                }
+            ],
+            buttonAlign: 'center',
+            buttons: 
+            [
+                {id:'formAddDeno', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
+                    handler: function(){
+                    	operType = 'AddDeno';
+                    	dataFormDeno.getForm().reset();
+                    	dataFormDeno.getForm().findField('subject').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('subject').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('text').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('text').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('hyperlink').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('hyperlink').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('activeFlag').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('activeFlag').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('effectiveDate').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('effectiveDate').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('expiredDate').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('expiredDate').inputEl.removeCls('readonly_field');
+                    	Ext.getCmp('formSubmitDeno').enable();
+                    	Ext.getCmp('formModifyDeno').disable();
+                    }
+                },{id:'formModifyDeno', text: '<%=UnieapConstants.getMessage("comm.modify")%>',disabled:true,
+                    handler: function(){
+                    	operType = 'ModifyDeno';
+                    	dataFormDeno.getForm().findField('subject').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('subject').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('text').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('text').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('hyperlink').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('hyperlink').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('activeFlag').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('activeFlag').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('effectiveDate').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('effectiveDate').inputEl.removeCls('readonly_field');
+                    	dataFormDeno.getForm().findField('expiredDate').setReadOnly(false);
+                    	dataFormDeno.getForm().findField('expiredDate').inputEl.removeCls('readonly_field');
+                    	Ext.getCmp('formSubmitDeno').enable();
+                    }
+                }, 
+                {id:'formSubmitDeno',text: '<%=UnieapConstants.getMessage("comm.submit")%>',disabled:true,
+                    handler: function(){
+                    	var form = dataFormDeno.getForm();
+                    	 if (form.isValid()){
+                             form.submit({
+                                 clientValidation: true,
+                                 method: 'POST',
+                                 params:{'operType':operType},
+                                 waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+                                 url: 'mcareController.do?method=messageDeal',
+                                 success: function(form, action) {
+                                	var result = Ext.JSON.decode(action.response.responseText);
+				                    if(result.isSuccess == 'failed'){
+				                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+				                    }else{
+	                                    	gridstoreForDeno.reload();
+	                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+				                    }
+                                 },
+                                 failure: function(form, action){
+                                	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+                                 }
+                             });
+                    	 }
+                    }
+                }
+            ]
+        });
+    	
+    	
+    	
     	
     	var tabPanel = Ext.create('Ext.tab.Panel',{
 	     	renderTo:'tabPanel',activeTab:0,layout: 'fit',
@@ -1088,6 +1326,18 @@
 									    region: 'east',
 									    width:500,
 									    items: [dataFormAd]
+									}
+					             ],
+					    closable: false
+					}, {
+						xtype: 'panel',layout: 'border',height:550,
+					    title: '<%=UnieapConstants.getMessage("mcare.denomination.display.title")%>',
+					    items : [
+									gridForDeno,
+									{
+									    region: 'east',
+									    width:500,
+									    items: [dataFormDeno]
 									}
 					             ],
 					    closable: false

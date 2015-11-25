@@ -8,10 +8,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.apps.mcare.pojo.AppOffering;
 import com.apps.mcare.pojo.AppOfferingCategory;
 import com.unieap.BaseBO;
 import com.unieap.UnieapConstants;
@@ -26,97 +28,46 @@ import com.unieap.pojo.User;
 import com.unieap.pojo.UserRole;
 import com.unieap.tools.Propertyholder;
 
-@Service("offeringCategoryBO")
-public class OfferingCategoryBO extends BaseBO {
+@Service("OfferingBO")
+public class OfferingBO extends BaseBO {
 	public void getOfferingCategoryList(PaginationSupport page, AppOfferingCategory vo) throws Exception {
 		DetachedCriteria criteria = DetachedCriteria.forClass(AppOfferingCategory.class);
 		setCriteria(criteria, vo);
 		getPaginationDataByDetachedCriteria(criteria, page);
 	}
 
-	public Map<String, String> userDeal(String operType, User vo, UserRole ur) throws Exception {
+	public void getOfferingList(PaginationSupport page, AppOfferingCategory vo) throws Exception {
+		DetachedCriteria criteria = DetachedCriteria.forClass(AppOffering.class);
+		Property categoryIdProperty = Property.forName("categoryId");
+		criteria.add(categoryIdProperty.eq(vo.getId()));
+		getPaginationDataByDetachedCriteria(criteria, page);
+	}
+
+	public Map<String, String> offeringDeal(String operType, AppOffering vo) throws Exception {
 		if (StringUtils.equals(operType, UnieapConstants.ADD)) {
-			Map result = checkExist(
-					UnieapConstants.getMessage("mdm.role.check.userCode", new Object[] { vo.getUserCode() }),
-					"userCode", vo.getUserCode(), User.class, null);
-			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
-				return save(vo);
-			} else {
-				return result;
-			}
+			return save(vo);
 		} else if (StringUtils.equals(operType, UnieapConstants.MODIFY)) {
-			Map result = checkExistForUpdate(
-					UnieapConstants.getMessage("mdm.role.check.userCode", new Object[] { vo.getUserCode() }), "userId",
-					vo.getUserId(), "userCode", vo.getUserCode(), User.class, null);
-			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
-				return update(vo);
-			} else {
-				return result;
-			}
-		} else if (StringUtils.equals(operType, UnieapConstants.DELETE)) {
-			return delete(vo);
-		} else if (StringUtils.equals(operType, UnieapConstants.CHECKEXIST)) {
-			return checkExist(UnieapConstants.getMessage("mdm.role.check.userCode", new Object[] { vo.getUserCode() }),
-					"userCode", vo.getUserCode(), User.class, null);
-		} else if (StringUtils.equals(operType, "User_Role_Delete")) {
-			return deleteUserRole(ur);
+			return update(vo);
 		} else {
 			throw new Exception(UnieapConstants.getMessage("comm.operation.error", new Object[] { operType }));
 		}
 	}
 
-	public Map<String, String> assignUserRole(String datas, User vo) throws Exception {
-		JSONArray datasArray = new JSONArray(datas);
-		if (datasArray != null && datasArray.length() > 0) {
-			JSONObject json = null;
-			String roleId = null;
-			UserRole ur;
-			List<UserRole> urs = new ArrayList<UserRole>();
-			for (int i = 0; i < datasArray.length(); i++) {
-				ur = new UserRole();
-				json = (JSONObject) datasArray.get(i);
-				roleId = json.get("roleId").toString();
-				ur.setUserRoleId(getSequence(null, UnieapConstants.UNIEAP));
-				ur.setUserId(vo.getUserId());
-				ur.setRoleId(Integer.valueOf(roleId));
-				ur.setActiveFlag(UnieapConstants.YES);
-				ur.setCreateDate(UnieapConstants.getDateTime(null));
-				ur.setCreateBy(UnieapConstants.getUser().getUserCode());
-				urs.add(ur);
-				// DBManager.getHT(null).save(ur);
-			}
-			DBManager.getHT(null).saveOrUpdateAll(urs);
-		}
-		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
-	}
-
-	public Map<String, String> save(User vo) throws Exception {
-		vo.setUserId(getSequence(null, "unieap"));
-		vo.setPassword(vo.getUserCode());
-		vo.setLocked(UnieapConstants.NO);
-		vo.setExpired(UnieapConstants.NO);
+	public Map<String, String> save(AppOffering vo) throws Exception {
+		vo.setId(getSequence(null, null));
 		vo.setCreateDate(UnieapConstants.getDateTime(null));
 		vo.setCreateBy(UnieapConstants.getUser().getUserCode());
 		DBManager.getHT(null).save(vo);
-		//sendEmailToNewUser(vo);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
 
-	public Map<String, String> update(User vo)
+	public Map<String, String> update(AppOffering vo)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, IntrospectionException {
-		User ouser = DBManager.getHT(null).get(User.class, vo.getUserId());
-		ouser.setEnable(vo.getEnable());
-		ouser.setExpired(vo.getExpired());
-		ouser.setLocked(vo.getLocked());
-		ouser.setEmail(vo.getEmail());
-		ouser.setUserCode(vo.getUserCode());
-		ouser.setUserName(vo.getUserName());
-		ouser.setRemark(vo.getRemark());
-		ouser.setModifyDate(UnieapConstants.getDateTime(null));
-		ouser.setModifyBy(UnieapConstants.getUser().getUserCode());
+		vo.setModifyDate(UnieapConstants.getDateTime(null));
+		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
 		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
-		changeLogBO.save(ouser.getUserId(), ouser, "user", UnieapConstants.MODIFY, UnieapConstants.UNIEAP);
-		DBManager.getHT(null).update(ouser);
+		changeLogBO.save(vo.getId(), vo, "appOffering", UnieapConstants.MODIFY, UnieapConstants.UNIEAP);
+		DBManager.getHT(null).update(vo);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
 

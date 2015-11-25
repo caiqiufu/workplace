@@ -13,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.apps.mcare.pojo.AppComplain;
 import com.apps.mcare.vo.ComplainVO;
 import com.unieap.BaseBO;
+import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
 import com.unieap.db.DBManager;
 import com.unieap.file.bo.FileBO;
+import com.unieap.mdm.bo.ChangeLogBO;
 
 @Service("complainBO")
 public class ComplainBO extends BaseBO {
@@ -51,7 +53,7 @@ public class ComplainBO extends BaseBO {
 
 	public void getComplainList(PaginationSupport page, ComplainVO vo) throws Exception {
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT id,evalution,text,url ,url as fileName,c.submit_date as submitDate,c.submit_by as submitBy ");
+		sql.append("SELECT id,evalution,text,url,url as fileName,c.submit_date as submitDate,c.submit_by as submitBy,feedback,status ");
 		sql.append("FROM app_complain c where ");
 		sql.append(" submit_date > '").append(vo.getSubmitDateStart()).append("' and submit_date < '")
 				.append(vo.getSubmitDateEnd()).append("' ");
@@ -76,6 +78,26 @@ public class ComplainBO extends BaseBO {
 		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),
 				new Object[] { serviceNumber });
 		return datas;
+	}
+	
+	public Map<String, String> complainDeal(String operType, AppComplain vo) throws Exception {
+		if (StringUtils.equals(operType, "Modify")) {
+			update(vo);
+			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
+		}  else {
+			throw new Exception(UnieapConstants.getMessage("comm.operation.error", new Object[] { operType }));
+		}
+	}
+	public Map<String, String> update(AppComplain vo) throws Exception {
+		AppComplain appComplain = DBManager.getHT(null).get(AppComplain.class,vo.getId());
+		appComplain.setFeedback(vo.getFeedback());
+		appComplain.setStatus("F");
+		appComplain.setModifyDate(UnieapConstants.getDateTime(null));
+		appComplain.setModifyBy(UnieapConstants.getUser().getUserCode());
+		ChangeLogBO changeLogBO = (ChangeLogBO) ServiceUtils.getBean("changeLogBO");
+		changeLogBO.save(appComplain.getId(), vo, "appComplain", UnieapConstants.MODIFY, UnieapConstants.UNIEAP);
+		DBManager.getHT(null).update(appComplain);
+		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
 
 }

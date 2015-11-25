@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPMessage;
 
 import org.springframework.stereotype.Service;
@@ -79,6 +81,23 @@ public class QueryXchangePromotionLogs extends SoapMessageHandler implements Biz
 		reqestElement.addChildElement("StartTime", "arc").addTextNode(beginTimeStr);
 		reqestElement.addChildElement("EndTime", "arc").addTextNode(endTimeStr);
 		return message;
+	}
+
+	public void getCBSArsHeader(String method, SOAPMessage message) throws Exception {
+		SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+		envelope.addNamespaceDeclaration("arcl", "http://www.huawei.com/ar/wsservice/arcommon");
+		envelope.addNamespaceDeclaration("cbs", "http://www.huawei.com/bme/cbsinterface/cbscommon");
+		envelope.addNamespaceDeclaration("arc", "http://www.huawei.com/bme/cbsinterface/arcustomizedservices");
+		SOAPBody body = envelope.getBody();
+		SOAPElement bodyElement = body.addChildElement(method,"arc");
+		SOAPElement requestHeaderElement = bodyElement.addChildElement("RequestHeader");
+		requestHeaderElement.addChildElement("Version","cbs").addTextNode("1.0");
+		requestHeaderElement.addChildElement("MessageSeq","cbs").addTextNode(BssServiceUtils.generateTransactionId());
+		
+		SOAPElement accessSecurityElement = requestHeaderElement.addChildElement("AccessSecurity","cbs");
+		accessSecurityElement.addChildElement("LoginSystemCode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessUser"));
+		accessSecurityElement.addChildElement("Password","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.accessPwd"));
+		requestHeaderElement.addChildElement("AccessMode","cbs").addTextNode(SYSConfig.getConfig().get("cbs.inf.channelCode"));
 	}
 
 	@Override
