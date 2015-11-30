@@ -14,8 +14,9 @@ import com.unieap.mdm.vo.DicDataVO;
 public class AppDenomination implements java.io.Serializable {
 
 	private Integer id;
-	private Integer index;
+	private Integer seq;
 	private String type;
+	private String typeDesc;
 	private String value;
 	private String denoValue;
 	private String handleFee;
@@ -34,9 +35,9 @@ public class AppDenomination implements java.io.Serializable {
 	public AppDenomination() {
 	}
 
-	public AppDenomination(Integer id,Integer index,String type, String activeFlag, String createBy, Date createDate) {
+	public AppDenomination(Integer id,Integer seq,String type, String activeFlag, String createBy, Date createDate) {
 		this.id = id;
-		this.index = index;
+		this.seq = seq;
 		this.type = type;
 		this.activeFlag = activeFlag;
 		this.createBy = createBy;
@@ -45,11 +46,11 @@ public class AppDenomination implements java.io.Serializable {
 
 	
 	
-	public AppDenomination(Integer id, Integer index, String type, String value, String denoValue, String handleFee,
+	public AppDenomination(Integer id, Integer seq, String type, String value, String denoValue, String handleFee,
 			String attri1, String attri2, String activeFlag, String activeFlagDesc, String createBy, Date createDate,
 			String modifyBy, Date modifyDate, String remark,Date effectiveDate,Date expiredDate) {
 		this.id = id;
-		this.index = index;
+		this.seq = seq;
 		this.type = type;
 		this.value = value;
 		this.denoValue = denoValue;
@@ -75,12 +76,12 @@ public class AppDenomination implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Integer getIndex() {
-		return index;
+	public Integer getSeq() {
+		return seq;
 	}
 
-	public void setIndex(Integer index) {
-		this.index = index;
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 
 	public String getType() {
@@ -89,6 +90,12 @@ public class AppDenomination implements java.io.Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+		if(!StringUtils.isEmpty(this.type)){
+			DicDataVO dic =  CacheMgt.getDicData("denomination",type);
+			if(dic!=null){
+				this.typeDesc = dic.getDicName();
+			}
+		}
 	}
 
 	public String getValue() {
@@ -207,6 +214,14 @@ public class AppDenomination implements java.io.Serializable {
 
 	public void setExpiredDate(Date expiredDate) {
 		this.expiredDate = expiredDate;
+	}
+
+	public String getTypeDesc() {
+		return typeDesc;
+	}
+
+	public void setTypeDesc(String typeDesc) {
+		this.typeDesc = typeDesc;
 	}
 
 	

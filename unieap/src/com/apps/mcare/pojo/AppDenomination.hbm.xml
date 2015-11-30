@@ -9,8 +9,8 @@
 			<column name="id" />
 			<generator class="assigned" />
 		</id>
-		<property name="index" type="java.lang.Integer">
-			<column name="index" not-null="true" />
+		<property name="seq" type="java.lang.Integer">
+			<column name="seq" not-null="true" />
 		</property>
 		<property name="type" type="string">
 			<column name="type" length="45" not-null="true" />

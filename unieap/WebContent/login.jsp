@@ -128,7 +128,7 @@ body
 
 <body>
 	<div class="lg-container">
-		<h1>Mobile Care</h1>
+		<h1>Easy Mobile</h1>
 		<form action="j_spring_security_check" id="lg-form" name="lg-form"
 			method="post">
 			<div>

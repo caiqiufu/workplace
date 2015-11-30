@@ -59,9 +59,10 @@ public class QueryTransferLogs extends SoapMessageHandler implements BizHandler{
 				logs.add(transferBalanceLogVO);
 				transferBalanceLogVO.setResultCode(transferInfoVO.getResultCode());
 				transferBalanceLogVO.setTradeTime(BssServiceUtils.dateFormat(transferInfoVO.getTradeTime()));
-				transferBalanceLogVO.setTransferAmount(BssServiceUtils.moneyFormat(transferBalanceLogVO.getTransferAmount()));
-				transferBalanceLogVO.setTransferChannelID(UnieapConstants.getDicName("rechargeChannel", transferBalanceLogVO.getTransferChannelID()));
-				transferBalanceLogVO.setTransfereeNumber(transferBalanceLogVO.getTransfereeNumber());
+				transferBalanceLogVO.setTransferAmount(BssServiceUtils.moneyFormat(transferInfoVO.getTransferAmount()));
+				transferBalanceLogVO.setTransferChannelID(UnieapConstants.getDicName("rechargeChannel", transferInfoVO.getTransferChannelID()));
+				transferBalanceLogVO.setTransferorNumber(transferInfoVO.getPrimaryIdentity());
+				transferBalanceLogVO.setTransfereeNumber(transferInfoVO.getOppositePrimaryIdentity());
 			}
 			JSONArray logsJson = JSONUtils.getJSONArray(logs);
 			JSONObject jsonResult = new JSONObject();

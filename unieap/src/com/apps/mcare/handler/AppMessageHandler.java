@@ -19,7 +19,7 @@ import com.unieap.db.EntityRowMapper;
 import com.unieap.handler.ConfigHandler;
 
 @Service("appMessageHandler")
-public class appMessageHandler extends BaseBO implements ConfigHandler{
+public class AppMessageHandler extends BaseBO implements ConfigHandler{
 
 	@Override
 	public void dealNode(Node node, ServletContext servlet, String appName) throws Exception {

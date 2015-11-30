@@ -129,7 +129,7 @@ public class QueryXchangePromotionLogs extends SoapMessageHandler implements Biz
 		}
 		if (document.getElementsByTagName("arc:XchangeInfo").getLength() > 0) {
 			NodeList nodes = document.getElementsByTagName("arc:XchangeInfo");
-			for (int i = 0; 0 < nodes.getLength(); i++) {
+			for (int i = 0; i < nodes.getLength(); i++) {
 				XchangeInfoVO xchangeInfoVO = new XchangeInfoVO();
 				xchangeInfos.add(xchangeInfoVO);
 				NodeList xchangeInfoNodes = nodes.item(i).getChildNodes();

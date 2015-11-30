@@ -1,5 +1,7 @@
 package com.apps.esb.service.bss.app.crm.handler;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import javax.xml.soap.SOAPBodyElement;
@@ -52,33 +54,39 @@ public class ChangeCustomerData extends SoapMessageHandler implements BizHandler
 			throw new Exception("customerInfo is null");
 		}
 		JSONObject customerInfo = json.getJSONObject("customerInfo");
-		if(!customerInfo.has("customerId")){
-			throw new Exception("customerId is null");
-		}
-		String customerId = json.getString("customerId");
-		if(StringUtils.isEmpty(customerId)){
-			throw new Exception("customerId is null");
-		}
-		String certificateType = json.getString("certificateType");
-		String certificateNumber = json.getString("certificateNumber");
-		String firstName = json.getString("firstName");
-		String dateOfBirth = json.getString("dateOfBirth");
+		String customerId = customerInfo.getString("customerId");
+		String certificateType = customerInfo.getString("certificateType");
+		String certificateNumber = customerInfo.getString("certificateNumber");
+		String firstName = customerInfo.getString("firstName");
+		String dateOfBirth = customerInfo.getString("dateOfBirth");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+	    Date date = sdf.parse(dateOfBirth);
+	    String formatDateOfBirth = new SimpleDateFormat("yyyyMMdd").format(date);
 		SOAPMessage message = messageFactory.createMessage();
 		this.getCRMSerHeader("SubmitOrderRequest", message);
 		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
 		SOAPElement requestBodyElement = bodyElement.addChildElement("SubmitRequestBody","ser");
 		SOAPElement orderElement = requestBodyElement.addChildElement("Order","ser");
 		orderElement.addChildElement("OrderType","bas").addTextNode("CO012");
-		orderElement.addChildElement("CustomerId","bas").addTextNode(customerId);
 		SOAPElement orderItemsElement = requestBodyElement.addChildElement("OrderItems","ser");
 		SOAPElement orderItemElement = orderItemsElement.addChildElement("OrderItem","bas");
+		
+		SOAPElement orderItemInfoElement = orderItemElement.addChildElement("OrderItemInfo","bas");
+		SOAPElement orderItemTypeElement = orderItemInfoElement.addChildElement("OrderItemType","bas");
+		orderItemTypeElement.addTextNode("CO012");
+		
 		SOAPElement customerElement = orderItemElement.addChildElement("Customer","bas");
 		SOAPElement custInfoElement = customerElement.addChildElement("CustInfo","bas");
+		
+		SOAPElement custBaseInfoElement = custInfoElement.addChildElement("CustBaseInfo","bas");
+		SOAPElement customerIdElement = custBaseInfoElement.addChildElement("CustomerId","bas");
+		customerIdElement.addTextNode(customerId);
+		
 		SOAPElement individualInfoElement = custInfoElement.addChildElement("IndividualInfo","bas");
 		individualInfoElement.addChildElement("CertificateType","bas").addTextNode(certificateType);
 		individualInfoElement.addChildElement("CertificateNumber","bas").addTextNode(certificateNumber);
 		individualInfoElement.addChildElement("FirstName","bas").addTextNode(firstName);
-		individualInfoElement.addChildElement("DateOfBirth","bas").addTextNode(dateOfBirth);
+		individualInfoElement.addChildElement("DateOfBirth","bas").addTextNode(formatDateOfBirth);
 		return message;
 	}
 

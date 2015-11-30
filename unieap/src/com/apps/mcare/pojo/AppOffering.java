@@ -13,7 +13,7 @@ import com.unieap.mdm.vo.DicDataVO;
  */
 public class AppOffering implements java.io.Serializable {
 
-	private int id;
+	private Integer id;
 	private String offeringId;
 	private String offeringCode;
 	private String offeringName;
@@ -23,7 +23,7 @@ public class AppOffering implements java.io.Serializable {
 	private String effectiveType;
 	private String effectiveTypeDesc;
 	private String feeAmount;
-	private int categoryId;
+	private Integer categoryId;
 	private String activeFlag;
 	private String activeFlagDesc;
 	private Date createDate;
@@ -35,8 +35,8 @@ public class AppOffering implements java.io.Serializable {
 	public AppOffering() {
 	}
 
-	public AppOffering(int id, String offeringId, String offeringName, String offeringType, String effectiveType,
-			int categoryId, String activeFlag, Date createDate, String createBy) {
+	public AppOffering(Integer id, String offeringId, String offeringName, String offeringType, String effectiveType,
+			Integer categoryId, String activeFlag, Date createDate, String createBy) {
 		this.id = id;
 		this.offeringId = offeringId;
 		this.offeringName = offeringName;
@@ -48,8 +48,8 @@ public class AppOffering implements java.io.Serializable {
 		this.createBy = createBy;
 	}
 
-	public AppOffering(int id, String offeringId, String offeringCode, String offeringName, String seq,
-			String offeringType, String offeringDesc, String effectiveType, String feeAmount, int categoryId,
+	public AppOffering(Integer id, String offeringId, String offeringCode, String offeringName, String seq,
+			String offeringType, String offeringDesc, String effectiveType, String feeAmount, Integer categoryId,
 			String activeFlag, Date createDate, String createBy, Date modifyDate, String modifyBy, String remark) {
 		this.id = id;
 		this.offeringId = offeringId;
@@ -69,11 +69,11 @@ public class AppOffering implements java.io.Serializable {
 		this.remark = remark;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -147,11 +147,11 @@ public class AppOffering implements java.io.Serializable {
 		this.feeAmount = feeAmount;
 	}
 
-	public int getCategoryId() {
+	public Integer getCategoryId() {
 		return this.categoryId;
 	}
 
-	public void setCategoryId(int categoryId) {
+	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
 	}
 

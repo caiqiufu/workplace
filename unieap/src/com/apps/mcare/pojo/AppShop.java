@@ -21,7 +21,7 @@ public class AppShop implements java.io.Serializable {
 	private Date createDate;
 	private String createBy;
 	private Date modifyDate;
-	private Integer modifyBy;
+	private String modifyBy;
 	private String remark;
 
 	public AppShop() {
@@ -42,7 +42,7 @@ public class AppShop implements java.io.Serializable {
 
 	public AppShop(Integer id, String cityId, String cityName, String shopName, String openTime, String shopNo,
 			String address, String longitude, String latitude, String activeFlag, Date createDate, String createBy,
-			Date modifyDate, Integer modifyBy, String remark) {
+			Date modifyDate, String modifyBy, String remark) {
 		this.id = id;
 		this.cityId = cityId;
 		this.cityName = cityName;
@@ -164,11 +164,11 @@ public class AppShop implements java.io.Serializable {
 		this.modifyDate = modifyDate;
 	}
 
-	public Integer getModifyBy() {
+	public String getModifyBy() {
 		return this.modifyBy;
 	}
 
-	public void setModifyBy(Integer modifyBy) {
+	public void setModifyBy(String modifyBy) {
 		this.modifyBy = modifyBy;
 	}
 

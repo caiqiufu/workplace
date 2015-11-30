@@ -5,6 +5,7 @@ public class CustomerProfileVO {
 	private String serviceNumber;
 	private String activeDate;
 	private String subscriberType;
+	private String subscriberTypeDesc;
 	private String status;
 	private String statusReason;
 	private String corpName;
@@ -19,6 +20,7 @@ public class CustomerProfileVO {
     private String certificateNumber;
     private String dateOfBirth;
     private String customerLevel;
+    private String primaryOfferingName;
 	public String getCorpName() {
 		return corpName;
 	}
@@ -126,6 +128,18 @@ public class CustomerProfileVO {
 	}
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
+	}
+	public String getSubscriberTypeDesc() {
+		return subscriberTypeDesc;
+	}
+	public void setSubscriberTypeDesc(String subscriberTypeDesc) {
+		this.subscriberTypeDesc = subscriberTypeDesc;
+	}
+	public String getPrimaryOfferingName() {
+		return primaryOfferingName;
+	}
+	public void setPrimaryOfferingName(String primaryOfferingName) {
+		this.primaryOfferingName = primaryOfferingName;
 	}
 	
 }

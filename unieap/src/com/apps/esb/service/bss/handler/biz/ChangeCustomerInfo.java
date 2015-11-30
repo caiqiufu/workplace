@@ -5,13 +5,9 @@ import java.util.Map;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.app.crm.handler.ChangeCustomerData;
-import com.apps.esb.service.bss.app.crm.handler.GetCustomerMetaData;
-import com.apps.esb.service.bss.app.crm.vo.querycustomerinfo.CustomerInfoVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
@@ -33,13 +29,13 @@ public class ChangeCustomerInfo extends SoapMessageHandler implements BizHandler
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		GetCustomerMetaData getCustomerMetaData = (GetCustomerMetaData) ServiceUtils.getBean("getCustomerMetaData");
+		/*GetCustomerMetaData getCustomerMetaData = (GetCustomerMetaData) ServiceUtils.getBean("getCustomerMetaData");
 		ProcessResult processResultCustomer = getCustomerMetaData.process(requestInfo, parameters, extParameters);
 		CustomerInfoVO customerInfoVO = (CustomerInfoVO)processResultCustomer.getVo();
 		
 		JSONObject customerObj = new JSONObject("{customerId:"+customerInfoVO.getCustomerId()+"}");
 		JSONObject newExtParameters = BssServiceUtils.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
-		requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());
+		requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());*/
 		
 		ChangeCustomerData changeCustomerData = (ChangeCustomerData) ServiceUtils.getBean("changeCustomerData");
 		ProcessResult processResult = changeCustomerData.process(requestInfo,parameters,extParameters);

@@ -6,6 +6,8 @@ public class CdrInfoVO {
 	private String serviceType;
 	private String serviceTypeName;
 	private String otherNumber;
+	//1:MO,2:MT,3:CF
+	private String flowType;
 	/**
 	 * 20151001
 	 */
@@ -16,6 +18,7 @@ public class CdrInfoVO {
 	
 	private String actualVolume;
 	private String actualChargeAmt;
+	private String measureUnit;
 	
 	private String chargeDuration;
 	private String destinationNetworkName;
@@ -104,6 +107,18 @@ public class CdrInfoVO {
 	}
 	public void setDestinationNetworkName(String destinationNetworkName) {
 		this.destinationNetworkName = destinationNetworkName;
+	}
+	public String getFlowType() {
+		return flowType;
+	}
+	public void setFlowType(String flowType) {
+		this.flowType = flowType;
+	}
+	public String getMeasureUnit() {
+		return measureUnit;
+	}
+	public void setMeasureUnit(String measureUnit) {
+		this.measureUnit = measureUnit;
 	}
 	
 	

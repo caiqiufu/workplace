@@ -2,15 +2,12 @@ package com.apps.mcare.bo;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.mcare.pojo.AppOffering;
@@ -36,10 +33,10 @@ public class OfferingBO extends BaseBO {
 		getPaginationDataByDetachedCriteria(criteria, page);
 	}
 
-	public void getOfferingList(PaginationSupport page, AppOfferingCategory vo) throws Exception {
+	public void getOfferingList(PaginationSupport page, AppOffering vo) throws Exception {
 		DetachedCriteria criteria = DetachedCriteria.forClass(AppOffering.class);
 		Property categoryIdProperty = Property.forName("categoryId");
-		criteria.add(categoryIdProperty.eq(vo.getId()));
+		criteria.add(categoryIdProperty.eq(vo.getCategoryId()));
 		getPaginationDataByDetachedCriteria(criteria, page);
 	}
 

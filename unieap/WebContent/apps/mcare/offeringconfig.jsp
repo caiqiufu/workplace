@@ -26,9 +26,22 @@
             },
             sorters: [{ property: 'categoreName', direction: 'ASC'}]
         });
+    	var operationItems = [];
+    	var selectedRecord;
+    	if(UnieapButton.Offering_Category_Modify!=null&&UnieapButton.Offering_Category_Modify.abled==true){
+    		operationItems.push({iconCls :'',tooltip:''});
+	    	operationItems.push({
+	    		iconCls : 'edit',
+	     	   	tooltip: '<%=UnieapConstants.getMessage("comm.modify")%>',
+	           	handler:function(grid, rowIndex, colIndex){	
+	         	   	selectedRecord = grid.getStore().getAt(rowIndex);
+	        		showForm('Modify',selectedRecord);
+	           	}
+	        });
+    	}
        	var selModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single',listeners:{
   			select:function(model,record,index){
-  				roleGridStore.reload();
+  					offeringGridStore.reload();
 	  			}
 			}
 		});
@@ -37,23 +50,135 @@
                {el : 'datagrid',layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
        	   	 	selModel:selModel,
           	   	store : gridstore,
+	          	listeners:{
+		 		   		afterRender:function(thisForm, options){
+			        	if(UnieapButton.Offering_Category_Add!=null&&UnieapButton.Offering_Category_Add.abled== true){
+			        		Ext.getCmp('Offering_Category_Add').show();
+			        	}
+		            }
+		        },
        	   	   	columns:
        	   	   	[
        	   	   		{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:operationItems},
        	   	   		{ text: "<%=UnieapConstants.getMessage("app.offeringconfig.categoryType")%>", dataIndex: 'categoryTypeDesc',sortable: true,width:120},
        	   	   		{ text: "<%=UnieapConstants.getMessage("app.offeringconfig.categoryName")%>", dataIndex: 'categoreName', sortable: true,width:120},
        	   	  		{ text: "<%=UnieapConstants.getMessage("app.offeringconfig.priceDesc")%>", dataIndex: 'priceDesc', sortable: false,width:120},
-       	   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'enableDesc',sortable: false},
+       	   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false},
        	   	   		{ text: "<%=UnieapConstants.getMessage("comm.createDate")%>",width: 150, dataIndex: 'createDate',sortable: false},
        	   	   		{ text: "<%=UnieapConstants.getMessage("comm.modifyDate")%>",width: 150, dataIndex: 'modifyDate',sortable: false},
        	   	   		{ text: "<%=UnieapConstants.getMessage("comm.remark")%>", dataIndex: 'remark',width: 200, sortable: false}
        	   	   	],
+	       	   	tbar:[{ pressed :true,iconCls:'add',
+	         		tooltip:'<%=UnieapConstants.getMessage("comm.add")%>',text:'<%=UnieapConstants.getMessage("comm.add")%>',xtype:'button',id:'Offering_Category_Add',hidden:true,
+			        handler : function(){showForm('Add',null);}
+				}],
            	   	bbar:new Ext.PagingToolbar(
            	   	{ store : gridstore,displayInfo: true})
                	
-               });
+        });
     	datagrid.render();
     	gridstore.loadPage(1);
+    	
+    	var dataWin = null;
+        var dataForm = null;
+        var operType = '';
+        function showForm(status,selectedRecord){
+         	operType = status;
+             if (dataWin==null){
+             	dataForm = Ext.widget('form',
+             	{
+                     defaults:{labelAlign: 'left', labelWidth: 90, anchor: '100%'},
+                     bodyPadding:5,
+                     items:
+                     [
+                     	{xtype:'fieldset', title:'<%=UnieapConstants.getMessage("comm.data")%>',
+ 	                        items:
+ 	                        [
+ 	                        	{ xtype:'textfield',hidden: true, name:'id'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'createDate'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'modifyDate'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'createBy'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'modifyBy'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'seq'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'detailUrl'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'planUrl'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'planHyperlink'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'questionUrl'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'questionHyperlink'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'noteUrl'},
+ 	                        	{ xtype:'textfield',hidden: true, name:'noteHyperlink'},
+ 	                        	{ xtype:'combo', labelWidth:120, width:350,forceSelection: true,editable:false,allowBlank:false,
+ 	                                name:'categoryType',fieldLabel:'<%=UnieapConstants.getMessage("mcare.offering.display.categoryType")%>',displayField:'dicName',valueField:'dicCode',
+ 	                                store:Ext.create('Ext.data.Store', 
+ 	                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._offerCategoryType})
+ 								},
+ 	                        	{ xtype:'textfield',labelWidth:120, width:350, name:'categoreName',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.offering.display.categoreName")%>',maxLength:45,allowBlank:false},
+ 	                        	{ xtype:'textfield',labelWidth:120, width:350, name:'categoryDesc',fieldLabel:'<font color=red>*</font><%=UnieapConstants.getMessage("mcare.offering.display.categoryDesc")%>',maxLength:255,allowBlank:false},
+ 	                        	{ xtype:'combo', labelWidth:120, width:350,forceSelection: true,editable:false,allowBlank:false,
+ 	                                name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
+ 	                                store:Ext.create('Ext.data.Store', 
+ 	                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
+ 								},
+ 	                        	{ xtype:'textareafield',labelWidth:120, width:350, name:'remark',fieldLabel:'<%=UnieapConstants.getMessage("comm.remark")%>',maxLength:255,growMin:60,growMax:100,allowBlank:true}
+ 	                        ]
+ 	                    }
+                     ],
+                     buttons: 
+                     [
+ 	                    {id:'formCancel', text: '<%=UnieapConstants.getMessage("comm.cancel")%>',
+ 	                        handler: function(){
+ 	                        	dataForm.getForm().reset();
+ 	                        	dataWin.hide();
+ 	                        }
+ 	                    }, 
+ 	                    {id:'formSubmit',text: '<%=UnieapConstants.getMessage("comm.submit")%>',
+ 	                        handler: function(){
+ 	                        	var form = dataForm.getForm();
+ 	                        	 if (form.isValid()){
+ 	                                 form.submit({
+ 	                                     clientValidation: true,
+ 	                                     method: 'POST',
+ 	                                     params:{'operType':operType},
+ 	                                     waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+ 	                                     url: 'mcareController.do?method=offeringDeal',
+ 	                                     success: function(form, action) {
+ 	                                    	var result = Ext.JSON.decode(action.response.responseText);
+ 						                    if(result.isSuccess == 'failed'){
+ 						                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+ 		                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+ 						                    }else{
+  		                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
+ 	 		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+ 						                    }
+ 	                                     },
+ 	                                     failure: function(form, action){
+ 	                                    	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+ 	                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+ 	                                     }
+ 	                                 });
+ 	                        	 }
+ 	                        }
+ 	                    }
+                     ]
+                 });
+                 dataWin = Ext.widget('window', 
+                 { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 400, height: 260, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'roleName' });
+             }
+             if(operType=='Add'){
+             	dataForm.getForm().reset();
+             	dataWin.show();
+             }else if(operType=='Modify'){
+             	dataWin.show();
+             	dataForm.getForm().setValues(selectedRecord.data);
+             }else{
+             	dataWin.show();
+             }
+ 	    }
+ 		
+ 		function showResult(btn){
+ 	     	dataWin.hide();
+ 	     	gridstore.reload();
+ 	    }
     	
     	
         
@@ -87,8 +212,20 @@
         });
     	
     	var offeringSelModel = Ext.create('Ext.selection.CheckboxModel',{mode:'single'});
-    	var offeringUserOperationItems = [];
-    	var selectedUserRoleRecord;
+    	var offeringOperationItems = [];
+    	var selectedeRecordOffering;
+    	if(UnieapButton.Offering_Modify!=null&&UnieapButton.Offering_Modify.abled==true){
+    		offeringOperationItems.push({iconCls :'',tooltip:''});
+    		offeringOperationItems.push({
+	    		iconCls : 'edit',
+	     	   	tooltip: '<%=UnieapConstants.getMessage("comm.modify")%>',
+	           	handler:function(grid, rowIndex, colIndex){	
+	           		selectedeRecordOffering = grid.getStore().getAt(rowIndex);
+	        		showFormOffering('Modify',selectedRecord);
+	           	}
+	        });
+    	}
+    	
     	var offeringDatagrid = Ext.create('Ext.grid.Panel', 
     	        {el : 'offeringgrid',layout: 'fit',columnLines: true,autoScroll:true,autoExpandColumn:'action',
     		   	 	selModel:offeringSelModel,title: '<%=UnieapConstants.getMessage("comm.list")%>',
@@ -102,28 +239,30 @@
 			        },
     		   	   	columns:
     		   	   	[
-						{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:roleUserOperationItems},
-    		   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.offeringId")%>",dataIndex: 'offeringId',width:60},
-    		   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.offeringName")%>",dataIndex: 'offeringName',width:60},
-    		   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.offeringType")%>",dataIndex: 'offeringType',width:60},
-    		   	 		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.effectiveType")%>",dataIndex: 'effectiveTypeDesc',width:60},
-    		   	 		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.feeAmount")%>",dataIndex: 'feeAmount',width:60},
-    		   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false,width:60}
+						{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:offeringOperationItems},
+    		   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.offeringId")%>",dataIndex: 'offeringId',width:120},
+    		   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.offeringName")%>",dataIndex: 'offeringName',width:120},
+    		   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.offeringType")%>",dataIndex: 'offeringType',width:120},
+    		   	 		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.effectiveType")%>",dataIndex: 'effectiveTypeDesc',width:120},
+    		   	 		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.feeAmount")%>",dataIndex: 'feeAmount',width:120},
+    		   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false,width:120}
     		   	   	],
     	 		   	tbar:[{ pressed :true,iconCls:'add',
     		             		tooltip:'<%=UnieapConstants.getMessage("comm.add")%>',text:'<%=UnieapConstants.getMessage("comm.add")%>',xtype:'button',id:'Offering_Add',hidden:true,
-    		            		handler : function(){chooseShowForm();}
-    		    	}]
+    		            		handler : function(){showFormOffering("Add",null);}
+    		    	}],
+               	   	bbar:new Ext.PagingToolbar(
+                       	   	{ store : offeringGridStore,displayInfo: true})
     	        });
     	offeringDatagrid.render();
     	//offeringGridStore.loadPage(1);
-       var dataWin = null;
-       var dataForm = null;
-       var operType = '';
-       function showForm(status,selectedRecord){
-        	operType = status;
-            if (dataWin==null){
-            	dataForm = Ext.widget('form',
+       var dataWinOffering = null;
+       var dataFormOffering = null;
+       var operTypeOffering = '';
+       function showFormOffering(status,selectedRecord){
+        	operTypeOffering = status;
+            if (dataWinOffering==null){
+            	dataFormOffering = Ext.widget('form',
             	{
                     defaults:{labelAlign: 'left', labelWidth: 90, anchor: '100%'},
                     bodyPadding:5,
@@ -162,13 +301,13 @@
                     [
 	                    {id:'formCancel', text: '<%=UnieapConstants.getMessage("comm.cancel")%>',
 	                        handler: function(){
-	                        	dataForm.getForm().reset();
-	                        	dataWin.hide();
+	                        	dataFormOffering.getForm().reset();
+	                        	dataWinOffering.hide();
 	                        }
 	                    }, 
 	                    {id:'formSubmit',text: '<%=UnieapConstants.getMessage("comm.submit")%>',
 	                        handler: function(){
-	                        	var form = dataForm.getForm();
+	                        	var form = dataFormOffering.getForm();
 	                        	 if (form.isValid()){
 	                                 form.submit({
 	                                     clientValidation: true,
@@ -182,7 +321,7 @@
 						                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
 		                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
 						                    }else{
- 		                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
+ 		                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResultOffering,
 	 		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
 						                    }
 	                                     },
@@ -196,46 +335,22 @@
 	                    }
                     ]
                 });
-                dataWin = Ext.widget('window', 
-                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 400, height: 260, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'roleName' });
+                dataWinOffering = Ext.widget('window', 
+                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 400, height: 260, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'offeringName' });
             }
-            if(operType=='Add'){
-            	dataForm.getForm().reset();
-            	dataWin.show();
-            }else if(operType=='Modify'){
-            	dataWin.show();
-            	dataForm.getForm().setValues(selectedRecord.data);
+            if(operTypeOffering=='Add'){
+            	dataFormOffering.getForm().reset();
+            	dataWinOffering.show();
+            }else if(operTypeOffering=='Modify'){
+            	dataWinOffering.show();
+            	dataFormOffering.getForm().setValues(selectedRecordOffering.data);
             }else{
-            	dataWin.show();
+            	dataWinOffering.show();
             }
 	    }
-		function removeDatas(btn){
-	     	if(btn=='yes'){
-		        	var roleId= selectedRecord.get("roleId");
-		        	Ext.Ajax.request({
-		                url: 'mdmController.do?method=roleDeal',
-		                params:{'operType':"Delete","roleId":roleId},
-		                success: function(response, opts){
-		                	var result = Ext.JSON.decode(action.response.responseText);
-		                	if(result.isSuccess == 'failed'){
-		                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                      			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-				                	roleGridStore.reload();
-		                    }else{
-                          	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
-                         			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-		                    }
-		                },
-		                failure: function(response, opts){
-		                	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:response.responseText,
-	             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-		                }
-		             });
-	     	}
-	     }
-		 function showResult(btn){
-	     	dataWin.hide();
-	     	roleGridStore.reload();
+		function showResultOffering(btn){
+	     	dataWinOffering.hide();
+	     	offeringGridStore.reload();
 	    }
     	
       

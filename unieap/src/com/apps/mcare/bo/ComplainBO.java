@@ -1,6 +1,5 @@
 package com.apps.mcare.bo;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +30,10 @@ public class ComplainBO extends BaseBO {
 		appComplain.setId(getSequence(null, null));
 		if(files!=null && files.size() >0){
 			
-			String url = File.separator + "apps" + File.separator + "mcare" + File.separator + "images" + File.separator
-					+ "complain";
-			String uploadPath = fileBO.getRootPath() + url;
+			String url = "apps/mcare/images/complain";
+			/*String uploadPath = fileBO.getRootPath()+ "apps" + File.separator + "mcare" + File.separator + "images" + File.separator
+					+ "complain";*/
+			String uploadPath = fileBO.getRootPath()+url;
 			String[] fieldIds = fileBO.upload("complain", appComplain.getId().toString(), files, uploadPath, url);
 			if (fieldIds != null) {
 				appComplain.setFileId(new Integer(fieldIds[0]));

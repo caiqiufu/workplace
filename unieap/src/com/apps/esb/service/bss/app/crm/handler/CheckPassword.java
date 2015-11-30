@@ -76,11 +76,10 @@ public class CheckPassword extends SoapMessageHandler implements BizHandler {
 		JSONObject json = new JSONObject(requestInfo.getRequestBody().getExtParameters());
 		if (json.has("password")) {
 			String sSrc = json.getString("password");
-			//String mKey =  SYSConfig.getConfig().get("mcare.encryption.key");
-			//String dSrc = EncryptionUtils.decryptSun(sSrc, mKey);
+			String mKey =  SYSConfig.getConfig().get("mcare.encryption.key");
+			String dSrc = EncryptionUtils.decryptSun(sSrc, mKey);
 			String sKey =  SYSConfig.getConfig().get("bss.encryption.key");
-			//String enPassword = EncryptionUtils.encryptSunJCE(dSrc, sKey);
-			String enPassword = EncryptionUtils.encryptSunJCE(sSrc, sKey);
+			String enPassword = EncryptionUtils.encryptSunJCE(dSrc, sKey);
 			passwordInfoElement.addChildElement("Password","bas").addTextNode(enPassword.trim());
 		} else {
 			throw new Exception("password is null");

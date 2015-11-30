@@ -10,7 +10,9 @@ import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPMessage;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -24,6 +26,7 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
 
 @Service("queryCDR")
 public class QueryCDR extends SoapMessageHandler implements BizHandler {
@@ -38,12 +41,25 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 			throws Exception {
 		RequestInfo newRequestInfo = BssServiceUtils.copyRequestInfo(requestInfo);
 		newRequestInfo.getRequestHeader().setBizCode("queryCDR");
-		ProcessResult processResult = new ProcessResult();
-		processResult.setResultCode(UnieapConstants.C0);
-		processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
-		QueryCdrVO queryCdrVO = queryCDRSummary(newRequestInfo.getRequestBody().getServiceNumber(), newRequestInfo);
-		processResult.setVo(queryCdrVO);
-		return processResult;
+		
+		
+		JSONObject json = new JSONObject(requestInfo.getRequestBody().getExtParameters());
+		if(!json.has("queryType")){
+			throw new Exception("queryType is null");
+		}
+		String queryType = json.getString("queryType");
+		if("D".equals(queryType)){
+			return queryCDRDetail(newRequestInfo.getRequestBody().getServiceNumber(), newRequestInfo);
+		}else if("S".equals(queryType)){
+			
+			return queryCDRSummary(newRequestInfo.getRequestBody().getServiceNumber(), newRequestInfo);
+		}else{
+			ProcessResult processResult = new ProcessResult();
+			processResult.setResultCode(UnieapConstants.C1);
+			processResult.setResultDesc(UnieapConstants.getMessage("99997"));
+			return processResult;
+		}
+		
 
 	}
 
@@ -102,37 +118,37 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 		return new String[] { firstday, lastday };
 	}
 
-	public QueryCdrVO queryCDRSummary(String serviceNumber, RequestInfo requestInfo) throws Exception {
-		SOAPMessage sOAPMessage1 = getRequestSOAPMessage(1, serviceNumber, requestInfo);
+	public ProcessResult queryCDRSummary(String serviceNumber, RequestInfo requestInfo) throws Exception {
+		SOAPMessage sOAPMessage1 = getRequestSOAPMessage(0, serviceNumber, requestInfo);
 		ProcessResult processResult1 = process(sOAPMessage1, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO1 = (QueryCdrVO) processResult1.getVo();
-		SOAPMessage sOAPMessage2 = getRequestSOAPMessage(2, serviceNumber, requestInfo);
+		SOAPMessage sOAPMessage2 = getRequestSOAPMessage(1, serviceNumber, requestInfo);
 		ProcessResult processResult2 = process(sOAPMessage2, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO2 = (QueryCdrVO) processResult2.getVo();
 		
-		SOAPMessage sOAPMessage3 = getRequestSOAPMessage(3, serviceNumber, requestInfo);
+		SOAPMessage sOAPMessage3 = getRequestSOAPMessage(2, serviceNumber, requestInfo);
 		ProcessResult processResult3 = process(sOAPMessage3, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO3 = (QueryCdrVO) processResult3.getVo();
 		
-		SOAPMessage sOAPMessage4 = getRequestSOAPMessage(4, serviceNumber, requestInfo);
+		SOAPMessage sOAPMessage4 = getRequestSOAPMessage(3, serviceNumber, requestInfo);
 		ProcessResult processResult4 = process(sOAPMessage4, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO4 = (QueryCdrVO) processResult4.getVo();
 		
-		SOAPMessage sOAPMessage5 = getRequestSOAPMessage(5, serviceNumber, requestInfo);
+		SOAPMessage sOAPMessage5 = getRequestSOAPMessage(4, serviceNumber, requestInfo);
 		ProcessResult processResult5 = process(sOAPMessage5, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
 		QueryCdrVO queryCdrVO5 = (QueryCdrVO) processResult5.getVo();
 		
-		SOAPMessage sOAPMessage6 = getRequestSOAPMessage(6, serviceNumber, requestInfo);
+		SOAPMessage sOAPMessage6 = getRequestSOAPMessage(5, serviceNumber, requestInfo);
 		ProcessResult processResult6 = process(sOAPMessage6, requestInfo,
 				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
 				"ws.cbs.query.timeout");
@@ -147,7 +163,69 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO4.getCdrSummaryList());
 		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO5.getCdrSummaryList());
 		queryCdrVO.getCdrSummaryList().addAll(queryCdrVO6.getCdrSummaryList());
-		return queryCdrVO;
+		ProcessResult processResult = new ProcessResult();
+		processResult.setResultCode(UnieapConstants.C0);
+		processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
+		processResult.setVo(queryCdrVO);
+		return processResult;
+	}
+	
+	public ProcessResult queryCDRDetail(String serviceNumber, RequestInfo requestInfo) throws Exception {
+		JSONObject json = new JSONObject(requestInfo.getRequestBody().getExtParameters());
+		if(!json.has("totalCDRNum")){
+			throw new Exception("totalCDRNum is null");
+		}
+		if(!json.has("pageNum")){
+			throw new Exception("pageNum is null");
+		}
+		String totalCDRNum = json.getString("totalCDRNum");
+		if(StringUtils.isEmpty(totalCDRNum)){
+			throw new Exception("totalCDRNum is null");
+		}
+		String pageNum = json.getString("pageNum");
+		if(StringUtils.isEmpty(pageNum)){
+			throw new Exception("pageNum is null");
+		}
+		
+		SOAPMessage sOAPMessage = getRequestCDRDetailSOAPMessage(totalCDRNum,pageNum, serviceNumber, requestInfo);
+		ProcessResult processResult = process(sOAPMessage, requestInfo,
+				requestInfo.getRequestBody().getServiceNumber(), requestInfo.getRequestBody().getExtParameters(), null,
+				"ws.cbs.query.timeout");
+		return processResult;
+	}
+	
+	
+	public SOAPMessage getRequestCDRDetailSOAPMessage(String totalCDRNum,String pageNum, String serviceNumber, RequestInfo requestInfo)
+			throws Exception {
+		SOAPMessage message = messageFactory.createMessage();
+		this.getCBSBbHeader("QueryCDRRequestMsg", message);
+		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
+		SOAPElement reqestElement = bodyElement.addChildElement("QueryCDRRequest");
+		SOAPElement subAccessCodeElement = reqestElement.addChildElement("SubAccessCode", "bbs");
+		SOAPElement primaryIdentityElement = subAccessCodeElement.addChildElement("PrimaryIdentity", "bbc");
+		primaryIdentityElement.addTextNode(serviceNumber);
+		SOAPElement timePeriodElement = reqestElement.addChildElement("TimePeriod", "bbs");
+		int pagesize = Integer.parseInt(SYSConfig.getConfig().get("mcare.display.cdr.pagesize"));
+        int begin = Integer.parseInt(pageNum)*pagesize;
+		
+		Calendar cale = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String firstday, lastday;
+		cale = Calendar.getInstance();
+		cale.add(Calendar.DATE, -89);
+		cale.set(Calendar.DAY_OF_MONTH, 1);
+		firstday = format.format(cale.getTime()) + "000000";
+		
+		cale = Calendar.getInstance();
+		cale.set(Calendar.DAY_OF_MONTH, 0);
+		lastday = format.format(cale.getTime()) + "235959";
+		
+		timePeriodElement.addChildElement("StartTime", "bbs").addTextNode(firstday);
+		timePeriodElement.addChildElement("EndTime", "bbs").addTextNode(lastday);
+		reqestElement.addChildElement("TotalCDRNum", "bbs").addTextNode(totalCDRNum);
+		reqestElement.addChildElement("BeginRowNum", "bbs").addTextNode(Integer.toString(begin));
+		reqestElement.addChildElement("FetchRowNum", "bbs").addTextNode(Integer.toString(pagesize));
+		return message;
 	}
 
 	public ProcessResult process(SOAPMessage request, RequestInfo requestInfo, String serviceNumber,
@@ -188,6 +266,16 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 			result.setResultDesc(retMsg);
 		}
 
+		if(document.getElementsByTagName("bbs:TotalCDRNum").getLength() > 0){
+			queryCdrVO.setTotalCDRNum(document.getElementsByTagName("bbs:TotalCDRNum").item(0).getTextContent());
+		}
+		if(document.getElementsByTagName("bbs:BeginRowNum").getLength() > 0){
+			queryCdrVO.setBeginRowNum(document.getElementsByTagName("bbs:BeginRowNum").item(0).getTextContent());
+		}
+		if(document.getElementsByTagName("bbs:FetchRowNum").getLength() > 0){
+			queryCdrVO.setFetchRowNum(document.getElementsByTagName("bbs:FetchRowNum").item(0).getTextContent());
+		}
+		
 		if (document.getElementsByTagName("bbs:CDRSummary").getLength() > 0) {
 			NodeList nodes = document.getElementsByTagName("bbs:CDRSummary");
 			for (int i = 0; i < nodes.getLength(); i++) {
@@ -246,7 +334,9 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 						cdrInfoVO.setServiceType(cDRInfoNode.getTextContent());
 					} else if ("bbs:ServiceTypeName".equals(cDRInfoNode.getNodeName())) {
 						cdrInfoVO.setServiceTypeName(cDRInfoNode.getTextContent());
-					} else if ("bbs:OtherNumber".equals(cDRInfoNode.getNodeName())) {
+					} else if ("bbs:FlowType".equals(cDRInfoNode.getNodeName())) {
+						cdrInfoVO.setFlowType(cDRInfoNode.getTextContent());
+					}else if ("bbs:OtherNumber".equals(cDRInfoNode.getNodeName())) {
 						cdrInfoVO.setOtherNumber(cDRInfoNode.getTextContent());
 					} else if ("bbs:BillCycleID".equals(cDRInfoNode.getNodeName())) {
 						cdrInfoVO.setBillCycleID(cDRInfoNode.getTextContent());
@@ -271,7 +361,9 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 						for (int k = 0; k < volumeInfoNodes.getLength(); k++) {
 							Node volumeInfoNode = volumeInfoNodes.item(k);
 							if ("bbs:ActualVolume".equals(volumeInfoNode.getNodeName())) {
-								cdrInfoVO.setActualChargeAmt(volumeInfoNode.getTextContent());
+								cdrInfoVO.setActualVolume(volumeInfoNode.getTextContent());
+							}else if("bbs:MeasureUnit".equals(volumeInfoNode.getNodeName())){
+								cdrInfoVO.setMeasureUnit(volumeInfoNode.getTextContent());
 							}
 						}
 					} else if ("bbs:MainBalanceDeduct".equals(cDRInfoNode.getNodeName())) {

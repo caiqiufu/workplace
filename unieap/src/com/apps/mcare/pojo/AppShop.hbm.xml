@@ -18,7 +18,7 @@
             <column name="shop_name" length="128" not-null="true" />
         </property>
         <property name="openTime" type="string">
-            <column name="open_time" length="45" not-null="true" />
+            <column name="open_time" length="255" not-null="true" />
         </property>
         <property name="shopNo" type="string">
             <column name="shop_no" length="45" />
@@ -44,8 +44,8 @@
         <property name="modifyDate" type="timestamp">
             <column name="modify_date" length="0" />
         </property>
-        <property name="modifyBy" type="java.lang.Integer">
-            <column name="modify_by" />
+        <property name="modifyBy" type="string">
+            <column name="modify_by" length="45"/>
         </property>
         <property name="remark" type="string">
             <column name="remark" />

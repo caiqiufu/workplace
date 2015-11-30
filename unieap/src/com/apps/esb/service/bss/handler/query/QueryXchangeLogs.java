@@ -55,15 +55,17 @@ public class QueryXchangeLogs extends SoapMessageHandler implements BizHandler{
 			List<XchangeLogVO> logs = new ArrayList<XchangeLogVO>();
 			for(int i = 0 ; i < xchangeInfos.size() ; i++){
 				XchangeInfoVO xchangeInfoVO = xchangeInfos.get(i);
-				XchangeLogVO xchangeLogVO = new XchangeLogVO();
-				logs.add(xchangeLogVO);
-				xchangeLogVO.setApplierNumber(xchangeInfoVO.getApplierNumber());
-				xchangeLogVO.setBonusAmount(BssServiceUtils.moneyFormat(xchangeInfoVO.getBonusAmount()));
-				xchangeLogVO.setBonusExpTime(BssServiceUtils.dateFormat(xchangeInfoVO.getBonusExpTime()));
-				xchangeLogVO.setDeductAmount(BssServiceUtils.moneyFormat(xchangeInfoVO.getDeductAmount()));
-				xchangeLogVO.setReceiverNumber(xchangeInfoVO.getReceiverNumber());
-				xchangeLogVO.setTradeTime(BssServiceUtils.dateFormat(xchangeInfoVO.getTradeTime()));
-				xchangeLogVO.setTransferFee(BssServiceUtils.moneyFormat(xchangeInfoVO.getTransferFee()));
+				if(Double.parseDouble(xchangeInfoVO.getDeductAmount())==0){
+					XchangeLogVO xchangeLogVO = new XchangeLogVO();
+					logs.add(xchangeLogVO);
+					xchangeLogVO.setApplierNumber(xchangeInfoVO.getApplierNumber());
+					xchangeLogVO.setBonusAmount(BssServiceUtils.moneyFormat(xchangeInfoVO.getBonusAmount()));
+					xchangeLogVO.setBonusExpTime(BssServiceUtils.dateFormat(xchangeInfoVO.getBonusExpTime()));
+					xchangeLogVO.setDeductAmount(BssServiceUtils.moneyFormat(xchangeInfoVO.getDeductAmount()));
+					xchangeLogVO.setReceiverNumber(xchangeInfoVO.getReceiverNumber());
+					xchangeLogVO.setTradeTime(BssServiceUtils.dateFormat(xchangeInfoVO.getTradeTime()));
+					xchangeLogVO.setTransferFee(BssServiceUtils.moneyFormat(xchangeInfoVO.getTransferFee()));
+				}
 			}
 			JSONArray logsJson = JSONUtils.getJSONArray(logs);
 			JSONObject jsonResult = new JSONObject();

@@ -52,6 +52,13 @@ public class QueryMyBills extends SoapMessageHandler implements BizHandler {
 		if(UnieapConstants.YES.equals(isdebug)){
 			requestInfo.getRequestBody().setServiceNumber("93268659");
 		}
+		if(UnieapConstants.YES.equals(isdebug)){
+			requestInfo.getRequestBody().setServiceNumber("93268659");
+		}
+		JSONObject customerObj = new JSONObject("{queryType:S}");
+		JSONObject newExtParameters = BssServiceUtils.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
+		requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());
+		
 		QueryCDR queryCDR = (QueryCDR) ServiceUtils.getBean("queryCDR");
 		ProcessResult processResult = queryCDR.process(requestInfo, parameters, extParameters);
 		if (!UnieapConstants.C0.equals(processResult.getResultCode())) {

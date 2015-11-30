@@ -1,6 +1,5 @@
 package com.apps.mcare.bo;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -27,17 +26,24 @@ import com.unieap.mdm.bo.ChangeLogBO;
 @Service("resourceConfigureBO")
 public class ResourceConfigureBO extends BaseBO {
 
-	public void getGroupList(PaginationSupport page, String groupName) throws Exception {
+	public void getGroupList(PaginationSupport page, String groupNames, String names) throws Exception {
 		DetachedCriteria criteria = DetachedCriteria.forClass(AppResconfig.class);
-		Property groupNameProperty = Property.forName("groupName");
-		criteria.add(groupNameProperty.eq(groupName));
-		getPaginationDataByDetachedCriteria(criteria, page);
-	}
-
-	public void getNamesList(PaginationSupport page, String groupNames) throws Exception {
-		DetachedCriteria criteria = DetachedCriteria.forClass(AppResconfig.class);
-		Property groupNameProperty = Property.forName("groupName");
-		criteria.add(groupNameProperty.in(groupNames.split(",")));
+		if (!StringUtils.isEmpty(groupNames)) {
+			Property groupNameProperty = Property.forName("groupName");
+			if (groupNames.contains(",")) {
+				criteria.add(groupNameProperty.in(groupNames.split(",")));
+			} else {
+				criteria.add(groupNameProperty.eq(groupNames));
+			}
+		}
+		if (!StringUtils.isEmpty(names)) {
+			Property nameProperty = Property.forName("name");
+			if (names.contains(",")) {
+				criteria.add(nameProperty.in(names.split(",")));
+			} else {
+				criteria.add(nameProperty.eq(names));
+			}
+		}
 		getPaginationDataByDetachedCriteria(criteria, page);
 	}
 
@@ -59,7 +65,7 @@ public class ResourceConfigureBO extends BaseBO {
 			updateNote(vo);
 			appResconfigHandler.deal(null);
 			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
-		}else if (StringUtils.equals(operType, "AddPopup")) {
+		} else if (StringUtils.equals(operType, "AddPopup")) {
 			savePopup(vo);
 			appResconfigHandler.deal(null);
 			return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
@@ -108,6 +114,7 @@ public class ResourceConfigureBO extends BaseBO {
 		DBManager.getHT(null).save(vo);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
+
 	public Map<String, String> updatePopup(AppResconfig vo) throws Exception {
 		vo.setModifyDate(UnieapConstants.getDateTime(null));
 		vo.setModifyBy(UnieapConstants.getUser().getUserCode());
@@ -117,7 +124,6 @@ public class ResourceConfigureBO extends BaseBO {
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
 
-	
 	public Map<String, String> saveNote(AppResconfig vo) throws Exception {
 		vo.setId(getSequence(null, "unieap"));
 		vo.setType("C");
@@ -151,8 +157,11 @@ public class ResourceConfigureBO extends BaseBO {
 		appResconfig.setActiveFlag(activeFlag);
 		appResconfig.setHyperlink(hyperlink);
 		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
-		String url = File.separator + "apps" + File.separator + "mcare" + File.separator + "images" + File.separator
-				+ "app";
+		String url = "apps/mcare/images/app";
+		/*
+		 * String uploadPath = fileBO.getRootPath() + "apps" + File.separator +
+		 * "mcare" + File.separator + "images" + File.separator + "app";
+		 */
 		String uploadPath = fileBO.getRootPath() + url;
 		fileBO.upload("app configure", id, items, uploadPath, url);
 		DBManager.getHT(null).update(appResconfig);

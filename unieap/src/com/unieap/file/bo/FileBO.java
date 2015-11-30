@@ -86,7 +86,7 @@ public class FileBO extends BaseBO {
 					fileArchive.setFileSize(new Double(fileSize));
 					fileArchive.setFileType(fileType);
 					fileArchive.setId(getSequence(null, null));
-					url = url+File.separator+fileName;
+					url = url+"/"+fileName;
 					fileArchive.setUrl(url);
 					fileIds.append(fileArchive.getId().toString()).append(",");
 					DBManager.getHT(null).save(fileArchive);

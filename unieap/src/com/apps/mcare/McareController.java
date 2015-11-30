@@ -19,6 +19,7 @@ import com.apps.mcare.bo.ComplainBO;
 import com.apps.mcare.bo.OfferingBO;
 import com.apps.mcare.bo.ResourceConfigureBO;
 import com.apps.mcare.pojo.AppComplain;
+import com.apps.mcare.pojo.AppDenomination;
 import com.apps.mcare.pojo.AppMessage;
 import com.apps.mcare.pojo.AppOffering;
 import com.apps.mcare.pojo.AppOfferingCategory;
@@ -45,7 +46,7 @@ public class McareController extends BaseController{
 		return page.getJsonString();
 	}
 	@RequestMapping(params="method=offeringGrid")  
-	public @ResponseBody String offeringGrid(PaginationSupport page,AppOfferingCategory vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	public @ResponseBody String offeringGrid(PaginationSupport page,AppOffering vo,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		OfferingBO offeringBO = (OfferingBO) ServiceUtils.getBean("OfferingBO");
 		offeringBO.getOfferingList(page, vo);
 		return page.getJsonString();
@@ -85,9 +86,9 @@ public class McareController extends BaseController{
 		return ma;
 	}
 	@RequestMapping(params="method=groupGrid")  
-	public @ResponseBody String groupGrid(PaginationSupport page,String groupName,HttpServletRequest request,HttpServletResponse response) throws Exception { 
+	public @ResponseBody String groupGrid(PaginationSupport page, String groupNames, String names,HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ResourceConfigureBO resourceConfigureBO = (ResourceConfigureBO) ServiceUtils.getBean("resourceConfigureBO");
-		resourceConfigureBO.getGroupList(page, groupName);
+		resourceConfigureBO.getGroupList(page, groupNames,names);
 		return page.getJsonString();
 	}
 	
@@ -106,12 +107,6 @@ public class McareController extends BaseController{
 		return model;
 	}
 	
-	@RequestMapping(params="method=groupNamesGrid")  
-	public @ResponseBody String groupNamesGrid(PaginationSupport page,String groupNames,HttpServletRequest request,HttpServletResponse response) throws Exception { 
-		ResourceConfigureBO resourceConfigureBO = (ResourceConfigureBO) ServiceUtils.getBean("resourceConfigureBO");
-		resourceConfigureBO.getNamesList(page, groupNames);
-		return page.getJsonString();
-	}
 	@RequestMapping(params="method=resourceConfigureDeal")  
 	public @ResponseBody Map<String, String> resourceConfigureDeal(String operType,AppResconfig vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		ResourceConfigureBO resourceConfigureBO = (ResourceConfigureBO) ServiceUtils.getBean("resourceConfigureBO");
@@ -160,9 +155,9 @@ public class McareController extends BaseController{
 	}
 	
 	@RequestMapping(params="method=denoDeal")  
-	public @ResponseBody Map<String, String> denoDeal(String operType,AppMessage vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
-		AppMessageBO appMessageBO = (AppMessageBO) ServiceUtils.getBean("appMessageBO");
-		Map<String, String> model = appMessageBO.messageDeal(operType, vo);
+	public @ResponseBody Map<String, String> denoDeal(String operType,AppDenomination vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		AppDenoBO appDenoBO = (AppDenoBO) ServiceUtils.getBean("appDenoBO");
+		Map<String, String> model = appDenoBO.denoDeal(operType, vo);
 		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
 		return model;
 	}

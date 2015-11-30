@@ -42,7 +42,7 @@ public class QueryUpgardeInfo extends SoapMessageHandler implements BizHandler {
 			}else{
 				upgradeInfo.put("isUpgrade", UnieapConstants.YES);
 				JSONObject upgradeInfoDetails = new JSONObject();
-				upgradeInfoDetails.put("url", (String) data.get("url"));
+				upgradeInfoDetails.put("url", SYSConfig.getConfig().get("upgradeUrl")+(String) data.get("url"));
 				upgradeInfoDetails.put("upgradeDesc", (String) data.get("change_desc"));
 				upgradeInfo.put("upgradeInfo", upgradeInfoDetails);
 			}

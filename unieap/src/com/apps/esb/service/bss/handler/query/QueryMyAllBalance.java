@@ -57,8 +57,8 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
-		if(UnieapConstants.YES.equals(isdebug)){
+		String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		if (UnieapConstants.YES.equals(isdebug)) {
 			requestInfo.getRequestBody().setServiceNumber("93268659");
 		}
 		QueryFreeUnits queryFreeUnits = (QueryFreeUnits) ServiceUtils.getBean("queryFreeUnits");
@@ -146,7 +146,7 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 				for (int j = 0; j < balanceResultList.size(); j++) {
 					BalanceResultVO balanceResultVO = balanceResultList.get(j);
 					/**
-					 * prepaid main account 
+					 * prepaid main account
 					 */
 					if ("C_MAIN_ACCOUNT".equals(balanceResultVO.getBalanceType())) {
 						moneyBalance
@@ -236,21 +236,25 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 
 					}
 				}
-				if(bonusAmount>0){
+				if (bonusAmount > 0) {
 					moneyBalance.setBonusAmount(BssServiceUtils.moneyFormat(Long.toString(bonusAmount)));
-					moneyBalance.setBonusRemaningAmount(BssServiceUtils.moneyFormat(Long.toString(bonusRemaningAmount)));
+					moneyBalance
+							.setBonusRemaningAmount(BssServiceUtils.moneyFormat(Long.toString(bonusRemaningAmount)));
 					bonusRemaningAmount = bonusAmount - bonusUsageAmount;
 					moneyBalance.setBonusUsageAmount(BssServiceUtils.moneyFormat(Long.toString(bonusRemaningAmount)));
 				}
 
 			}
 			List<AccountCreditVO> accountCreditList = balanceAccountVO.getAccountCreditList();
-			if (accountCreditList != null && accountCreditList.size() > 0 ) {
+			if (accountCreditList != null && accountCreditList.size() > 0) {
 				AccountCreditVO accountCreditVO = accountCreditList.get(0);
-				if(accountCreditVO.getCreditAmountInfoList()!=null && accountCreditVO.getCreditAmountInfoList().size()>0){
-					
-					moneyBalance.setCreditLimitAmount(BssServiceUtils.moneyFormat(accountCreditVO.getTotalCreditAmount()));
-					moneyBalance.setMainRemaningAmount(BssServiceUtils.moneyFormat(accountCreditVO.getTotalRemainAmount()));
+				if (accountCreditVO.getCreditAmountInfoList() != null
+						&& accountCreditVO.getCreditAmountInfoList().size() > 0) {
+
+					moneyBalance
+							.setCreditLimitAmount(BssServiceUtils.moneyFormat(accountCreditVO.getTotalCreditAmount()));
+					moneyBalance
+							.setMainRemaningAmount(BssServiceUtils.moneyFormat(accountCreditVO.getTotalRemainAmount()));
 					moneyBalance.setMainUsageAmount(BssServiceUtils.moneyFormat(accountCreditVO.getTotalUsageAmount()));
 					List<CreditAmountInfoVO> creditAmountInfoList = accountCreditVO.getCreditAmountInfoList();
 					if (creditAmountInfoList != null && creditAmountInfoList.size() > 0) {
@@ -258,13 +262,14 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 							MyBalanceDetailVO myBalanceDetailVO = new MyBalanceDetailVO();
 							mainBalanceDetails.add(myBalanceDetailVO);
 							CreditAmountInfoVO creditAmountInfoVO = creditAmountInfoList.get(j);
+							myBalanceDetailVO.setEffectiveTime(
+									BssServiceUtils.dateFormat(creditAmountInfoVO.getEffectiveTime()));
 							myBalanceDetailVO
-							.setEffectiveTime(BssServiceUtils.dateFormat(creditAmountInfoVO.getEffectiveTime()));
-							myBalanceDetailVO.setExpiryTime(BssServiceUtils.dateFormat(creditAmountInfoVO.getExpiryTime()));
+									.setExpiryTime(BssServiceUtils.dateFormat(creditAmountInfoVO.getExpiryTime()));
 							myBalanceDetailVO.setIndex(creditAmountInfoVO.getCreditInstID());
 							myBalanceDetailVO.setOfferingName(accountCreditVO.getCreditLimitTypeName());
 							myBalanceDetailVO
-							.setRemaningAmount(BssServiceUtils.moneyFormat(creditAmountInfoVO.getAmount()));
+									.setRemaningAmount(BssServiceUtils.moneyFormat(creditAmountInfoVO.getAmount()));
 						}
 					}
 				}
@@ -295,12 +300,11 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 									BssServiceUtils.dateFormat(freeUnitItemDetailVO.getEffectiveTime()));
 							myBalanceDetailVO
 									.setExpiryTime(BssServiceUtils.dateFormat(freeUnitItemDetailVO.getExpireTime()));
-							if(Long.parseLong(freeUnitItemDetailVO.getInitialAmount())>999990){
+							if (Long.parseLong(freeUnitItemDetailVO.getInitialAmount()) > 999990) {
 								myBalanceDetailVO.setTotalAmount(UnieapConstants.getMessage("mcare.unit.nolimit"));
 								myBalanceDetailVO.setRemaningAmount(UnieapConstants.getMessage("mcare.unit.nolimit"));
-								myBalanceDetailVO
-								.setUsageAmount(UnieapConstants.getMessage("mcare.unit.nolimit"));
-							}else{
+								myBalanceDetailVO.setUsageAmount(UnieapConstants.getMessage("mcare.unit.nolimit"));
+							} else {
 								myBalanceDetailVO.setTotalAmount(
 										BssServiceUtils.voiceFormat(freeUnitItemDetailVO.getInitialAmount()));
 								myBalanceDetailVO.setRemaningAmount(
@@ -308,7 +312,7 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 								int usageAmount = Integer.parseInt(freeUnitItemDetailVO.getInitialAmount())
 										- Integer.parseInt(freeUnitItemDetailVO.getCurrentAmount());
 								myBalanceDetailVO
-								.setUsageAmount(BssServiceUtils.voiceFormat(Integer.toString(usageAmount)));
+										.setUsageAmount(BssServiceUtils.voiceFormat(Integer.toString(usageAmount)));
 							}
 						}
 					}
@@ -325,14 +329,11 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 									BssServiceUtils.dateFormat(freeUnitItemDetailVO.getEffectiveTime()));
 							myBalanceDetailVO
 									.setExpiryTime(BssServiceUtils.dateFormat(freeUnitItemDetailVO.getExpireTime()));
-							myBalanceDetailVO.setTotalAmount(
-									BssServiceUtils.dataMBFormat(freeUnitItemDetailVO.getInitialAmount()));
-							myBalanceDetailVO.setRemaningAmount(
-									BssServiceUtils.dataMBFormat(freeUnitItemDetailVO.getCurrentAmount()));
+							myBalanceDetailVO.setTotalAmount(freeUnitItemDetailVO.getInitialAmount());
+							myBalanceDetailVO.setRemaningAmount(freeUnitItemDetailVO.getCurrentAmount());
 							int usageAmount = Integer.parseInt(freeUnitItemDetailVO.getInitialAmount())
 									- Integer.parseInt(freeUnitItemDetailVO.getCurrentAmount());
-							myBalanceDetailVO
-									.setUsageAmount(BssServiceUtils.dataMBFormat(Integer.toString((int) usageAmount)));
+							myBalanceDetailVO.setUsageAmount(Integer.toString(usageAmount));
 						}
 					}
 				}
@@ -353,10 +354,10 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 				voiceBalance.setDailyUsageAmount(BssServiceUtils.voiceFormat(Integer.toString(voiceDailyUsageAmount)));
 			}
 
-			dataBalance.setTotalAmount(BssServiceUtils.dataMBFormat(Integer.toString(dataTotalAmount)));
-			dataBalance.setRemaningAmount(BssServiceUtils.dataMBFormat(Integer.toString(dataRemaningAmount)));
+			dataBalance.setTotalAmount(Integer.toString(dataTotalAmount));
+			dataBalance.setRemaningAmount(Integer.toString(dataRemaningAmount));
 			int dataUsageAmount = dataTotalAmount - dataRemaningAmount;
-			dataBalance.setUsageAmount(BssServiceUtils.dataMBFormat(Integer.toString(dataUsageAmount)));
+			dataBalance.setUsageAmount(Integer.toString(dataUsageAmount));
 
 		}
 		return allBalanceVO;

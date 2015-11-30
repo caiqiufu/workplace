@@ -7,7 +7,7 @@
 %>
 <html>
   <head>
-    <title>mCare</title>
+    <title>easy mobile</title>
     <style type="text/css">
     	.myBody
 		{  
@@ -46,7 +46,7 @@
 			                    html:
 			                    	'<table class="grouble_table" width="100%" >'+
 			                    		'<tr class="grouble_table_tr">'+
-						        			'<td colspan="3" align ="center" style ="font-weight:bolder;font-size:20pt;color:#4F4F4F;">mCare Management Platform</td>'+
+						        			'<td colspan="3" align ="center" style ="font-weight:bolder;font-size:20pt;color:#4F4F4F;">Easy Mobile Management Platform</td>'+
 						        			'<td width="20px" align ="right">Welcome : <%=user.getUserName()%></td>'+
 						        		'</tr>'+
 								        '<tr class="grouble_table_tr">'+

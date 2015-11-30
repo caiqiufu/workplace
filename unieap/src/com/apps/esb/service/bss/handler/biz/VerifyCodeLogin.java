@@ -25,7 +25,9 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
+import com.unieap.encrypt.EncryptionUtils;
 import com.unieap.sms.bo.SmsBO;
 import com.unieap.tools.JSONUtils;
 
@@ -50,7 +52,9 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 		if (!json.has("verifyCode")) {
 			throw new Exception("verifyCode is null");
 		}
-		String verifyCode = json.getString("verifyCode");
+		String verifyCodeEn = json.getString("verifyCode");
+		String mKey =  SYSConfig.getConfig().get("mcare.encryption.key");
+		String verifyCode = EncryptionUtils.decryptSun(verifyCodeEn, mKey);
 
 		SmsBO smsBO = (SmsBO) ServiceUtils.getBean("smsBO");
 		String returnCode = smsBO.checkVerifyCode("V", requestInfo.getRequestBody().getServiceNumber(), verifyCode);
@@ -132,6 +136,7 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 			}
 			vo.setAddress(address.toString());
 		}
+		vo.setPrimaryOfferingName(querySubscriberInfoVO.getPrimaryOfferingVO().getOfferingName());
 		ActualCustomerVO actualCustomerVO = querySubscriberInfoVO.getActualCustomerVO();
 		if (actualCustomerVO != null) {
 			CorpInfoVO corpInfoVO = actualCustomerVO.getCorpInfoVO();
@@ -156,8 +161,8 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 		}
 		vo.setStatus(UnieapConstants.getDicName("subscriberStatus", querySubscriberInfoVO.getStatus()));
 		vo.setStatusReason(querySubscriberInfoVO.getStatusReason());
-		vo.setSubscriberType(UnieapConstants.getDicName("paymentType", querySubscriberInfoVO.getSubscriberType()));
-
+		vo.setSubscriberType(querySubscriberInfoVO.getSubscriberType());
+		vo.setSubscriberTypeDesc(UnieapConstants.getDicName("paymentType", querySubscriberInfoVO.getSubscriberType()));
 		StringBuffer name = new StringBuffer();
 		if (StringUtils.isNotEmpty(customerInfoVO.getFirstName())) {
 			name.append(customerInfoVO.getFirstName()).append(" ");
@@ -168,12 +173,14 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 		if (StringUtils.isNotEmpty(customerInfoVO.getLastName())) {
 			name.append(customerInfoVO.getLastName()).append(" ");
 		}
+		vo.setCustomerId(customerInfoVO.getCustomerId());
 		vo.setCustomerName(name.toString());
 		vo.setCertificateType(UnieapConstants.getDicName("certificateType", customerInfoVO.getCertificateType()));
 		vo.setCertificateNumber(customerInfoVO.getCertificateNumber());
 		vo.setCustomerLevel(UnieapConstants.getDicName("customerLevel", customerInfoVO.getCustomerLevel()));
 		vo.setSupplement("");
 		vo.setEmail("");
+		vo.setDateOfBirth(customerInfoVO.getDateOfBirth());
 		return vo;
 	}
 }

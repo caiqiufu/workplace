@@ -355,10 +355,24 @@ public class BssServiceUtils {
 		return sdf3.format(strtodate);
 	}
 
-	public static String dataMBFormat(String data) {
-		return data;
-		// return UnieapConstants.getMessage("mcare.unit.datamb", new Object[] {
-		// data });
+	public static String dataKBToMBFormat(String data) {
+		String datalength = SYSConfig.getConfig().get("mcare.unit.format.datalength");
+		DecimalFormat df = new DecimalFormat(datalength);
+		return df.format(Double.parseDouble(data) / 1024);
+	}
+
+	public static String dataBToKBFormat(String data) {
+
+		String datalength = SYSConfig.getConfig().get("mcare.unit.format.datalength");
+		DecimalFormat df = new DecimalFormat(datalength);
+		return df.format(Double.parseDouble(data) / 1024);
+	}
+
+	public static String dataBToMBFormat(String data) {
+		String datalength = SYSConfig.getConfig().get("mcare.unit.format.datalength");
+		DecimalFormat df = new DecimalFormat(datalength);
+		return df.format(Double.parseDouble(data) / 1024 / 1024);
+
 	}
 
 	public static String dataMBFormat(double data) {
