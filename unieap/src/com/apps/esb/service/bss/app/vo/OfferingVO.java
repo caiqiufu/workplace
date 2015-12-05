@@ -1,5 +1,10 @@
 package com.apps.esb.service.bss.app.vo;
 
+import org.springframework.util.StringUtils;
+
+import com.unieap.CacheMgt;
+import com.unieap.mdm.vo.DicDataVO;
+
 public class OfferingVO {
 	private String seq;
 	private String offeringId;
@@ -64,6 +69,12 @@ public class OfferingVO {
 		this.offerCategory = offerCategory;
 	}
 	public String getEffectiveType() {
+		if(!StringUtils.isEmpty(this.effectiveType)){
+			DicDataVO dic =  CacheMgt.getDicData("effectMode",effectiveType);
+			if(dic!=null){
+				this.effectiveType = dic.getDicName();
+			}
+		}
 		return effectiveType;
 	}
 	public void setEffectiveType(String effectiveType) {

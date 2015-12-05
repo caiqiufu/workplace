@@ -89,7 +89,7 @@
         });
         var gridstore = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 5,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy: 
             { type: 'ajax', url: 'MdMController.do?method=roleGrid',

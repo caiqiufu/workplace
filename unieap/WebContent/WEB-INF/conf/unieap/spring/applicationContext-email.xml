@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     
+    <!-- 
     <bean id="propertyConfiger" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
          <property name="location" value="classpath:email.properties"></property>
 	</bean>
+     -->
     <bean id="mail"
      class="org.springframework.mail.javamail.JavaMailSenderImpl">
      <!-- SMTP发送邮件的服务器的IP和端口 -->

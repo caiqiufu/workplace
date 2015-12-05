@@ -42,9 +42,9 @@ public class QueryDataBalance extends SoapMessageHandler implements BizHandler {
 			throw new Exception("serviceNumber is null");
 		}
 		String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
-		if(UnieapConstants.YES.equals(isdebug)){
+		/*if(UnieapConstants.YES.equals(isdebug)){
 			requestInfo.getRequestBody().setServiceNumber("93268659");
-		}
+		}*/
 		QueryFreeUnits queryFreeUnits = (QueryFreeUnits) ServiceUtils.getBean("queryFreeUnits");
 		ProcessResult processResult = queryFreeUnits.process(requestInfo,parameters,extParameters);
 		if(!UnieapConstants.C0.equals(processResult.getResultCode())){

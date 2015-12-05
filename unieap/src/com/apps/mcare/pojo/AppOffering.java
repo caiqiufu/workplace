@@ -19,6 +19,7 @@ public class AppOffering implements java.io.Serializable {
 	private String offeringName;
 	private String seq;
 	private String offeringType;
+	private String offeringTypeDesc;
 	private String offeringDesc;
 	private String effectiveType;
 	private String effectiveTypeDesc;
@@ -115,6 +116,12 @@ public class AppOffering implements java.io.Serializable {
 
 	public void setOfferingType(String offeringType) {
 		this.offeringType = offeringType;
+		if(!StringUtils.isEmpty(this.offeringType)){
+			DicDataVO dic =  CacheMgt.getDicData("offeringType",offeringType);
+			if(dic!=null){
+				this.offeringTypeDesc = dic.getDicName();
+			}
+		}
 	}
 
 	public String getOfferingDesc() {
@@ -223,6 +230,14 @@ public class AppOffering implements java.io.Serializable {
 
 	public void setEffectiveTypeDesc(String effectiveTypeDesc) {
 		this.effectiveTypeDesc = effectiveTypeDesc;
+	}
+
+	public String getOfferingTypeDesc() {
+		return offeringTypeDesc;
+	}
+
+	public void setOfferingTypeDesc(String offeringTypeDesc) {
+		this.offeringTypeDesc = offeringTypeDesc;
 	}
 
 }

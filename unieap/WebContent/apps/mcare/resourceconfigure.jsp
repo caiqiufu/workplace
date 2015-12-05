@@ -36,7 +36,7 @@
     	
     	var gridstoreForNotification = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mcareController.do?method=messageGrid&type=N',
                 reader: 
@@ -212,7 +212,7 @@
     	/***note begin*********************************************************/
     	var gridstoreForNote = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mcareController.do?method=messageGrid&type=B',
                 reader: 
@@ -388,7 +388,7 @@
     	/***pop-up notification begin*********************************************************/
     	var gridstoreForPopup = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mcareController.do?method=messageGrid&type=P',
                 reader: 
@@ -414,7 +414,7 @@
 						return value.length < max ? value : value.substring(0, max - 3) + '...';
 					}	
                 },
-                {text: "<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,width:80},
+                {text: "<%=UnieapConstants.getMessage("comm.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,width:80},
                 { text: "<%=UnieapConstants.getMessage("comm.effectiveDate")%>", dataIndex: 'effectiveDate',sortable: false,width:100,
                 	renderer: function (value, meta, record){
 						var max = 150;
@@ -493,7 +493,7 @@
                             store:Ext.create('Ext.data.Store', 
                             { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
 						},
-                    	{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>', allowBlank:true}
+                    	{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("comm.hyperlink")%>', allowBlank:true}
                     ]
                 }
             ],
@@ -573,7 +573,7 @@
     	/***top round pictures*************************************************/
     	var gridstoreForRound = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mcareController.do?method=groupGrid&groupNames=top_round_displays',
                 reader: 
@@ -592,7 +592,7 @@
 						return value.length < max ? value : value.substring(0, max - 3) + '...';
 					}	
                 },
-                {text: "<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,flex: true,
+                {text: "<%=UnieapConstants.getMessage("comm.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,flex: true,
                 	renderer: function (value, meta, record){
 						var max = 150;
 						meta.tdAttr = 'data-qtip="' + value + '"';
@@ -659,8 +659,8 @@
                             store:Ext.create('Ext.data.Store', 
                             { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
 						},
-                    	{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>', allowBlank:true},
-                    	{ xtype:'filefield',name: 'file',id:'uploadFileFormRound',labelWidth:80,width:420,fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.uploadfile")%>',msgTarget: 'side',
+                    	{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("comm.hyperlink")%>', allowBlank:true},
+                    	{ xtype:'filefield',name: 'file',id:'uploadFileFormRound',labelWidth:80,width:420,fieldLabel:'<%=UnieapConstants.getMessage("comm.uploadfile")%>',msgTarget: 'side',
 							listeners : {
 			    	        	 change : function(obj, v){
 			    	        		 var picPath = obj.getValue();  
@@ -792,7 +792,7 @@
     	/***ad pictures*************************************************/
     	var gridstoreForAd = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mcareController.do?method=groupGrid&names=app_ad_page,chongzhi_ad',
                 reader: 
@@ -811,7 +811,7 @@
 						return value.length < max ? value : value.substring(0, max - 3) + '...';
 					}	
                 },
-                {text: "<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,flex: true,
+                {text: "<%=UnieapConstants.getMessage("comm.hyperlink")%>", dataIndex: 'hyperlink', sortable: true,flex: true,
                 	renderer: function (value, meta, record){
 						var max = 150;
 						meta.tdAttr = 'data-qtip="' + value + '"';
@@ -879,8 +879,8 @@
                             store:Ext.create('Ext.data.Store', 
                             { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
 						},
-						{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.hyperlink")%>', allowBlank:true},
-						{ xtype:'filefield',name: 'file',id:'uploadFileFormAd',labelWidth:80,width:420,fieldLabel:'<%=UnieapConstants.getMessage("mcare.resourceConfigure.display.uploadfile")%>',msgTarget: 'side',
+						{ xtype:'textfield',labelWidth:80, width:450,name:'hyperlink', fieldLabel:'<%=UnieapConstants.getMessage("comm.hyperlink")%>', allowBlank:true},
+						{ xtype:'filefield',name: 'file',id:'uploadFileFormAd',labelWidth:80,width:420,fieldLabel:'<%=UnieapConstants.getMessage("comm.uploadfile")%>',msgTarget: 'side',
 							listeners : {
 			    	        	 change : function(obj, v){
 			    	        		 var picPath = obj.getValue();  
@@ -1021,7 +1021,7 @@
     	
     	var gridstoreForDeno = Ext.create('Ext.data.Store', {
             model: 'denodatamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mcareController.do?method=denoGrid',
                 reader: 

@@ -15,16 +15,13 @@ import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.app.cbs.handler.QueryCDR;
 import com.apps.esb.service.bss.app.cbs.vo.queryCdr.CdrInfoVO;
 import com.apps.esb.service.bss.app.cbs.vo.queryCdr.QueryCdrVO;
-import com.apps.esb.service.bss.app.cbs.vo.xchangelog.XchangeInfoVO;
 import com.apps.esb.service.bss.app.vo.CdrDetailVO;
-import com.apps.esb.service.bss.app.vo.XchangeLogVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
 import com.unieap.UnieapConstants;
-import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
 import com.unieap.tools.JSONUtils;
 
@@ -42,10 +39,10 @@ public class QueryMyCdr extends SoapMessageHandler implements BizHandler {
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		/*String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
 		if (UnieapConstants.YES.equals(isdebug)) {
 			requestInfo.getRequestBody().setServiceNumber("93268659");
-		}
+		}*/
 		JSONObject customerObj = new JSONObject("{queryType:D}");
 		JSONObject newExtParameters = BssServiceUtils
 				.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
@@ -72,14 +69,19 @@ public class QueryMyCdr extends SoapMessageHandler implements BizHandler {
 				}else{
 					if("1106".equals(cdrInfoVO.getMeasureUnit())){
 						cdrDetailVO.setActualVolume(BssServiceUtils.dataBToKBFormat(cdrInfoVO.getActualVolume())+"(KB)");
+						cdrDetailVO.setOtherNumber(requestInfo.getRequestBody().getServiceNumber());
 					}else if("1003".equals(cdrInfoVO.getMeasureUnit())){
 						cdrDetailVO.setActualVolume(cdrInfoVO.getActualVolume()+"(s)");
+						cdrDetailVO.setOtherNumber(cdrInfoVO.getOtherNumber());
 					}else if("1101".equals(cdrInfoVO.getMeasureUnit())){
 						cdrDetailVO.setActualVolume(cdrInfoVO.getActualVolume()+"(item)");
+						cdrDetailVO.setOtherNumber(cdrInfoVO.getOtherNumber());
 					}else if("1006".equals(cdrInfoVO.getMeasureUnit())){
 						cdrDetailVO.setActualVolume(cdrInfoVO.getActualVolume()+"(times)");
+						cdrDetailVO.setOtherNumber(requestInfo.getRequestBody().getServiceNumber());
 					}else{
 						cdrDetailVO.setActualVolume(cdrInfoVO.getActualVolume());
+						cdrDetailVO.setOtherNumber(cdrInfoVO.getOtherNumber());
 					}
 				}
 				cdrDetailVO.setEndTime(BssServiceUtils.dateFormat(cdrInfoVO.getEndTime()));
@@ -87,7 +89,6 @@ public class QueryMyCdr extends SoapMessageHandler implements BizHandler {
 					cdrInfoVO.setFlowType("--");
 				}
 				cdrDetailVO.setFlowType(UnieapConstants.getDicName("cdrFlowType", cdrInfoVO.getFlowType()));
-				cdrDetailVO.setOtherNumber(cdrInfoVO.getOtherNumber());
 				cdrDetailVO.setServiceTypeName(cdrInfoVO.getServiceTypeName());
 				cdrDetailVO.setStartTime(BssServiceUtils.dateFormat(cdrInfoVO.getStartTime()));
 			}

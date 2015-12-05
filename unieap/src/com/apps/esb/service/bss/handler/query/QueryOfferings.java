@@ -79,14 +79,14 @@ public class QueryOfferings extends SoapMessageHandler implements BizHandler {
 		 * offerCategoryVO.setQuestionUrl(appOfferingCategory.getQuestionUrl());
 		 */
 		StringBuffer sqlCategory = new StringBuffer();
-		sqlCategory.append(
-				" select id as categoryId,category_type as categoryType,picture_url as pictureUrl,categore_name as categoreName,");
-		sqlCategory.append(" category_desc as categoryDesc,price_desc as priceDesc, ");
+		sqlCategory.append(" select  oc.id as categoryId,category_type as categoryType,fa.url as pictureUrl,");
+		sqlCategory.append("categore_name as categoreName, category_desc as categoryDesc,price_desc as priceDesc, ");
 		sqlCategory.append(" oc.detail_url as detailUrl,detail_hyperlink as detailHyperlink,plan_url as planUrl,");
-		sqlCategory.append(
-				" plan_hyperlink as planHyperlink,question_url as questionUrl,question_hyperlink as questionHyperlink,");
-		sqlCategory.append(" note_url as noteUrl,note_hyperlink as noteHyperlink");
-		sqlCategory.append(" from app_offering_category oc where oc.id= ?");
+		sqlCategory.append(" plan_hyperlink as planHyperlink,question_url as questionUrl,");
+		sqlCategory.append("question_hyperlink as questionHyperlink,");
+		sqlCategory.append(" note_url as noteUrl,note_hyperlink as noteHyperlink ");
+		sqlCategory.append(" from app_offering_category oc ,unieap.file_archive fa ");
+		sqlCategory.append(" where oc.id = fa.ext_key and oc.id= ? ");
 		List offerCategoryVOs = DBManager.getJT(null).query(sqlCategory.toString(), new Object[] { categoryId },
 				new EntityRowMapper(OfferCategoryVO.class));
 		OfferCategoryVO offerCategoryVO = (OfferCategoryVO) offerCategoryVOs.get(0);

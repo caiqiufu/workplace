@@ -172,19 +172,19 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 	
 	public ProcessResult queryCDRDetail(String serviceNumber, RequestInfo requestInfo) throws Exception {
 		JSONObject json = new JSONObject(requestInfo.getRequestBody().getExtParameters());
-		if(!json.has("totalCDRNum")){
-			throw new Exception("totalCDRNum is null");
+		if(!json.has("totalNum")){
+			throw new Exception("totalNum is null");
 		}
-		if(!json.has("pageNum")){
-			throw new Exception("pageNum is null");
+		if(!json.has("page")){
+			throw new Exception("page is null");
 		}
-		String totalCDRNum = json.getString("totalCDRNum");
+		String totalCDRNum = json.getString("totalNum");
 		if(StringUtils.isEmpty(totalCDRNum)){
-			throw new Exception("totalCDRNum is null");
+			throw new Exception("totalNum is null");
 		}
-		String pageNum = json.getString("pageNum");
+		String pageNum = json.getString("page");
 		if(StringUtils.isEmpty(pageNum)){
-			throw new Exception("pageNum is null");
+			throw new Exception("page is null");
 		}
 		
 		SOAPMessage sOAPMessage = getRequestCDRDetailSOAPMessage(totalCDRNum,pageNum, serviceNumber, requestInfo);
@@ -213,11 +213,9 @@ public class QueryCDR extends SoapMessageHandler implements BizHandler {
 		String firstday, lastday;
 		cale = Calendar.getInstance();
 		cale.add(Calendar.DATE, -89);
-		cale.set(Calendar.DAY_OF_MONTH, 1);
 		firstday = format.format(cale.getTime()) + "000000";
 		
 		cale = Calendar.getInstance();
-		cale.set(Calendar.DAY_OF_MONTH, 0);
 		lastday = format.format(cale.getTime()) + "235959";
 		
 		timePeriodElement.addChildElement("StartTime", "bbs").addTextNode(firstday);

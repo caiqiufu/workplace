@@ -90,7 +90,7 @@ public class BssServiceUtils {
 				String systemCode = requestHeader.getString("systemCode");
 				header.setSystemCode(systemCode);
 			} else {
-				header.setSystemCode("APP");
+				header.setSystemCode("mCare");
 			}
 			if (requestHeader.has("deviceInfo")) {
 				DeviceInfo deviceInfo = new DeviceInfo();

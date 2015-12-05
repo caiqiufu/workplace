@@ -14,7 +14,7 @@
         });
     	var gridstore = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'MdmController.do?method=roleGrid',
                 reader:{root: 'rows', totalProperty: 'totalCount'},
@@ -42,7 +42,7 @@
 	           	tooltip: '<%=UnieapConstants.getMessage("comm.delete")%>',
 	           	handler:function(grid, rowIndex, colIndex){	
 	         	   selectedRecord = grid.getStore().getAt(rowIndex);
-		           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.delete.confirm")%>', removeDatas);
+		           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.delete")%>', removeDatas);
 	           	}
 	        });
     	}
@@ -216,7 +216,7 @@
 		      	tooltip: '<%=UnieapConstants.getMessage("comm.delete")%>',
 		     	 handler:function(grid, rowIndex, colIndex){	
 		    	  	dicSelectedRecord = grid.getStore().getAt(rowIndex);
-		          	Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.delete.confirm")%>', dicremoveDatas);
+		          	Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.delete")%>', dicremoveDatas);
 		      	}
 	      });
   	  }

@@ -23,10 +23,8 @@ import com.unieap.base.vo.PaginationSupport;
 import com.unieap.db.DBManager;
 import com.unieap.db.EntityRowMapper;
 import com.unieap.mdm.vo.UserRoleVO;
-import com.unieap.pojo.EmailSend;
 import com.unieap.pojo.User;
 import com.unieap.pojo.UserRole;
-import com.unieap.tools.Propertyholder;
 
 @Service("userBO")
 public class UserBO extends BaseBO {
@@ -191,7 +189,7 @@ public class UserBO extends BaseBO {
 	}
 
 	public void sendEmailToNewUser(User vo) throws Exception {
-		StringBuffer sb = new StringBuffer();
+		/*StringBuffer sb = new StringBuffer();
 		sb.append("[").append("unieap system").append("]").append(" please active you new account");
 		StringBuffer content = new StringBuffer();
 		String en = System.getProperty("line.separator");
@@ -219,7 +217,7 @@ public class UserBO extends BaseBO {
 		emailSend.setStatus("2");
 		emailSend.setSubject(sb.toString());
 		emailSend.setTimes(Integer.valueOf(0));
-		DBManager.getHT(null).save(emailSend);
+		DBManager.getHT(null).save(emailSend);*/
 	}
 
 }

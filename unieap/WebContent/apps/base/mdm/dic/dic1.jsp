@@ -60,7 +60,7 @@
 	           handler:function(grid, rowIndex, colIndex)
 	           {	
 	         	   selectedRecord = grid.getStore().getAt(rowIndex);
-		           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.delete.confirm")%>', removeDatas);
+		           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.delete")%>', removeDatas);
 	           }
 	        });
     	}
@@ -259,7 +259,7 @@
        });
  	  var dicgridstore = Ext.create('Ext.data.Store', {
           model: 'dicmodel',
-          pageSize: 15,
+          pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
           remoteSort: true,
           proxy: 
           { type: 'ajax', url: 'MdmController.do?method=dicDataGrid',
@@ -299,7 +299,7 @@
 	      handler:function(grid, rowIndex, colIndex)
 	      {	
 	    	   dicselectedRecord = grid.getStore().getAt(rowIndex);
-	           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.delete.confirm")%>', dicremoveDatas);
+	           Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.delete")%>', dicremoveDatas);
 	      }
        });
   	 }

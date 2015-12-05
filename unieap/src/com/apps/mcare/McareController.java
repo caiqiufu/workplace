@@ -51,6 +51,17 @@ public class McareController extends BaseController{
 		offeringBO.getOfferingList(page, vo);
 		return page.getJsonString();
 	}
+	
+	@RequestMapping(params="method=offerCategoryDeal")  
+	public @ResponseBody Map<String, String> offerCategoryDeal(String operType,AppOfferingCategory vo,String parameters, HttpServletRequest request,HttpServletResponse response) throws Exception { 
+		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
+		List<FileItem> items = fileBO.getFileItems(request);
+		OfferingBO offeringBO = (OfferingBO) ServiceUtils.getBean("OfferingBO");
+		Map<String, String> model = offeringBO.offerCategoryDeal(operType, vo,parameters,items);
+		model.put(UnieapConstants.SUCCESS,UnieapConstants.SUCCESS);
+		return model;
+	}
+	
 	@RequestMapping(params="method=offeringDeal")  
 	public @ResponseBody Map<String, String> offeringDeal(String operType,AppOffering vo, HttpServletRequest request,HttpServletResponse response) throws Exception { 
 		OfferingBO offeringBO = (OfferingBO) ServiceUtils.getBean("OfferingBO");

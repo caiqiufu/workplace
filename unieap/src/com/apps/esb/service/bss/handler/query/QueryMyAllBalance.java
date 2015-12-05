@@ -57,10 +57,10 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		/*String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
 		if (UnieapConstants.YES.equals(isdebug)) {
 			requestInfo.getRequestBody().setServiceNumber("93268659");
-		}
+		}*/
 		QueryFreeUnits queryFreeUnits = (QueryFreeUnits) ServiceUtils.getBean("queryFreeUnits");
 		ProcessResult processResultFreeUnits = queryFreeUnits.process(requestInfo, parameters, extParameters);
 		if (!UnieapConstants.C0.equals(processResultFreeUnits.getResultCode())) {
@@ -350,7 +350,7 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 				int voiceUsageAmount = voiceTotalAmount - voiceRemaningAmount;
 				voiceBalance.setUsageAmount(BssServiceUtils.voiceFormat(Integer.toString(voiceUsageAmount)));
 				int voiceDailyUsageAmount = voiceRemaningAmount
-						/ Integer.parseInt(SYSConfig.getConfig().get("mcare.display.voice"));
+						/ Integer.parseInt(SYSConfig.getConfig().get("mcare.display.daily.voice"));
 				voiceBalance.setDailyUsageAmount(BssServiceUtils.voiceFormat(Integer.toString(voiceDailyUsageAmount)));
 			}
 

@@ -79,6 +79,7 @@ public class DicBO extends BaseBO {
 		DBManager.getHT(null).update(vo);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
 	}
+
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Map<String, String> dicDataDeal(String operType, DicDataTree vo) throws Exception {
 		if (StringUtils.equals(operType, UnieapConstants.ADD)) {
@@ -105,13 +106,14 @@ public class DicBO extends BaseBO {
 			throw new Exception(UnieapConstants.getMessage("comm.operation.error", new Object[] { operType }));
 		}
 	}
-	public void saveRoleResource(DicDataTree vo){
+
+	public void saveRoleResource(DicDataTree vo) {
 		RoleResource rr = new RoleResource();
-		rr.setRoleResourceId(getSequence(null,UnieapConstants.UNIEAP));
+		rr.setRoleResourceId(getSequence(null, UnieapConstants.UNIEAP));
 		rr.setRoleId(Integer.valueOf("1"));
 		rr.setResourceId(vo.getDicCode());
 		rr.setResourceType(vo.getDicType());
-		if(vo.getParentId()!=null){
+		if (vo.getParentId() != null) {
 			rr.setCategory(vo.getParentId().toString());
 		}
 		rr.setActiveFlag(UnieapConstants.YES);
@@ -119,6 +121,7 @@ public class DicBO extends BaseBO {
 		rr.setCreateBy(UnieapConstants.getUser().getUserCode());
 		DBManager.getHT(null).save(rr);
 	}
+
 	public Map<String, String> checkDicCodeExist(DicDataTree vo) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(DicDataTree.class);
 		Property parentId = Property.forName("parentId");
@@ -177,8 +180,8 @@ public class DicBO extends BaseBO {
 		StringBuffer sql = new StringBuffer();
 		sql.append("select dic_id as dicId, dic_code as dicCode,dic_name as dicName,href,seq ,");
 		sql.append("icon as iconCls,active_flag as activeFlag,leaf,parent_id as parentId,");
-		sql.append(
-				"parent_code as parentCode,parent_name as parentName,dic_type as dicType ,remark,create_by as createBy ");
+		sql.append("parent_code as parentCode,parent_name as parentName,");
+		sql.append("dic_type as dicType ,remark,create_by as createBy ");
 		sql.append("from unieap.dic_data_tree where parent_id =? and language =? order by dic_name");
 		List<?> datas = DBManager.getJT(null).query(sql.toString(),
 				new Object[] { treeVO.getId(), SYSConfig.defaultLanguage }, new DicTreeEntityRowMapper(TreeVO.class));

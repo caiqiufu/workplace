@@ -82,7 +82,7 @@
         });
     	var gridstore = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mdmController.do?method=userGrid',
                 reader: 
@@ -310,7 +310,7 @@
         });
     	var roleGridStore = Ext.create('Ext.data.Store', {
             model: 'roleModel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'mdmController.do?method=userRoleGrid',
                 reader: 
@@ -343,7 +343,7 @@
 	           	tooltip: '<%=UnieapConstants.getMessage("comm.delete")%>',
 	           	handler:function(grid, rowIndex, colIndex){	
 	           		selectedUserRoleRecord = grid.getStore().getAt(rowIndex);
-		            Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.delete.confirm")%>', removeRoleDatas);
+		            Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.delete")%>', removeRoleDatas);
 	           	}
 	        });
     	}

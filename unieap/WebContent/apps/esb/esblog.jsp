@@ -105,7 +105,7 @@
         });
     	var gridstore = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
+            pageSize: <%=SYSConfig.getConfig().get("pageSize")%>,
             remoteSort: true,
             proxy:{ type: 'ajax', url: 'esbController.do?method=esblogGrid',
                 reader: 

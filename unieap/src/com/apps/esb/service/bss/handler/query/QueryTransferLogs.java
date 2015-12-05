@@ -22,7 +22,6 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
 import com.unieap.UnieapConstants;
-import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
 import com.unieap.tools.JSONUtils;
 
@@ -40,10 +39,10 @@ public class QueryTransferLogs extends SoapMessageHandler implements BizHandler{
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		/*String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
 		if(UnieapConstants.YES.equals(isdebug)){
 			requestInfo.getRequestBody().setServiceNumber("93268659");
-		}
+		}*/
 		QueryAccountTransferLogs queryAccountTransferLogs = (QueryAccountTransferLogs) ServiceUtils.getBean("queryAccountTransferLogs");
 		ProcessResult processResult = queryAccountTransferLogs.process(requestInfo, parameters, extParameters);
 		if(!UnieapConstants.C0.equals(processResult.getResultCode())){

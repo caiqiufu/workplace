@@ -55,15 +55,15 @@ public class QueryOfferingCategory extends SoapMessageHandler implements BizHand
 
 	private List<?> getOfferingCategoryList(String categoryType) {
 		StringBuffer sql = new StringBuffer();
-		sql.append(
-				"SELECT id as categoryId,category_type as categoryType, picture_url as pictureUrl,categore_name as categoreName,");
-		sql.append(" category_desc as categoryDesc, price_desc as priceDesc");
-		sql.append(" FROM unieap.app_offering_category where active_flag = ?  ");
-		if (!categoryType.equals("ct_All")) {
+		sql.append("SELECT oc.id as categoryId,oc.category_type as categoryType, fa.url as pictureUrl,");
+		sql.append("oc.categore_name as categoreName, oc.category_desc as categoryDesc, oc.price_desc as priceDesc ");
+		sql.append("FROM unieap.app_offering_category oc,unieap.file_archive fa ");
+		sql.append("where oc.id = fa.ext_key and  oc.active_flag = ? ");
+		if (!categoryType.equals("ct_all") && !categoryType.equals("ct_service") && !categoryType.equals("ct_other")) {
 			String types = getcategoryTypes(categoryType);
 			sql.append(" and category_type in (").append(types).append(")");
 		}
-		sql.append(" order by seq, categore_name ");
+		sql.append(" order by categore_name ");
 		List<?> datas = DBManager.getJT(null).query(sql.toString(), new Object[] { UnieapConstants.YES },
 				new EntityRowMapper(OfferCategoryVO.class));
 		return datas;
