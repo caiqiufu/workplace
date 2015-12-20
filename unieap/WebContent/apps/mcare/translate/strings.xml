@@ -55,7 +55,7 @@
     <string name="get_sms_verify">reload</string>
     <string name="get_sms_verify_success">verify code has be send</string>
     <string name="get_sms_verify_fail">failed to get verify code</string>
-    <string name="count_down">after %1$d retry</string>
+    <string name="count_down">after %1$d s retry</string>
     <string name="toast_error_password_null">password not be blank</string>
     <string name="toast_error_phone_null">phone number not be blank</string>
     <string name="toast_error_phone_invalid">phone number incorrect</string>

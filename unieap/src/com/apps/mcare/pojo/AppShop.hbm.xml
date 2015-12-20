@@ -50,5 +50,8 @@
         <property name="remark" type="string">
             <column name="remark" />
         </property>
+        <property name="tenantId" type="string">
+            <column name="tenant_id" length="45"/>
+        </property>
     </class>
 </hibernate-mapping>

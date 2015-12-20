@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.unieap.BaseController;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
+import com.unieap.base.vo.MenuVO;
 import com.unieap.login.bo.LoginBO;
 import com.unieap.pojo.VisitLog;
+import com.unieap.tools.JSONUtils;
 
 @Controller
 @RequestMapping("loginController.do")
@@ -31,17 +35,31 @@ public class LoginController extends BaseController {
 		loginBO.initUserButton(this.getServletContext());
 		Map<String, List<Object>> menus = loginBO.getUserMenu(UnieapConstants.getUser().getUserId());
 		/** mantis application */
-		// ModelAndView ma = new ModelAndView("apps/mantis/mainmenu",menus);
-		/** reuse application */
-		ModelAndView ma = new ModelAndView("apps/base/mdm/mainmenu", menus);
-		/** desk application */
-		// ma.addObject("MENU",loginBO.getUserMenu(user.getUserId(),null));
+		//ModelAndView ma = new ModelAndView("apps/mantis/mainmenu",menus);
+		ModelAndView ma = new ModelAndView();
+		if("1".equals(SYSConfig.getConfig().get("menuType"))){
+			/** mdm application */
+			ma.setViewName("apps/base/mdm/mainmenu");
+			ma.addAllObjects(menus);
+		}else{
+			/** desk application */
+			ma.setViewName("apps/base/desktop/desk");
+			List<Object> menuList = menus.get("menus");
+			if(menuList!=null &&menuList.size() >0){
+				for(int i = 0 ; i< menuList.size() ; i++){
+					MenuVO vo = (MenuVO)menuList.get(i);
+					JSONArray dataBalanceJson = JSONUtils.collectionToJson(menuList);
+					ma.addObject("MENU",dataBalanceJson.toString());
+				}
+			}else{
+				ma.addObject("MENU","{}");
+			}
+		}
 		VisitLog log = new VisitLog();
 		log.setRemoteIp(request.getRemoteAddr());
 		loginBO.louginLog(log);
 		return ma;
 	}
-
 	@RequestMapping(params = "method=logout", method = RequestMethod.GET)
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView ma = new ModelAndView("logout");

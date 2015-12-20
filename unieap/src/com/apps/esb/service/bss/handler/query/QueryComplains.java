@@ -45,6 +45,7 @@ public class QueryComplains extends SoapMessageHandler implements BizHandler {
 				complain.put("text", (String) data.get("text"));
 				complain.put("url", (String) data.get("url"));
 				complain.put("feedback", (String) data.get("feedback"));
+				complain.put("feedbackDate", data.get("modify_date"));
 				SimpleDateFormat sdf = new SimpleDateFormat(UnieapConstants.TIMEFORMAT);
 				String dt = sdf.format(data.get("submit_date"));
 				complain.put("submitDate",dt);

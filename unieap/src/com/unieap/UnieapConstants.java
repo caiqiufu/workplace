@@ -67,11 +67,11 @@ public class UnieapConstants {
 	public final static String NO = "N";
 
 	public static String C99999 = "999999";
-	/*
+	/**
 	 * success
 	 */
 	public static String C0 = "0";
-	/*
+	/**
 	 * failed
 	 */
 	public static String C1 = "1";

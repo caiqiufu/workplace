@@ -1,10 +1,10 @@
 SET SQL_SAFE_UPDATES = 0;
 delete from app_complain;
-delete from app_push_message;
+delete from app_message;
 delete from app_pushed_list;
 delete from app_upgrade;
 delete from chglog;
-delete from email_send;
+delete from email_notify;
 delete from esblog;
 delete from esblog_device;
 delete from exclog;

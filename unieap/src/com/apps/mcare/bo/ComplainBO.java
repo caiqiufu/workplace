@@ -13,11 +13,13 @@ import com.apps.mcare.pojo.AppComplain;
 import com.apps.mcare.vo.ComplainVO;
 import com.unieap.BaseBO;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
 import com.unieap.db.DBManager;
 import com.unieap.file.bo.FileBO;
 import com.unieap.mdm.bo.ChangeLogBO;
+import com.unieap.pojo.FileArchive;
 
 @Service("complainBO")
 public class ComplainBO extends BaseBO {
@@ -29,14 +31,17 @@ public class ComplainBO extends BaseBO {
 		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
 		appComplain.setId(getSequence(null, null));
 		if(files!=null && files.size() >0){
-			
-			String url = "apps/mcare/images/complain";
+			String shareFolderPath = SYSConfig.getConfig().get("shareFolderPath");
+			String mcareComplain = SYSConfig.getConfig().get("mcareComplain");
+			String url = "sharefolder/mcare/images/complain";
 			/*String uploadPath = fileBO.getRootPath()+ "apps" + File.separator + "mcare" + File.separator + "images" + File.separator
 					+ "complain";*/
-			String uploadPath = fileBO.getRootPath()+url;
-			String[] fieldIds = fileBO.upload("complain", appComplain.getId().toString(), files, uploadPath, url);
-			if (fieldIds != null) {
-				appComplain.setFileId(new Integer(fieldIds[0]));
+			//String uploadPath = fileBO.getRootPath()+url;
+			String uploadPath = shareFolderPath+mcareComplain;
+			List<FileArchive> fileArchiveList = fileBO.upload("complain", appComplain.getId().toString(), files, uploadPath, url);
+			if (fileArchiveList != null) {
+				appComplain.setFileId(fileArchiveList.get(0).getId());
+				appComplain.setUrl(fileArchiveList.get(0).getUrl());
 			}
 		}
 		DBManager.getHT(null).save(appComplain);
@@ -53,9 +58,10 @@ public class ComplainBO extends BaseBO {
 
 	public void getComplainList(PaginationSupport page, ComplainVO vo) throws Exception {
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT id,evalution,text,url,url as fileName,c.submit_date as submitDate,c.submit_by as submitBy,feedback,status ");
+		sql.append("SELECT id,evalution,text,url,url as fileName,c.submit_date as submitDate,c.submit_by as submitBy,");
+		sql.append(" feedback,status,modify_date as modifyDate,modify_by as modifyBy ");
 		sql.append("FROM app_complain c where ");
-		sql.append(" submit_date > '").append(vo.getSubmitDateStart()).append("' and submit_date < '")
+		sql.append(" submit_date >='").append(vo.getSubmitDateStart()).append("' and submit_date <= '")
 				.append(vo.getSubmitDateEnd()).append("' ");
 		if (!StringUtils.isEmpty(vo.getSubmitBy())) {
 			sql.append(" and c.submit_by ='").append(vo.getSubmitBy()).append("' ");
@@ -63,7 +69,8 @@ public class ComplainBO extends BaseBO {
 		sql.append(" order by c.id desc ");
 		StringBuffer totalSql = new StringBuffer();
 		totalSql.append("SELECT count(*) FROM app_complain where ");
-		totalSql.append(" submit_date > '").append(vo.getSubmitDateStart()).append("' and submit_date < '")
+		
+		totalSql.append(" submit_date >= '").append(vo.getSubmitDateStart()).append("' and submit_date <= '")
 				.append(vo.getSubmitDateEnd()).append("' ");
 		if (!StringUtils.isEmpty(vo.getSubmitBy())) {
 			totalSql.append(" and submit_by ='").append(vo.getSubmitBy()).append("' ");
@@ -72,7 +79,7 @@ public class ComplainBO extends BaseBO {
 	}
 
 	public List<Map<String, Object>> queryComplains(String serviceNumber) {
-		StringBuffer sql = new StringBuffer("SELECT ac.id,ac.text,ac.feedback,ac.submit_date,fa.url ");
+		StringBuffer sql = new StringBuffer("SELECT ac.id,ac.text,ac.feedback,ac.submit_date,fa.url,ac.modify_date ");
 		sql.append("FROM unieap.app_complain ac left join unieap.file_archive fa on  ac.file_id = fa.id ");
 		sql.append("where ac.submit_by = ? order by ac.id desc ");
 		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),

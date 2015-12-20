@@ -14,6 +14,7 @@ import com.apps.mcare.pojo.AppShop;
 import com.unieap.BaseBO;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
 import com.unieap.db.DBManager;
 import com.unieap.handler.ConfigHandler;
 
@@ -35,6 +36,8 @@ public class AppShopLoadHandler extends BaseBO implements ConfigHandler{
 		DetachedCriteria criteria = DetachedCriteria.forClass(AppShop.class);
 		Property activeFlag = Property.forName("activeFlag");
 		criteria.add(activeFlag.eq(UnieapConstants.YES));
+		Property tenantId = Property.forName("tenantId");
+		criteria.add(tenantId.eq(SYSConfig.getConfig().get("tenantId")));
 		criteria.addOrder(Order.asc("shopName"));
 		List<AppShop> shopLis = DBManager.getHT(null).findByCriteria(criteria);
 		CacheMgt.getCacheData().put("AppShopList", shopLis);

@@ -14,6 +14,7 @@ import com.apps.mcare.pojo.AppMessage;
 import com.unieap.BaseBO;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
+import com.unieap.base.SYSConfig;
 import com.unieap.db.DBManager;
 import com.unieap.db.EntityRowMapper;
 import com.unieap.handler.ConfigHandler;
@@ -54,7 +55,7 @@ public class AppMessageHandler extends BaseBO implements ConfigHandler{
 		sql.append(" and expired_date >'").append(UnieapConstants.getCurrentTime(null, UnieapConstants.TIMEFORMAT)).append("') or (effective_date is null and expired_date is null))");
 		sql.append(" order by id");
 		
-		List<Object> datas = DBManager.getJT(null).query(sql.toString(), new Object[] { UnieapConstants.YES },
+		List<Object> datas = DBManager.getJT(null).query(sql.toString(), new Object[] { UnieapConstants.YES},
 				new EntityRowMapper(AppMessage.class));
 		Map<String,List<AppMessage>> messages = new HashMap<String, List<AppMessage>>();
 		if(datas!=null&&datas.size()>0){

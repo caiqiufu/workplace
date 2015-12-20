@@ -50,7 +50,7 @@ public class EsbBO extends BaseBO {
 		sql.append("  order by log_id DESC");
 		StringBuffer totalSql = new StringBuffer();
 		totalSql.append("SELECT count(*) from unieap.esblog where ");
-		totalSql.append(" request_Time > '").append(vo.getRequestTimeStart()).append("' and request_Time < '")
+		totalSql.append(" request_Time >= '").append(vo.getRequestTimeStart()).append("' and request_Time <= '")
 				.append(vo.getRequestTimeEnd()).append("' ");
 		if (!StringUtils.isEmpty(vo.getServiceNumber())) {
 			totalSql.append(" and service_Number ='").append(vo.getServiceNumber()).append("' ");

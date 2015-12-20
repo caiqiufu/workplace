@@ -157,12 +157,15 @@ public class ResourceConfigureBO extends BaseBO {
 		appResconfig.setActiveFlag(activeFlag);
 		appResconfig.setHyperlink(hyperlink);
 		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
-		String url = "apps/mcare/images/app";
+		String shareFolderPath = SYSConfig.getConfig().get("shareFolderPath");
+		String mcareApp = SYSConfig.getConfig().get("mcareApp");
+		String url = "sharefolder/mcare/images/res";
 		/*
 		 * String uploadPath = fileBO.getRootPath() + "apps" + File.separator +
 		 * "mcare" + File.separator + "images" + File.separator + "app";
 		 */
-		String uploadPath = fileBO.getRootPath() + url;
+		//String uploadPath = fileBO.getRootPath() + url;
+		String uploadPath = shareFolderPath+mcareApp;
 		fileBO.upload("app configure", id, items, uploadPath, url);
 		DBManager.getHT(null).update(appResconfig);
 		return result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);

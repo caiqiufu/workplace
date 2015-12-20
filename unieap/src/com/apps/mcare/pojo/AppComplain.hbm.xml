@@ -23,6 +23,9 @@
         <property name="submitBy" type="string">
             <column name="submit_by" length="45" not-null="true" />
         </property>
+        <property name="url" type="string">
+            <column name="url" length="512"  />
+        </property>
         <property name="fileId" type="java.lang.Integer">
             <column name="file_id" />
         </property>

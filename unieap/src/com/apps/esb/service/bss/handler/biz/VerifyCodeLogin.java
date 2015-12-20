@@ -121,10 +121,19 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 			throws Exception {
 		CustomerProfileVO vo = new CustomerProfileVO();
 		vo.setActiveDate(BssServiceUtils.dateFormat(querySubscriberInfoVO.getEffectiveDate()));
-		List<AddressInfoVO> addressList = querySubscriberInfoVO.getAddressInfoList();
+		List<AddressInfoVO> addressList = customerInfoVO.getAddressList();
 		if (addressList != null && addressList.size() > 0) {
 			AddressInfoVO addressInfoVO = addressList.get(0);
 			StringBuffer address = new StringBuffer();
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress1())) {
+				address.append(addressInfoVO.getAddress1()).append(" ");
+			}
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress2())) {
+				address.append(addressInfoVO.getAddress2()).append(" ");
+			}
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress3())) {
+				address.append(addressInfoVO.getAddress3()).append(" ");
+			}
 			if (StringUtils.isNotEmpty(addressInfoVO.getAddress4())) {
 				address.append(addressInfoVO.getAddress4()).append(" ");
 			}
@@ -133,6 +142,18 @@ public class VerifyCodeLogin extends SoapMessageHandler implements BizHandler {
 			}
 			if (StringUtils.isNotEmpty(addressInfoVO.getAddress6())) {
 				address.append(addressInfoVO.getAddress6()).append(" ");
+			}
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress7())) {
+				address.append(addressInfoVO.getAddress7()).append(" ");
+			}
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress8())) {
+				address.append(addressInfoVO.getAddress8()).append(" ");
+			}
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress9())) {
+				address.append(addressInfoVO.getAddress9()).append(" ");
+			}
+			if (StringUtils.isNotEmpty(addressInfoVO.getAddress10())) {
+				address.append(addressInfoVO.getAddress10()).append(" ");
 			}
 			vo.setAddress(address.toString());
 		}

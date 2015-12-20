@@ -17,13 +17,14 @@ import org.springframework.stereotype.Service;
 import com.unieap.BaseBO;
 import com.unieap.UnieapConstants;
 import com.unieap.base.SYSConfig;
+import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.ButtonVO;
 import com.unieap.base.vo.MenuVO;
 import com.unieap.db.DBManager;
 import com.unieap.db.EntityRowMapper;
+import com.unieap.file.bo.FileBO;
 import com.unieap.mdm.vo.DicDataVO;
 import com.unieap.pojo.VisitLog;
-import com.unieap.tools.FileUtils;
 import com.unieap.tools.JSONUtils;
 
 /**
@@ -32,18 +33,17 @@ import com.unieap.tools.JSONUtils;
 @Service("loginBO")
 public class LoginBO extends BaseBO {
 
-	private final static String CODELISTJSPATH = "unieap/js/common/";
-
 	public Map<String, List<Object>> getUserMenu(Integer userId) throws Exception {
 		List<Object> menus;
 		StringBuffer sql = new StringBuffer();
 		if(StringUtils.equals(UnieapConstants.UNIEAP, UnieapConstants.getUser().getUserCode())){
-			sql.append("SELECT dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
+			sql.append("SELECT dd.dic_id as id, dd.dic_name as text,1 as leaf, dd.dic_name as qtip,dd.icon as iconCls,dd.icon as imgSrc, ");
+			sql.append("dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
 			sql.append(" FROM unieap.dic_data_tree dd where  dd.dic_type = 'M' and  dd.active_flag =? order by dd.seq ASC");
 			menus = DBManager.getJT(null).query(sql.toString(), new Object[] { UnieapConstants.YES },
 					new EntityRowMapper(MenuVO.class));
 		}else{
-			sql.append("SELECT dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
+			sql.append("SELECT dd.dic_id as id, dd.dic_name as text,dd.dic_code as menuCode,dd.dic_name as menuName ,dd.href as href ");
 			sql.append("FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
 			sql.append("where u.user_id = ur.user_id and ur.role_id = rr.role_id and dd.dic_type = 'M' ");
 			sql.append("and rr.resource_id = dd.dic_code and u.user_id = ? and dd.active_flag =? order by dd.seq ASC");
@@ -120,10 +120,12 @@ public class LoginBO extends BaseBO {
 				jagroup.put(dic);
 			}
 			String code = "var UnieapDicdata = eval(" + jsonObj.toString() + ")";
-			createJs(servlet, UnieapConstants.getUser().getUserCode(), "dicdata_constants", code);
+			String fileName = UnieapConstants.getUser().getUserCode() + "_dicdata_constants.js";
+			createJs(servlet,fileName, code);
 		} else {
 			String code = "var UnieapDicdata = eval({})";
-			createJs(servlet, UnieapConstants.getUser().getUserCode(), "dicdata_constants", code);
+			String fileName = UnieapConstants.getUser().getUserCode() + "_dicdata_constants.js";
+			createJs(servlet,fileName, code);
 		}
 	}
 
@@ -162,10 +164,12 @@ public class LoginBO extends BaseBO {
 				jsonObj.put(value.getButtonCode(), json);
 			}
 			String code = "var UnieapButton=eval(" + jsonObj.toString() + ")";
-			createJs(servlet, UnieapConstants.getUser().getUserCode(), "button_constants", code);
+			String fileName = UnieapConstants.getUser().getUserCode() + "_button_constants.js";
+			createJs(servlet,fileName, code);
 		} else {
 			String code = "var UnieapButton = eval({})";
-			createJs(servlet, UnieapConstants.getUser().getUserCode(), "button_constants", code);
+			String fileName = UnieapConstants.getUser().getUserCode() + "_button_constants.js";
+			createJs(servlet,fileName, code);
 		}
 	}
 	public List<Object> getButtonsByUserId(Integer userId) throws Exception {
@@ -188,17 +192,13 @@ public class LoginBO extends BaseBO {
 		return datas;
 	}
 	
-	private void createJs(ServletContext servlet, String userId, String fileName, String jsStr) throws Exception {
-		String filePath = servlet.getResource("/") + "";
-		if (StringUtils.isNotEmpty(filePath) && filePath.indexOf("file:") != -1) {
-			filePath = filePath.substring("file:/".length());
-		} else {
-			filePath = servlet.getRealPath("/");
-		}
-		if (StringUtils.isEmpty(filePath)) {
-			throw new Exception("cannot get file[" + fileName + "]output path...");
-		}
-		String path = filePath + CODELISTJSPATH + userId + "_" + fileName + ".js";
-		FileUtils.write(path, true, true, jsStr);
+	private void createJs(ServletContext servlet, String fileName, String jsStr) throws Exception {
+		String shareFolderPath = SYSConfig.getConfig().get("shareFolderPath");
+		String mdmCommon = SYSConfig.getConfig().get("mdmCommon");
+		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
+		//String CODELISTJSPATH = "unieap/js/common";
+		String uploadPath = shareFolderPath+mdmCommon;
+		fileBO.write(fileName, uploadPath, true, true, jsStr);
+		//FileUtils.write(path, true, true, jsStr);
 	}
 }

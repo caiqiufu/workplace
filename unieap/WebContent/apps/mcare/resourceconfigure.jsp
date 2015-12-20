@@ -148,7 +148,7 @@
                 {id:'formAdd', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
                     handler: function(){
                     	operType = 'AddNotification';
-                    	dataForm.getForm().reset();
+                    	//dataForm.getForm().reset();
                     	dataForm.getForm().findField('subject').setReadOnly(false);
                     	dataForm.getForm().findField('subject').inputEl.removeCls('readonly_field');
                     	dataForm.getForm().findField('text').setReadOnly(false);
@@ -261,7 +261,7 @@
     	gridstoreForNote.load();
     	gridForNote.getSelectionModel().on('selectionchange', function(sm, selectedRecord) {
             if (selectedRecord.length) {
-            	dataFormNote.getForm().reset();
+            	//dataFormNote.getForm().reset();
             	dataFormNote.getForm().setValues(selectedRecord[0].data);
             	dataFormNote.getForm().findField('subject').setReadOnly(true);
             	dataFormNote.getForm().findField('subject').inputEl.addCls('readonly_field');
@@ -323,7 +323,7 @@
                 {id:'formAddNote', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
                     handler: function(){
                     	operType = 'AddNote';
-                    	dataFormNote.getForm().reset();
+                    	//dataFormNote.getForm().reset();
                     	dataFormNote.getForm().findField('subject').setReadOnly(false);
                     	dataFormNote.getForm().findField('subject').inputEl.removeCls('readonly_field');
                     	dataFormNote.getForm().findField('text').setReadOnly(false);
@@ -438,7 +438,7 @@
     	gridstoreForPopup.load();
     	gridForPopup.getSelectionModel().on('selectionchange', function(sm, selectedRecord) {
             if (selectedRecord.length) {
-            	dataFormPopup.getForm().reset();
+            	//dataFormPopup.getForm().reset();
             	dataFormPopup.getForm().setValues(selectedRecord[0].data);
             	dataFormPopup.getForm().findField('subject').setReadOnly(true);
             	dataFormPopup.getForm().findField('subject').inputEl.addCls('readonly_field');
@@ -503,7 +503,7 @@
                 {id:'formAddPopup', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
                     handler: function(){
                     	operType = 'AddPopup';
-                    	dataFormPopup.getForm().reset();
+                    	//dataFormPopup.getForm().reset();
                     	dataFormPopup.getForm().findField('subject').setReadOnly(false);
                     	dataFormPopup.getForm().findField('subject').inputEl.removeCls('readonly_field');
                     	dataFormPopup.getForm().findField('text').setReadOnly(false);
@@ -768,7 +768,7 @@
                     method: 'POST',
                     params:{'operType':operType},
                     waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                    url: 'mcareController.do?method=resourceConfigurePictureDeal&parameters='+parameters,
+                    url: 'mcareController.do?method=resourceConfigurePictureDeal&parameters='+encodeURL(parameters),
                     success: function(form, action) {
                    	var result = Ext.JSON.decode(action.response.responseText);
 	                    if(result.isSuccess == 'failed'){
@@ -988,7 +988,7 @@
                     method: 'POST',
                     params:{'operType':operType},
                     waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                    url: 'mcareController.do?method=resourceConfigurePictureDeal&parameters='+parameters,
+                    url: 'mcareController.do?method=resourceConfigurePictureDeal&parameters='+encodeURL(parameters),
                     success: function(form, action) {
                    	var result = Ext.JSON.decode(action.response.responseText);
 	                    if(result.isSuccess == 'failed'){

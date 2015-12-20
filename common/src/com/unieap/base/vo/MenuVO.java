@@ -24,6 +24,11 @@ public class MenuVO extends BaseVO{
     public String isDefault;
     public String menuType;
     public String separateLine;
+    public Long id;
+    public String text;
+	public String iconCls;
+	public String qtip;
+	public boolean leaf; 
     public List<MenuVO> childrenContainer = new ArrayList<MenuVO>();
     public List<MenuVO> modules = new ArrayList<MenuVO>();
     public List<MenuVO> getChildrenContainer() {
@@ -162,4 +167,35 @@ public class MenuVO extends BaseVO{
 	public String getSeparateLine() {
 		return separateLine;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getIconCls() {
+		return iconCls;
+	}
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+	public String getQtip() {
+		return qtip;
+	}
+	public void setQtip(String qtip) {
+		this.qtip = qtip;
+	}
+	public boolean isLeaf() {
+		return leaf;
+	}
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	
 }

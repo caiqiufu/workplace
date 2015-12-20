@@ -34,9 +34,9 @@
 <link rel="shortcut icon" type="image/x-icon" href="<%=path%>/unieap/js/common/images/title.png" media="screen" /> 
 <!-- 快码缓存文件,由系统生成-->
 <script type="text/javascript"
-	src="<%=path%>/unieap/js/common/<%=user.getUserCode()%>_button_constants.js"></script>
+	src="<%=path%>/sharefolder/common/<%=user.getUserCode()%>_button_constants.js"></script>
 <script type="text/javascript"
-	src="<%=path%>/unieap/js/common/<%=user.getUserCode()%>_dicdata_constants.js"></script>
+	src="<%=path%>/sharefolder/common/<%=user.getUserCode()%>_dicdata_constants.js"></script>
 <!-- 根目录路径 -->
 <script type="text/javascript">
 	var basePathUrl = "<%=basePath%>";

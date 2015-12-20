@@ -75,11 +75,11 @@
        	   	   	columns:
        	   	   	[
        	   	   		{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:80,items:operationItems},
-       	   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.categoryType")%>", dataIndex: 'categoryTypeDesc',sortable: true,width:120},
+       	   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.categoryType")%>", dataIndex: 'categoryTypeDesc',sortable: false,width:120},
        	   	   		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.categoreName")%>", dataIndex: 'categoreName', sortable: true,width:120},
-       	   	  		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.categoryDesc")%>", dataIndex: 'categoryDesc', sortable: true,width:120},
+       	   	  		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.categoryDesc")%>", dataIndex: 'categoryDesc', sortable: false,width:120},
        	   	  		{ text: "<%=UnieapConstants.getMessage("mcare.offering.display.priceDesc")%>", dataIndex: 'priceDesc', sortable: false,width:120},
-       	   	  		{text: "<%=UnieapConstants.getMessage("comm.hyperlink")%>", dataIndex: 'detailHyperlink', sortable: true,flex: true,width:150,
+       	   	  		{text: "<%=UnieapConstants.getMessage("comm.hyperlink")%>", dataIndex: 'detailHyperlink', sortable: false,flex: true,width:200,
                     	renderer: function (value, meta, record){
     						var max = 150;
     						meta.tdAttr = 'data-qtip="' + value + '"';
@@ -160,7 +160,7 @@
 	 	   			    	                	 previewPictureWinCategory.destroy();
 	 	   			    	                 }
 	 	   			    	                 previewPictureWinCategory = Ext.widget('window', 
-	 	   			    	     	              { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', layout: 'fit', modal: true,
+	 	   			    	     	              { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', layout: 'fit', modal: true,width: 400, height: 400,
 	 	   			    	        			 		items: {
 	 	   			    	        			 			xtype:'panel',border:false,
 	 	   			    	        			 			html:'<img id="previewImgCategory" src='+url+' style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale);"></img>'
@@ -197,10 +197,10 @@
  	                            var fileOriginalName = form.findField('uploadFileCategory').getValue();
  	                            if(fileOriginalName != '' && fileOriginalName != null){
 	 	                          	if(checkFileType(fileOriginalName)){
-	 	                          		var pWidth =250 , pHeight = 240;
+	 	                          		var pWidth =235 , pHeight = 215;
  	                             		if(previewImg.width< pWidth-20 ||previewImg.width >pWidth+20 || previewImg.height< pHeight-20 ||previewImg.height >pHeight+20){
  	                                 		Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',
- 	                                 			msg:'<%=UnieapConstants.getMessage("comm.fileupload.filesize","400,400")%>',
+ 	                                 			msg:'<%=UnieapConstants.getMessage("comm.fileupload.filesize","235,215")%>',
  	                                  			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
  	                                 		return;
  	                                 	}else{
@@ -267,7 +267,7 @@
                      method: 'POST',
                      params:{'operType1':operType},
                      waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                     url: 'mcareController.do?method=offerCategoryDeal&operType='+operType+'&parameters='+parameters,
+                     url: 'mcareController.do?method=offerCategoryDeal&operType='+operType+'&parameters='+encodeURL(parameters),
                      success: function(form, action) {
                     	var result = Ext.JSON.decode(action.response.responseText);
 	                    if(result.isSuccess == 'failed'){

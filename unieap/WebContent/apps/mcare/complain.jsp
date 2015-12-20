@@ -4,6 +4,9 @@
 <head>
 <title>complain management</title>
     <script type="text/javascript">
+    function showPicture(url){
+   		window.open(url);
+   	}
     Ext.onReady(function(){
     	Ext.tip.QuickTipManager.init();
     	 var queryPara;
@@ -25,11 +28,11 @@
  								    items: 
  								    [
  								        { xtype:'textfield',name: 'submitBy',fieldLabel: '<%=UnieapConstants.getMessage("mcare.complain.display.submitBy")%>'},
- 								        {name: 'submitDateStart', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("mcare.complain.display.submitDateStart")%>',format: 'Y-m-d h:i:s', xtype: 'datefield',allowBlank:false,
- 						               		value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d h:i:s")	
+ 								        {name: 'submitDateStart', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("mcare.complain.display.submitDateStart")%>',format: 'Y-m-d', xtype: 'datefield',allowBlank:false,
+ 						               		value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")	
  						               	},
- 						                {name: 'submitDateEnd', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("mcare.complain.display.submitDateEnd")%>', format: 'Y-m-d h:i:s',xtype: 'datefield',allowBlank:false,
- 						               		value:Ext.util.Format.date(new Date(),"Y-m-d h:i:s")	
+ 						                {name: 'submitDateEnd', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("mcare.complain.display.submitDateEnd")%>', format: 'Y-m-d',xtype: 'datefield',allowBlank:false,
+ 						               		value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,+1),"Y-m-d")	
  						                },
  						                { xtype:'button',iconCls:'search-trigger',text:'<%=UnieapConstants.getMessage("comm.search")%>',iconAlign: 'right',
  					    	                handler: function (){
@@ -65,7 +68,7 @@
             extend: 'Ext.data.Model',
             fields:
             [
-            	'id','evalution','text','url','fileName','submitDate','submitBy','feedback','status','statusDesc'
+            	'id','evalution','text','url','fileName','submitDate','submitBy','feedback','status','statusDesc','modifyDate','modifyBy'
             ],
             idProperty: 'id'
         });
@@ -113,6 +116,13 @@
 							return value.length < max ? value : value.substring(0, max - 3) + '...';
 						}	
        	   			},
+       	   			{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.feedback")%>", dataIndex: 'feedback',flex: true, sortable: false,width:500,
+		       	   	  	renderer: function (value, meta, record){
+							var max = 150;
+							meta.tdAttr = 'data-qtip="' + value + '"';
+							return value.length < max ? value : value.substring(0, max - 3) + '...';
+						}	
+       	   			},
 			       	{ text: "<%=UnieapConstants.getMessage("mcare.complain.display.url")%>", dataIndex: 'url', sortable: false,width:150,
 	       	   			renderer: function (value, meta, record){
 	       	   				if(value!=null&&value!=''){
@@ -132,11 +142,7 @@
            	   	bbar:new Ext.PagingToolbar(
            	   	{ store : gridstore,displayInfo: true})
             });
-    	datagrid.render();
-	   	function showPicture(url){
-	   		window.open(url);
-	   	}
-	   	
+       datagrid.render();
 	   var dataWin = null;
        var dataForm = null;
        var operType = '';
@@ -225,8 +231,6 @@
 	     	dataWin.hide();
 	     	gridstore.reload();
 	    }
-	   	
-	   	
 	});
     </script>
 </head>

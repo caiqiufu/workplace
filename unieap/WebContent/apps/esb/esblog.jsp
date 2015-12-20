@@ -55,11 +55,11 @@
 									},
  					                items: 
  					                [
- 						               	{name: 'requestTimeStart', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("esb.log.display.requestTimeStart")%>',format: 'Y-m-d h:i:s', xtype: 'datefield',allowBlank:false,
- 						               		value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d h:i:s")	
+ 						               	{name: 'requestTimeStart', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("esb.log.display.requestTimeStart")%>',format: 'Y-m-d', xtype: 'datefield',allowBlank:false,
+ 						               		value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,-1),"Y-m-d")	
  						               	},
- 						                {name: 'requestTimeEnd', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("esb.log.display.requestTimeEnd")%>', format: 'Y-m-d h:i:s',xtype: 'datefield',allowBlank:false,
- 						               		value:Ext.util.Format.date(new Date(),"Y-m-d h:i:s")	
+ 						                {name: 'requestTimeEnd', fieldLabel: '<font color=red>*</font><%=UnieapConstants.getMessage("esb.log.display.requestTimeEnd")%>', format: 'Y-m-d',xtype: 'datefield',allowBlank:false,
+ 						               		value:Ext.util.Format.date(Ext.Date.add(new Date(),Ext.Date.DAY,+1),"Y-m-d")	
  						                },
  						                { xtype:'button',iconCls:'search-trigger',text:'<%=UnieapConstants.getMessage("comm.search")%>',iconAlign: 'right',
  					    	                handler: function (){

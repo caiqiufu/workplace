@@ -47,14 +47,17 @@ public class QueryMyBills extends SoapMessageHandler implements BizHandler {
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
-		/*String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
-		if(UnieapConstants.YES.equals(isdebug)){
-			requestInfo.getRequestBody().setServiceNumber("93268659");
-		}*/
+		/*
+		 * String isdebug
+		 * =SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		 * if(UnieapConstants.YES.equals(isdebug)){
+		 * requestInfo.getRequestBody().setServiceNumber("93268659"); }
+		 */
 		JSONObject customerObj = new JSONObject("{queryType:S}");
-		JSONObject newExtParameters = BssServiceUtils.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
+		JSONObject newExtParameters = BssServiceUtils
+				.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
 		requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());
-		
+
 		QueryCDR queryCDR = (QueryCDR) ServiceUtils.getBean("queryCDR");
 		ProcessResult processResult = queryCDR.process(requestInfo, parameters, extParameters);
 		if (!UnieapConstants.C0.equals(processResult.getResultCode())) {
@@ -63,7 +66,7 @@ public class QueryMyBills extends SoapMessageHandler implements BizHandler {
 		QueryCdrVO queryCdrVO = (QueryCdrVO) processResult.getVo();
 		MyBillVO getMyBillVO = getMyBillVO(queryCdrVO);
 		List<MontlyUsageVO> mothBills = getMyBillVO.getMontlyUsages();
-		//Collections.reverse(mothBills);
+		// Collections.reverse(mothBills);
 		Collections.sort(mothBills);
 		JSONArray logsJson = JSONUtils.getJSONArray(mothBills);
 		JSONObject jsonResult = new JSONObject();
@@ -151,34 +154,39 @@ public class QueryMyBills extends SoapMessageHandler implements BizHandler {
 		if (cdrSummaryList != null && cdrSummaryList.size() > 0) {
 			for (int i = 0; i < cdrSummaryList.size(); i++) {
 				CdrSummaryVO cdrSummaryVO = cdrSummaryList.get(i);
-				if (cdrSummaryVO.getTotalChargeAmt() != null) {
-					CdrCycleSummaryVO cdrCycleSummaryVO = cdrCycleSummarys.get(cdrSummaryVO.getBillCycleID());
-					if (cdrCycleSummaryVO == null) {
-						cdrCycleSummaryVO = new CdrCycleSummaryVO();
-						cdrCycleSummaryVO.setTotalChargeAmt("0");
-						Map<String, CdrCategoryVO> categoryCdrSummarys = new HashMap<String, CdrCategoryVO>();
-						cdrCycleSummaryVO.setCategoryCdrSummarys(categoryCdrSummarys);
-						cdrCycleSummarys.put(cdrSummaryVO.getBillCycleID(), cdrCycleSummaryVO);
-					}
-					cdrCycleSummaryVO.setBillCycleID(cdrSummaryVO.getBillCycleID());
+				CdrCycleSummaryVO cdrCycleSummaryVO = cdrCycleSummarys.get(cdrSummaryVO.getBillCycleID());
+				if (cdrCycleSummaryVO == null) {
+					cdrCycleSummaryVO = new CdrCycleSummaryVO();
+					cdrCycleSummaryVO.setTotalChargeAmt("0");
+					Map<String, CdrCategoryVO> categoryCdrSummarys = new HashMap<String, CdrCategoryVO>();
+					cdrCycleSummaryVO.setCategoryCdrSummarys(categoryCdrSummarys);
+					cdrCycleSummarys.put(cdrSummaryVO.getBillCycleID(), cdrCycleSummaryVO);
+				}
+				cdrCycleSummaryVO.setBillCycleID(cdrSummaryVO.getBillCycleID());
+				if (!StringUtils.isEmpty(cdrSummaryVO.getTotalChargeAmt())
+						&& !StringUtils.isEmpty(cdrCycleSummaryVO.getTotalChargeAmt())) {
+
 					long cycleTotal = Long.parseLong(cdrSummaryVO.getTotalChargeAmt())
 							+ Long.parseLong(cdrCycleSummaryVO.getTotalChargeAmt());
 					cdrCycleSummaryVO.setTotalChargeAmt(Long.toString(cycleTotal));
+				}
 
-					CdrCategoryVO cdrCategoryVO = cdrCycleSummaryVO.getCategoryCdrSummarys()
-							.get(cdrSummaryVO.getServiceCategory());
-					if (cdrCategoryVO == null) {
-						cdrCategoryVO = new CdrCategoryVO();
-						cdrCategoryVO.setUsageAmount("0");
-						List<CdrSummaryVO> categoryCdrSummaryList = new ArrayList<CdrSummaryVO>();
-						cdrCategoryVO.setCdrSummaryList(categoryCdrSummaryList);
-						cdrCycleSummaryVO.getCategoryCdrSummarys().put(cdrSummaryVO.getServiceCategory(),
-								cdrCategoryVO);
-					}
-					cdrCategoryVO.setCategoryType(cdrSummaryVO.getServiceCategory());
-					cdrCategoryVO.setCategoryTypeDesc(
-							UnieapConstants.getDicName("serviceCategory", cdrSummaryVO.getServiceCategory()));
-					cdrCategoryVO.getCdrSummaryList().add(cdrSummaryVO);
+				CdrCategoryVO cdrCategoryVO = cdrCycleSummaryVO.getCategoryCdrSummarys()
+						.get(cdrSummaryVO.getServiceCategory());
+				if (cdrCategoryVO == null) {
+					cdrCategoryVO = new CdrCategoryVO();
+					cdrCategoryVO.setUsageAmount("0");
+					List<CdrSummaryVO> categoryCdrSummaryList = new ArrayList<CdrSummaryVO>();
+					cdrCategoryVO.setCdrSummaryList(categoryCdrSummaryList);
+					cdrCycleSummaryVO.getCategoryCdrSummarys().put(cdrSummaryVO.getServiceCategory(), cdrCategoryVO);
+				}
+				cdrCategoryVO.setCategoryType(cdrSummaryVO.getServiceCategory());
+				cdrCategoryVO.setCategoryTypeDesc(
+						UnieapConstants.getDicName("serviceCategory", cdrSummaryVO.getServiceCategory()));
+				cdrCategoryVO.getCdrSummaryList().add(cdrSummaryVO);
+				if (!StringUtils.isEmpty(cdrSummaryVO.getTotalChargeAmt())
+						&& !StringUtils.isEmpty(cdrCategoryVO.getUsageAmount())) {
+
 					long categoryTotal = Long.parseLong(cdrSummaryVO.getTotalChargeAmt())
 							+ Long.parseLong(cdrCategoryVO.getUsageAmount());
 					cdrCategoryVO.setUsageAmount(Long.toString(categoryTotal));

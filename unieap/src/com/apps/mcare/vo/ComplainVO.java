@@ -1,5 +1,7 @@
 package com.apps.mcare.vo;
 
+import java.util.Date;
+
 import org.springframework.util.StringUtils;
 
 import com.unieap.CacheMgt;
@@ -16,6 +18,8 @@ public class ComplainVO {
 	private String submitDateEnd;
 	private String submitBy;
 	private String feedback;
+	private Date modifyDate;
+	private String modifyBy;
 	private String status;
 	private String statusDesc;
 	public String getId() {
@@ -96,5 +100,18 @@ public class ComplainVO {
 	public void setStatusDesc(String statusDesc) {
 		this.statusDesc = statusDesc;
 	}
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+	public String getModifyBy() {
+		return modifyBy;
+	}
+	public void setModifyBy(String modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+	
 	
 }

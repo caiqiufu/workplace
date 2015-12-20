@@ -23,6 +23,7 @@ public class AppUpgrade implements java.io.Serializable {
 	private String tenantId;
 	private String fileId;
 	private Date effectiveDate;
+	private String url;
 
 	public AppUpgrade() {
 	}
@@ -32,7 +33,7 @@ public class AppUpgrade implements java.io.Serializable {
 		this.activeFlag = activeFlag;
 	}
 
-	public AppUpgrade(Integer id, String activeFlag, String version, String changeDesc, Date createDate, String remark,Date effectiveDate) {
+	public AppUpgrade(Integer id, String activeFlag, String version, String changeDesc, Date createDate, String remark,Date effectiveDate,String url) {
 		this.id = id;
 		this.activeFlag = activeFlag;
 		this.version = version;
@@ -40,6 +41,7 @@ public class AppUpgrade implements java.io.Serializable {
 		this.createDate = createDate;
 		this.remark = remark;
 		this.effectiveDate = effectiveDate;
+		this.url = url;
 	}
 
 	public Integer getId() {
@@ -126,6 +128,14 @@ public class AppUpgrade implements java.io.Serializable {
 
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = effectiveDate;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	

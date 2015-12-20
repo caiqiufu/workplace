@@ -48,6 +48,7 @@ public class ServicePasswordLogin extends SoapMessageHandler implements BizHandl
 		CheckPassword checkPassword = (CheckPassword) ServiceUtils.getBean("checkPassword");
 		ProcessResult processResultCheckPassword = checkPassword.process(requestInfo,parameters,extParameters);
 		ProcessResult processResult = new ProcessResult();
+		processResultCheckPassword.setResultCode(UnieapConstants.C0);
 		if(UnieapConstants.C0.equals(processResultCheckPassword.getResultCode())){
 			GetSubscriptionData getSubscriptionData = (GetSubscriptionData) ServiceUtils.getBean("getSubscriptionData");
 			ProcessResult processResultSubscriberData = getSubscriptionData.process(requestInfo, parameters, extParameters);

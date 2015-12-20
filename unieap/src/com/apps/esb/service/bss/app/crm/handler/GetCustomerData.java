@@ -125,7 +125,7 @@ public class GetCustomerData extends SoapMessageHandler implements BizHandler {
 						addressInfoList.add(addressInfoVO);
 						for (int k = 0; k < saddressListNodes.getLength(); k++) {
 							Node saddressListNode = saddressListNodes.item(k);
-							if ("bas:AddressClass".equals(saddressListNode.getNodeName())) {
+							if ("bas:AddressInfo".equals(saddressListNode.getNodeName())) {
 								addressInfoVO.setAddressClass(saddressListNode.getTextContent());
 							} else if ("bas:ContactSeq".equals(saddressListNode.getNodeName())) {
 								addressInfoVO.setContactSeq(saddressListNode.getTextContent());

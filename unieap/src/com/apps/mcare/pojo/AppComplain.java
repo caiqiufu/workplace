@@ -14,6 +14,7 @@ public class AppComplain implements java.io.Serializable {
 	private byte[] screenshot;
 	private Date submitDate;
 	private String submitBy;
+	private String url;
 	private Integer fileId;
 	private String status;
 	private Date modifyDate;
@@ -33,7 +34,7 @@ public class AppComplain implements java.io.Serializable {
 	}
 
 	public AppComplain(Integer id, String evalution, String text, byte[] screenshot, Date submitDate, String submitBy,
-			String status, Date modifyDate, String modifyBy, String remark,String feedback,Integer fileId) {
+			String status, Date modifyDate, String modifyBy, String remark,String feedback,Integer fileId,String url) {
 		this.id = id;
 		this.evalution = evalution;
 		this.text = text;
@@ -46,6 +47,7 @@ public class AppComplain implements java.io.Serializable {
 		this.remark = remark;
 		this.feedback = feedback;
 		this.fileId = fileId;
+		this.url = url;
 	}
 
 	public Integer getId() {
@@ -142,6 +144,14 @@ public class AppComplain implements java.io.Serializable {
 
 	public void setFileId(Integer fileId) {
 		this.fileId = fileId;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 

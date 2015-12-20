@@ -14,6 +14,7 @@ import com.unieap.handler.ConfigHandler;
 @Service("loadSystemData")
 public class LoadSystemData {
 	public final Log log = LogFactory.getLog(LoadSystemData.class);
+
 	public void loadSystemConfigure() {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT name,value FROM unieap.sys_config where active_flag ='Y'");
@@ -43,8 +44,9 @@ public class LoadSystemData {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
 				"SELECT handler_name as handlerName,class_name as className ,parameters FROM unieap.handler_config ");
-		sql.append(" where active_flag ='Y' and handler_type ='B'");
-		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString());
+		sql.append(" where active_flag = 'Y' and tenant_id =?  and handler_type ='B'");
+		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),
+				new Object[] {SYSConfig.getConfig().get("tenantId") });
 		if (datas != null && datas.size() > 0) {
 			Map<String, Map<String, String>> bizHandler = new HashMap<String, Map<String, String>>();
 			Map<String, Object> data;
@@ -74,8 +76,8 @@ public class LoadSystemData {
 	public void loadEsbInfoData() {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
-				"SELECT id, biz_code as bizCode, system_name as systemName,inf_name as infName,url,active_flag as activeFlag FROM unieap.esb_info where active_flag='Y'");
-		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString());
+				"SELECT id, biz_code as bizCode, system_name as systemName,inf_name as infName,url,active_flag as activeFlag FROM unieap.esb_info where active_flag='Y' and tenant_id =? ");
+		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),new Object[] {SYSConfig.getConfig().get("tenantId") });
 		if (datas != null && datas.size() > 0) {
 			Map<String, Map<String, String>> infInfos = new HashMap<String, Map<String, String>>();
 			Map<String, Object> data;
@@ -118,8 +120,8 @@ public class LoadSystemData {
 	public void initSystemHandlerDeal() throws Exception {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
-				"SELECT handler_name as handlerName, class_name as className FROM unieap.handler_config where active_flag ='Y' and handler_type = 'S'");
-		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString());
+				"SELECT handler_name as handlerName, class_name as className FROM unieap.handler_config where active_flag ='Y' and handler_type = 'S' and tenant_id =? ");
+		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),new Object[] {SYSConfig.getConfig().get("tenantId") });
 		if (datas != null & !datas.isEmpty()) {
 			for (int i = 0; i < datas.size(); i++) {
 				String handlerName = ((Map<String, Object>) datas.get(i)).get("handlerName").toString();
@@ -133,11 +135,12 @@ public class LoadSystemData {
 		}
 		log.info("initSystemHandlerDeal end...");
 	}
+
 	public void reloadSystemHandlerDeal() throws Exception {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
-				"SELECT handler_name as handlerName, class_name as className FROM unieap.handler_config where active_flag ='Y' and handler_type = 'S'");
-		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString());
+				"SELECT handler_name as handlerName, class_name as className FROM unieap.handler_config where active_flag ='Y' and handler_type = 'S' and tenant_id =?");
+		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),new Object[] {SYSConfig.getConfig().get("tenantId") });
 		if (datas != null & !datas.isEmpty()) {
 			for (int i = 0; i < datas.size(); i++) {
 				String handlerName = ((Map<String, Object>) datas.get(i)).get("handlerName").toString();

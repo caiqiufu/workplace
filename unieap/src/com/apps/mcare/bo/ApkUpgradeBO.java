@@ -22,6 +22,7 @@ import com.unieap.base.ServiceUtils;
 import com.unieap.base.vo.PaginationSupport;
 import com.unieap.db.DBManager;
 import com.unieap.file.bo.FileBO;
+import com.unieap.pojo.FileArchive;
 
 @Service("apkUpgradeBO")
 public class ApkUpgradeBO extends BaseBO {
@@ -55,11 +56,12 @@ public class ApkUpgradeBO extends BaseBO {
 			appUpgrade.setRemark(remark);
 			if (files != null && files.size() > 0) {
 				FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
-				String url = File.separator + "apps" + File.separator + "mcare" + File.separator + "apk";
+				String url = "apps/mcare/apk";
 				String uploadPath = fileBO.getRootPath() + url;
-				String[] fieldIds = fileBO.upload("apk", appUpgrade.getId().toString(), files, uploadPath, url);
-				if (fieldIds != null) {
-					appUpgrade.setFileId(fieldIds[0]);
+				List<FileArchive> fileArchiveList = fileBO.upload("apk", appUpgrade.getId().toString(), files, uploadPath, url);
+				if (fileArchiveList != null) {
+					appUpgrade.setFileId(fileArchiveList.get(0).getId().toString());
+					appUpgrade.setUrl(fileArchiveList.get(0).getUrl());
 				}
 				DBManager.getHT(null).save(appUpgrade);
 			}
@@ -88,9 +90,10 @@ public class ApkUpgradeBO extends BaseBO {
 
 			String url = File.separator + "apps" + File.separator + "mcare" + File.separator + "apk";
 			String uploadPath = fileBO.getRootPath() + url;
-			String[] fieldIds = fileBO.upload("apk", vo.getId().toString(), files, uploadPath, url);
-			if (fieldIds != null) {
-				vo.setFileId(fieldIds[0]);
+			List<FileArchive> fileArchiveList = fileBO.upload("apk", vo.getId().toString(), files, uploadPath, url);
+			if (fileArchiveList != null) {
+				vo.setFileId(fileArchiveList.get(0).getId().toString());
+				vo.setUrl(fileArchiveList.get(0).getUrl());
 			}
 		}
 		DBManager.getHT(null).save(vo);

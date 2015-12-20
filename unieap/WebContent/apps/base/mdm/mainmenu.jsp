@@ -17,13 +17,11 @@
     </style>
 	<script type="text/javascript">
 			
-			function toManaement(href)
-			{
+			function toManaement(href){
 				var url = basePathUrl+"/MdmController.do?method=menu";
 				document.getElementById("mainframe").src=url;
 			}
-			function toFrame(href,title)
-			{
+			function toFrame(href,title){
 				//var url = basePathUrl+"/"+href;
 				//document.getElementById("mainframe").src=url;
 				openTab('',href,title,'');

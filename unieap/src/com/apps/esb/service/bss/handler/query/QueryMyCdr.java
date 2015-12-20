@@ -89,6 +89,9 @@ public class QueryMyCdr extends SoapMessageHandler implements BizHandler {
 					cdrInfoVO.setFlowType("--");
 				}
 				cdrDetailVO.setFlowType(UnieapConstants.getDicName("cdrFlowType", cdrInfoVO.getFlowType()));
+				if("7".equals(cdrInfoVO.getServiceCategory())){
+					cdrDetailVO.setOtherNumber(requestInfo.getRequestBody().getServiceNumber());
+				}
 				cdrDetailVO.setServiceTypeName(cdrInfoVO.getServiceTypeName());
 				cdrDetailVO.setStartTime(BssServiceUtils.dateFormat(cdrInfoVO.getStartTime()));
 			}

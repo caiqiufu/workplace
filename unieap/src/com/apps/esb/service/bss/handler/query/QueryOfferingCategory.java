@@ -32,7 +32,7 @@ public class QueryOfferingCategory extends SoapMessageHandler implements BizHand
 	@Override
 	public ProcessResult process(RequestInfo requestInfo, String parameters, Map<String, Object> extParameters)
 			throws Exception {
-		String categoryType = "ct_All";
+		String categoryType = "ct_all";
 		if (!StringUtils.isEmpty(requestInfo.getRequestBody().getExtParameters())) {
 			JSONObject extParametersJson = new JSONObject(requestInfo.getRequestBody().getExtParameters());
 			if (extParametersJson.has("categoryType")) {

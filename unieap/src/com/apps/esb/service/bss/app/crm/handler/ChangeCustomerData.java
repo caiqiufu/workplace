@@ -10,7 +10,6 @@ import javax.xml.soap.SOAPMessage;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.apps.esb.service.bss.BssServiceUtils;
 import com.apps.esb.service.bss.element.RequestInfo;

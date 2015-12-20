@@ -9,6 +9,11 @@ import org.apache.axis.utils.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.apps.esb.bizengine.CheckOfferingRuleHandler;
+import com.apps.esb.service.bss.app.crm.handler.GetAvailablePrimaryOffer;
+import com.apps.esb.service.bss.app.crm.handler.GetAvailableSupplementaryOffering;
+import com.apps.esb.service.bss.app.crm.vo.getavailableprimaryoffering.AvailablePrimaryOfferingVO;
+import com.apps.esb.service.bss.app.crm.vo.getavailablesuboffering.AvailableSubOfferingVO;
 import com.apps.esb.service.bss.app.vo.OfferCategoryVO;
 import com.apps.esb.service.bss.app.vo.OfferingVO;
 import com.apps.esb.service.bss.element.RequestInfo;
@@ -17,6 +22,7 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
 import com.unieap.UnieapConstants;
+import com.unieap.base.ServiceUtils;
 import com.unieap.db.DBManager;
 import com.unieap.db.EntityRowMapper;
 import com.unieap.tools.JSONUtils;
@@ -46,10 +52,51 @@ public class QueryOfferings extends SoapMessageHandler implements BizHandler {
 		result.setResultCode(UnieapConstants.C0);
 		result.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
 		OfferCategoryVO offerCategoryVO = getOfferingsCategory(categoryId);
+
+		if ("ct_me".equals(offerCategoryVO.getCategoryType())) {
+
+			GetAvailablePrimaryOffer getAvailablePrimaryOffer = (GetAvailablePrimaryOffer) ServiceUtils
+					.getBean("getAvailablePrimaryOffer");
+			ProcessResult processResult = getAvailablePrimaryOffer.process(requestInfo, parameters, extParameters);
+			AvailablePrimaryOfferingVO availablePrimaryOfferingVO = (AvailablePrimaryOfferingVO) processResult.getVo();
+
+			CheckOfferingRuleHandler checkOfferingRuleHandler = (CheckOfferingRuleHandler) ServiceUtils
+					.getBean("checkOfferingRuleHandler");
+			checkOfferingRuleHandler.availableOfferings("P",availablePrimaryOfferingVO.getOfferingInfoMap(),
+					offerCategoryVO);
+		} else if ("ct_all".equals(offerCategoryVO.getCategoryType())) {
+
+			GetAvailablePrimaryOffer getAvailablePrimaryOffer = (GetAvailablePrimaryOffer) ServiceUtils
+					.getBean("getAvailablePrimaryOffer");
+			ProcessResult processResult = getAvailablePrimaryOffer.process(requestInfo, parameters, extParameters);
+			AvailablePrimaryOfferingVO availablePrimaryOfferingVO = (AvailablePrimaryOfferingVO) processResult.getVo();
+
+			CheckOfferingRuleHandler checkOfferingRuleHandler = (CheckOfferingRuleHandler) ServiceUtils
+					.getBean("checkOfferingRuleHandler");
+			checkOfferingRuleHandler.availableOfferings("P",availablePrimaryOfferingVO.getOfferingInfoMap(),
+					offerCategoryVO);
+
+			GetAvailableSupplementaryOffering getAvailableSupplementaryOffering = (GetAvailableSupplementaryOffering) ServiceUtils
+					.getBean("getAvailableSupplementaryOffering");
+			ProcessResult processSubResult = getAvailableSupplementaryOffering.process(requestInfo, parameters,
+					extParameters);
+			AvailableSubOfferingVO AvailableSubOfferingVO = (AvailableSubOfferingVO) processSubResult.getVo();
+			checkOfferingRuleHandler.availableOfferings("S",AvailableSubOfferingVO.getOfferingInfoMap(), offerCategoryVO);
+
+		} else {
+			GetAvailableSupplementaryOffering getAvailableSupplementaryOffering = (GetAvailableSupplementaryOffering) ServiceUtils
+					.getBean("getAvailableSupplementaryOffering");
+			ProcessResult processSubResult = getAvailableSupplementaryOffering.process(requestInfo, parameters,
+					extParameters);
+			AvailableSubOfferingVO AvailableSubOfferingVO = (AvailableSubOfferingVO) processSubResult.getVo();
+			CheckOfferingRuleHandler checkOfferingRuleHandler = (CheckOfferingRuleHandler) ServiceUtils
+					.getBean("checkOfferingRuleHandler");
+			checkOfferingRuleHandler.availableOfferings("S",AvailableSubOfferingVO.getOfferingInfoMap(), offerCategoryVO);
+		}
+
 		JSONObject offerCategoryJson = JSONUtils.convertBean2JSON(offerCategoryVO);
 		JSONObject jsonResult = new JSONObject();
 		jsonResult.put("offerCategoryDetail", offerCategoryJson);
-		result.setExtParameters(jsonResult.toString());
 		result.setExtParameters(jsonResult.toString());
 		return result;
 	}

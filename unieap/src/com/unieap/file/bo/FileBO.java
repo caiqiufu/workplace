@@ -2,8 +2,12 @@ package com.unieap.file.bo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Service;
@@ -30,7 +35,7 @@ public class FileBO extends BaseBO {
 	}
 	
 	
-	public List<FileItem> getFileItems(HttpServletRequest request) throws Exception {
+	public List<FileItem> getFileItems(HttpServletRequest request){
 		String tempPath = getRootPath() + File.separator + "buffer";
 		File tempPathFile = new File(tempPath);
 		if (!tempPathFile.exists()) {
@@ -45,7 +50,12 @@ public class FileBO extends BaseBO {
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		// Set overall request size constraint
 		upload.setSizeMax(4194304); // 设置最大文件尺寸，这里是4MB
-		List<FileItem> items = upload.parseRequest(request);// 得到所有的文件
+		List<FileItem> items;
+		try {
+			items = upload.parseRequest(request);
+		} catch (FileUploadException e) {
+			items = null;
+		}// 得到所有的文件
 		return items;
 	}
 
@@ -57,9 +67,10 @@ public class FileBO extends BaseBO {
 		return fileArchive;
 	}
 
-	public String[] upload(String fileCategory, String extKey, List<FileItem> files, String uploadPath, String url)
+	public List<FileArchive> upload(String fileCategory, String extKey, List<FileItem> files, String uploadPath, String url)
 			throws Exception {
 		StringBuffer fileIds = new StringBuffer();
+		List<FileArchive> fileArchiveList = new ArrayList<FileArchive>();
 		if (files != null && files.size() > 0) {
 			DecimalFormat df = new DecimalFormat(".00");
 			for (int i = 0; i < files.size(); i++) {
@@ -78,6 +89,7 @@ public class FileBO extends BaseBO {
 					File savedFile = new File(uploadPath, fullFile.getName());
 					fileItem.write(savedFile);
 					FileArchive fileArchive = new FileArchive();
+					fileArchiveList.add(fileArchive);
 					fileArchive.setArchiveDate(UnieapConstants.getDateTime(null));
 					fileArchive.setExtKey(extKey);
 					fileArchive.setFileCategory(fileCategory);
@@ -93,7 +105,8 @@ public class FileBO extends BaseBO {
 				}
 			}
 		}
-		return fileIds.toString().split(",");
+		//return fileIds.toString().split(",");
+		return fileArchiveList;
 
 	}
 
@@ -139,4 +152,69 @@ public class FileBO extends BaseBO {
 		return path;
 		// return SYSConfig.rootPath+File.separator;
 	}
+	
+	/**
+	 *<p>描述:创建文件</P>
+	 * Jan 26, 2011
+	 * @param path
+	 * @param isCover
+	 * @param isEnter
+	 * @param str
+	 * @throws Exception
+	 */
+	public  void write(String fileName,String uploadPath, boolean isCover, boolean isEnter, String str) throws Exception {
+		create(uploadPath,fileName);
+		File file = new File(uploadPath,fileName);
+		OutputStreamWriter out = null;
+		String feed = str;
+		if (isEnter) {
+			feed = feed + '\n';
+		}
+		try {
+			out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			out.write(feed);
+			out.flush();
+		} catch (IOException e) {
+			throw new Exception("write file [" + fileName + "] failure!", e);
+		} finally {
+			out.close();
+		}
+	}
+	
+	
+	/**
+	 *<p>描述:创建文件夹</P>
+	 * Jan 26, 2011
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public  boolean create(String dir,String fileName) throws Exception {
+		File f = new File(dir,fileName);
+		if (f.exists()) {
+			return true;
+		}
+		createDir(dir);
+		File file = new File(dir,fileName);
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			throw new Exception("create file [" + dir + "] failure,message:" + e.getMessage(), e);
+		}
+		return true;
+	}
+	/**
+	 *<p>描述:创建默认</P>
+	 * Jan 26, 2011
+	 * @param path
+	 * @return
+	 */
+	public  boolean createDir(String path) {
+		File filepath = new File(path);
+		if (!filepath.exists()) {
+			return filepath.mkdirs();
+		}
+		return true;
+	}
+	
 }

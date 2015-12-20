@@ -22,13 +22,12 @@ p {
 }
 </style>
 <script type="text/javascript">
-	function initFunctions()
-	{
-		setTimeout("updateTipInfos()",10000);
-	}
     var userName = '<%=user.getUserName()%>';
 	var tabs;
     var menuJson = <%=menuHtml%>;
+    function toFrame(href,title){
+		openTab('',href,title,'');
+	}
     Ext.onReady(function() {
         Ext.QuickTips.init();
         Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
@@ -37,13 +36,13 @@ p {
         Ext.define('MenuTree', {
 	        extend: 'Ext.data.Model',
 	        fields: [{
-	            name: "menuCode",
+	            name: "id",
 	            type: "string"
 	        },{
 	            name: "text",
 	            type: "string"
 	        },{
-	            name: "url",
+	            name: "href1",
 	            type: "string"
 	        },{
 	            name: "imgSrc",
@@ -59,7 +58,7 @@ p {
         	root:{
         		 text:'Menu',
         		 children: menuJson
-        		 //children:[{id:11,text:'111a',children:[{id:111,text:'1111b'}]},{id:12,text:'112c'}]
+        		 //children:[{id:11,text:'111a',leaf:true,href:'mdmController.do?method=dic'},{id:12,text:'112c',leaf:true}]
         	}
         });
         // Go ahead and create the TreePanel now so that we can use it below
@@ -77,9 +76,11 @@ p {
             store: store,
             listeners:{
         	  itemclick : function(view,record,item,index,e){   
+        		e.stopEvent();
         	 	if(record.isLeaf()){ 
 	        	     //record.appendChild({text:"草他吗的"}); 
-        	 		openTab(record.data.id,record.data.url,record.data.text,record.data.imgSrc);     
+        	 		//openTab(record.data.id,record.data.href,record.data.text,record.data.imgSrc);
+        	 		toFrame(record.data.href,record.data.text,record.data.text);
 	            }
         	 }
             }
@@ -93,19 +94,19 @@ p {
 	                height: 32, // give north and south regions a height
 	                autoEl: {
 	                    tag: 'div',
-	                    html:'<table><tr><td>User Name:</td><td>'+userName+'</td><td><a href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></td><td><marquee scrollAmount=2 width=800 direction="right"><div id="tipInfo">ACDC ACDC ACDC</div></marquee></td></tr></table>'
+	                    html:'<table><tr><td>Welcome : </td><td>'+userName+'</td><td><marquee scrollAmount=2 width=800 direction="right"><div id="tipInfo">Easy Mobile Platform</div></marquee></td></tr></table>'
 	                }
 	            }),
 	            {
 	                region: 'west',
 	                stateId: 'navigation-panel',
 	                id: 'west-panel', // see Ext.getCmp() below
-	                title: 'West',
+	                title: 'Menu',
 	                split: true,
 	                width: 200,
 	                minWidth: 175,
 	                maxWidth: 400,
-	                collapsible: true,
+	                collapsible: false,
 	                animCollapse: true,
 	                margins: '0 0 0 5',
 	                items:[treePanel]
@@ -124,65 +125,44 @@ p {
         });
       });
 
-	/**functions**/
-	function updateTipInfos()
-    {
-		Ext.Ajax.request({
-                url: 'MonitorController.do?method=updateTipInfos',
-                async:false,
-                params:{'operType':"checkExist","userCode":''},
-                success: function(response, opts) 
-                {
-                	var result = Ext.JSON.decode(response.responseText);
-                    if(result.tipInfo != '')
-                    {
-                		document.getElementById("tipInfo").innerHTML = result.tipInfo;
-                    }
-                },
-                failure: function(response, opts) 
-                {
-                	Ext.MessageBox.alert('Status', 'Error:'+response.status);
-                }
-             });
-	}
-    function openTab(id,href,text,imgSrc){
-    	addTab (true,id,href,text,imgSrc);
-    }
-    function addTab (closable,id,href,text,imgSrc) {
-    	var url = basePathUrl+"/"+href;
-    	//alert('url='+url);
-    	var windowName = text;
-    	var imgSrc = imgSrc;
-    	var tabItems = tabs.items.items;
-    	if(tabItems.length == 0){
-    		tabs.add({
-		        	title:windowName,
-		            xtype: 'panel',
-		            html :'<iframe scrolling="yes" frameborder="0" border="0" frameBorder="0" marginwidth="0" marginheight="0" src="'+url+'" style="width:100%;height:100%;"></iframe>',
-		        	closable: !!closable
-		        }).show();
-	        
-    	}else{
-    		var isExist = false;
-	    	Ext.each(tabItems,function(tab){
-	    		if(tab.title == windowName){
-	    			isExist = true;
-	    			tab.show();
-	    			//tab.loader.load();
-	    		}
-	    	});
-	    	if(!isExist){
-		        tabs.add({
-		        	title:windowName,
-		            xtype: 'panel',
-		            html :'<iframe scrolling="no" frameborder="0" border="0" frameBorder="0" marginwidth="0" marginheight="0" src="'+url+'" style="width:100%;height:100%;"></iframe>',
-		        	closable: !!closable
-		        }).show();
+		/**functions**/
+    	function openTab(id,href,text,imgSrc){
+        	addTab (true,id,href,text,imgSrc);
+        }
+    	function addTab (closable,id,href,text,imgSrc) {
+	    	var url = basePathUrl+"/"+href;
+	    	var windowName = text;
+	    	var imgSrc = imgSrc;
+	    	var tabItems = tabs.items.items;
+	    	if(tabItems.length == 0){
+	    		tabs.add({
+			        	title:windowName,
+			            xtype: 'panel',
+			            html :'<iframe scrolling="yes" frameborder="0" border="0" frameBorder="0" marginwidth="0" marginheight="0" src="'+url+'" style="width:100%;height:100%;"></iframe>',
+			        	closable: !!closable
+			        }).show();
+		        
+	    	}else{
+	    		var isExist = false;
+		    	Ext.each(tabItems,function(tab){
+		    		if(tab.title == windowName){
+		    			isExist = true;
+		    			tab.show();
+		    			//tab.loader.load();
+		    		}
+		    	});
+		    	if(!isExist){
+			        tabs.add({
+			        	title:windowName,
+			            xtype: 'panel',
+			            html :'<iframe scrolling="yes" frameborder="0" border="0" frameBorder="0" marginwidth="0" marginheight="0" src="'+url+'" style="width:100%;height:100%;"></iframe>',
+			        	closable: !!closable
+			        }).show();
+		    	}
 	    	}
-    	}
-    }
+	    }
     </script>
 </head>
-<body onload="initFunctions()">
+<body>
 </body>
 </html>
