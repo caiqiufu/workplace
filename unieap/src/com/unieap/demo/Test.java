@@ -1,8 +1,12 @@
 package com.unieap.demo;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.unieap.encrypt.EncryptionUtils;
+import org.json.JSONObject;
+
+import com.unieap.tools.JSONUtils;
 
 public class Test {
 
@@ -25,6 +29,18 @@ public class Test {
 		//System.out.println("enString=" + enString);
 		//String deString = EncryptionUtils.decrypt(enString, sKey);
 		//System.out.println("deString=" + deString);
+		testVO();
 	}
-
+	public static void testVO() throws Exception{
+		TestVO vo = new TestVO();
+		vo.setName("Chai");
+		Map<String,String> extAttris = new HashMap<String,String>();
+		extAttris.put("TEST_ATTRIBUTE1", "attribute1");
+		extAttris.put("TEST_ATTRIBUTE2", "attribute2");
+		//vo.setExtAttris(extAttris);
+		JSONObject dataBalanceJson = JSONUtils.convertBean2JSON(vo);
+		JSONObject jsonResult = new JSONObject();
+		jsonResult.put("dataBalance", dataBalanceJson);
+		System.out.print(jsonResult.toString());
+	}
 }

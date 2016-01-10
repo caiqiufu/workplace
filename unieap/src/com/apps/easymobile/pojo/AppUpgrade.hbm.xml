@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-9 9:37:41 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.easymobile.pojo.AppUpgrade" table="app_upgrade" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="activeFlag" type="string">
+            <column name="active_flag" length="45" not-null="true" />
+        </property>
+        <property name="version" type="string">
+            <column name="version" length="45" />
+        </property>
+        <property name="changeDesc" type="string">
+            <column name="change_desc" length="1024" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="0" />
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" />
+        </property>
+        <property name="fileId" type="string">
+            <column name="file_id" length="45" />
+        </property>
+        <property name="tenantId" type="string">
+            <column name="tenant_id" length="45" />
+        </property>
+         <property name="effectiveDate" type="timestamp">
+            <column name="effective_date" length="0" />
+        </property>
+        <property name="url" type="string">
+            <column name="url" length="512"  />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -11,10 +11,6 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.BssServiceUtils;
-import com.apps.esb.service.bss.app.cbs.handler.QueryAccountBalance;
-import com.apps.esb.service.bss.app.cbs.handler.QueryAccumulationUsage;
-import com.apps.esb.service.bss.app.cbs.handler.QueryFreeUnits;
-import com.apps.esb.service.bss.app.cbs.handler.QuerySubLifeCycle;
 import com.apps.esb.service.bss.app.cbs.vo.queryaccountbalance.AccountCreditVO;
 import com.apps.esb.service.bss.app.cbs.vo.queryaccountbalance.BalanceAccountVO;
 import com.apps.esb.service.bss.app.cbs.vo.queryaccountbalance.BalanceDetailVO;
@@ -28,16 +24,21 @@ import com.apps.esb.service.bss.app.cbs.vo.queryfreeunit.FreeUnitItemVO;
 import com.apps.esb.service.bss.app.cbs.vo.queryfreeunit.QueryFreeUnitVO;
 import com.apps.esb.service.bss.app.cbs.vo.querysublifecycle.LifeCycleStatusVO;
 import com.apps.esb.service.bss.app.cbs.vo.querysublifecycle.QuerySubLifeCycleVO;
-import com.apps.esb.service.bss.app.vo.AllBalanceVO;
-import com.apps.esb.service.bss.app.vo.DataBalanceVO;
-import com.apps.esb.service.bss.app.vo.MoneyBalanceVO;
-import com.apps.esb.service.bss.app.vo.MyBalanceDetailVO;
-import com.apps.esb.service.bss.app.vo.VoiceBalanceVO;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.QueryAccountBalance;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.QueryAccumulationUsage;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.QueryFreeUnits;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.QuerySubLifeCycle;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
+import com.apps.esb.service.bss.handler.CustomizeBizHanlder;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
+import com.apps.esb.service.bss.vo.allbalance.AllBalanceVO;
+import com.apps.esb.service.bss.vo.allbalance.MoneyBalanceVO;
+import com.apps.esb.service.bss.vo.allbalance.MyBalanceDetailVO;
+import com.apps.esb.service.bss.vo.allbalance.VoiceBalanceVO;
+import com.apps.esb.service.bss.vo.databalance.DataBalanceVO;
 import com.unieap.UnieapConstants;
 import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
@@ -52,7 +53,7 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 	}
 
 	@Override
-	public ProcessResult process(RequestInfo requestInfo, String parameters, Map<String, Object> extParameters)
+	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler, Map<String, Object> extParameters)
 			throws Exception {
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
@@ -62,33 +63,47 @@ public class QueryMyAllBalance extends SoapMessageHandler implements BizHandler 
 			requestInfo.getRequestBody().setServiceNumber("93268659");
 		}*/
 		QueryFreeUnits queryFreeUnits = (QueryFreeUnits) ServiceUtils.getBean("queryFreeUnits");
-		ProcessResult processResultFreeUnits = queryFreeUnits.process(requestInfo, parameters, extParameters);
+		ProcessResult processResultFreeUnits = queryFreeUnits.process(requestInfo, handler, extParameters);
 		if (!UnieapConstants.C0.equals(processResultFreeUnits.getResultCode())) {
 			return processResultFreeUnits;
 		}
 		QueryFreeUnitVO queryFreeUnitVO = (QueryFreeUnitVO) processResultFreeUnits.getVo();
 		QueryAccountBalance queryAccountBalance = (QueryAccountBalance) ServiceUtils.getBean("queryAccountBalance");
-		ProcessResult processResultBalance = queryAccountBalance.process(requestInfo, parameters, extParameters);
+		ProcessResult processResultBalance = queryAccountBalance.process(requestInfo, handler, extParameters);
 		if (!UnieapConstants.C0.equals(processResultBalance.getResultCode())) {
 			return processResultBalance;
 		}
 		QueryAccountBalanceVO queryAccountBalanceVO = (QueryAccountBalanceVO) processResultBalance.getVo();
 		QueryAccumulationUsage queryAccumulationUsage = (QueryAccumulationUsage) ServiceUtils
 				.getBean("queryAccumulationUsage");
-		ProcessResult processResultAccumulationUsage = queryAccumulationUsage.process(requestInfo, parameters,
+		ProcessResult processResultAccumulationUsage = queryAccumulationUsage.process(requestInfo, handler,
 				extParameters);
 		if (!UnieapConstants.C0.equals(processResultAccumulationUsage.getResultCode())) {
 			return processResultAccumulationUsage;
 		}
 		AccumulationUsageVO accumulationUsageVO = (AccumulationUsageVO) processResultAccumulationUsage.getVo();
 		QuerySubLifeCycle querySubLifeCycle = (QuerySubLifeCycle) ServiceUtils.getBean("querySubLifeCycle");
-		ProcessResult processResultLifeCycle = querySubLifeCycle.process(requestInfo, parameters, extParameters);
+		ProcessResult processResultLifeCycle = querySubLifeCycle.process(requestInfo, handler, extParameters);
 		if (!UnieapConstants.C0.equals(processResultLifeCycle.getResultCode())) {
 			return processResultLifeCycle;
 		}
 		QuerySubLifeCycleVO querySubLifeCycleVO = (QuerySubLifeCycleVO) processResultLifeCycle.getVo();
 		AllBalanceVO allBalanceVO = getAllBalanceVO(queryFreeUnitVO, queryAccountBalanceVO, accumulationUsageVO,
 				querySubLifeCycleVO);
+		
+		if(handler!=null){
+			String custHandlerName = handler.get("custHandlerName");
+			if(!StringUtils.isEmpty(custHandlerName)){
+				CustomizeBizHanlder custHandler = (CustomizeBizHanlder)ServiceUtils.getBean(custHandlerName);
+				List<Object> originalVOs = new ArrayList<Object>();
+				originalVOs.add(queryFreeUnitVO);
+				originalVOs.add(queryAccountBalanceVO);
+				originalVOs.add(accumulationUsageVO);
+				originalVOs.add(querySubLifeCycleVO);
+				custHandler.process(requestInfo, handler, extParameters, allBalanceVO,originalVOs);
+			}
+		}
+		
 		JSONObject dataBalanceJson = JSONUtils.convertBean2JSON(allBalanceVO);
 		JSONObject jsonResult = new JSONObject();
 		jsonResult.put("allBalanceInfo", dataBalanceJson);

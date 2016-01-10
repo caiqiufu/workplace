@@ -9,8 +9,8 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.BssServiceUtils;
-import com.apps.esb.service.bss.app.cbs.handler.XchangePromotion;
 import com.apps.esb.service.bss.app.cbs.vo.xchange.XchangePromotionVO;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.XchangePromotion;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;

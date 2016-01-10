@@ -10,12 +10,12 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.apps.easymobile.pojo.AppShop;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
-import com.apps.mcare.pojo.AppShop;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
 import com.unieap.tools.JSONUtils;

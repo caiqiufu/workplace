@@ -12,15 +12,15 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.BssServiceUtils;
-import com.apps.esb.service.bss.app.cbs.handler.QueryXchangePromotionLogs;
 import com.apps.esb.service.bss.app.cbs.vo.xchangelog.QueryXchangeLogVO;
 import com.apps.esb.service.bss.app.cbs.vo.xchangelog.XchangeInfoVO;
-import com.apps.esb.service.bss.app.vo.XchangeLogVO;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.QueryXchangePromotionLogs;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
+import com.apps.esb.service.bss.vo.xchange.XchangeLogVO;
 import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
 import com.unieap.tools.JSONUtils;

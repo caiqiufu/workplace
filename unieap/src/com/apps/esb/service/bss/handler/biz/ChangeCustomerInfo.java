@@ -7,7 +7,7 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.apps.esb.service.bss.app.crm.handler.ChangeCustomerData;
+import com.apps.esb.service.bss.customize.smart.app.handler.crm.ChangeCustomerData;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;

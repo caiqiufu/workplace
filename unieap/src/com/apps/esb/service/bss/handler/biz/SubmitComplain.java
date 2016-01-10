@@ -10,13 +10,13 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.apps.easymobile.bo.ComplainBO;
+import com.apps.easymobile.pojo.AppComplain;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
-import com.apps.mcare.bo.ComplainBO;
-import com.apps.mcare.pojo.AppComplain;
 import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;
 

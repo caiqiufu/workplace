@@ -61,7 +61,7 @@ public class UserBO extends BaseBO {
 		} else if (StringUtils.equals(operType, UnieapConstants.DELETE)) {
 			return delete(vo);
 		} else if (StringUtils.equals(operType, UnieapConstants.CHECKEXIST)) {
-			return checkExist(UnieapConstants.getMessage("mdm.role.check.userCode", new Object[] { vo.getUserCode() }),
+			return checkExist(UnieapConstants.getMessage("mdm.user.check.userCode", new Object[] { vo.getUserCode() }),
 					"userCode", vo.getUserCode(), User.class, null);
 		} else if (StringUtils.equals(operType, "User_Role_Delete")) {
 			return deleteUserRole(ur);

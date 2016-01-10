@@ -11,13 +11,13 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.apps.easymobile.bo.PushMessageBO;
+import com.apps.easymobile.pojo.AppMessage;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
-import com.apps.mcare.bo.PushMessageBO;
-import com.apps.mcare.pojo.AppMessage;
 import com.unieap.CacheMgt;
 import com.unieap.UnieapConstants;
 import com.unieap.base.ServiceUtils;

@@ -8,8 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.apps.esb.service.bss.app.crm.handler.ChangePrimaryOffering;
-import com.apps.esb.service.bss.app.crm.handler.ChangeSupplementaryOffering;
+import com.apps.esb.service.bss.customize.smart.app.handler.crm.ChangePrimaryOffering;
+import com.apps.esb.service.bss.customize.smart.app.handler.crm.ChangeSupplementaryOffering;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;

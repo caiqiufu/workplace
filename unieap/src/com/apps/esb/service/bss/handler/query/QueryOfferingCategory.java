@@ -10,12 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.apps.esb.service.bss.app.vo.OfferCategoryVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.handler.SoapMessageHandler;
+import com.apps.esb.service.bss.vo.offerings.OfferCategoryVO;
 import com.unieap.UnieapConstants;
 import com.unieap.db.DBManager;
 import com.unieap.db.EntityRowMapper;

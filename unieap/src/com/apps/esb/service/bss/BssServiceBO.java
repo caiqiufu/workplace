@@ -187,7 +187,7 @@ public class BssServiceBO extends BaseBO {
 			ProcessResult processResult;
 			try {
 				processResult = handler.process(BssServiceUtils.copyRequestInfo(requestInfo),
-						handlerObj.get("parameters"), extParameters);
+						handlerObj, extParameters);
 				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 			} catch (Exception e) {
 				processResult = new ProcessResult();

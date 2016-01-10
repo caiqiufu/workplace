@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-11-9 9:37:41 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.apps.easymobile.pojo.AppMessage" table="app_message" catalog="unieap" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+         <property name="type" type="string">
+            <column name="type" length="45" not-null="true" />
+        </property>
+        <property name="subject" type="string">
+            <column name="subject" not-null="true" />
+        </property>
+        <property name="text" type="string">
+            <column name="text" length="1024" />
+        </property>
+        <property name="hyperlink" type="string">
+            <column name="hyperlink" length="512" />
+        </property>
+        <property name="activeFlag" type="string">
+            <column name="active_flag" length="45" not-null="true" />
+        </property>
+        <property name="createBy" type="string">
+            <column name="create_by" length="45" not-null="true" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="0" not-null="true" />
+        </property>
+        <property name="modifyBy" type="string">
+            <column name="modify_by" length="45" />
+        </property>
+        <property name="modifyDate" type="timestamp">
+            <column name="modify_date" length="0" />
+        </property>
+        <property name="effectiveDate" type="timestamp">
+            <column name="effective_date" length="0" />
+        </property>
+        <property name="expiredDate" type="timestamp">
+            <column name="expired_date" length="0" />
+        </property>
+    </class>
+</hibernate-mapping>

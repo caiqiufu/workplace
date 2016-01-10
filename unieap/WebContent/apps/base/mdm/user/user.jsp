@@ -148,6 +148,7 @@
         var dataWin = null;
         var dataForm = null;
         var operType = '';
+        var error = '';
         function showForm(status,selectedRecord){
         	operType = status;
             if (dataWin==null){
@@ -170,7 +171,6 @@
 	                        	{ xtype:'textfield',labelWidth:80, width:350,maxLength:45, name:'userCode',fieldLabel:'<%=UnieapConstants.getMessage("mdm.user.display.userCode")%>',allowBlank:false,
 	                        		validateOnChange:false, validateOnBlur :true,
 								    validator :function(value){
-								    			var error = true; 
 								    			if(operType == 'Modify' || value==''||value ==null){
 								    				return true;
 								    			}
@@ -180,7 +180,7 @@
 									                success: function(response, opts){
 									                	var result = Ext.JSON.decode(response.responseText);
 									                    if(result.isSuccess == 'success'){
-									                		error = true; 
+									                    	error = true;
 									                    }else{
 									                    	error = result.message;
 									                    }
