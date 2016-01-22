@@ -11,6 +11,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -56,13 +58,20 @@ public class LoginBO extends BaseBO {
 	}
 
 	public void loadLoginUser() throws Exception {
-		org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-				.getContext().getAuthentication().getPrincipal();
+		org.springframework.security.core.userdetails.User u;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+            u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        } else if (auth.getDetails() instanceof org.springframework.security.core.userdetails.User) {
+            u = (org.springframework.security.core.userdetails.User) auth.getDetails();
+        } else {
+            throw new AccessDeniedException("User not properly authenticated.");
+        }
 		Property userCode = Property.forName("userCode");
 		DetachedCriteria criteria = DetachedCriteria.forClass(com.unieap.pojo.User.class)
 				.add(userCode.eq(u.getUsername()));
 		com.unieap.pojo.User user = (com.unieap.pojo.User) DBManager.getHT(null).findByCriteria(criteria).get(0);
-		UnieapConstants.user = user;
+		UnieapConstants.userList.put(user.getUserCode(), user);
 	}
 
 	public void lougoutLog(VisitLog log) {
@@ -137,7 +146,7 @@ public class LoginBO extends BaseBO {
 			sql.append(" dd.parent_id as groupId,dd.parent_code as groupCode,dd.parent_name as groupName,dd.dic_type as dicType,");
 			sql.append(" dd.active_flag as activeFlag ,dd.seq as seq ");
 			sql.append(" FROM unieap.dic_data_tree dd ");
-			sql.append(" where  dd.language =? order by dd.parent_code, dd.seq ASC ");
+			sql.append(" where  dd.language =? and dd.dic_type = 'D' order by dd.parent_code, dd.seq ASC ");
 			dicdatas = DBManager.getJT(null).query(sql.toString(),
 					new Object[] { SYSConfig.defaultLanguage },
 					new EntityRowMapper(DicDataVO.class));
@@ -147,7 +156,7 @@ public class LoginBO extends BaseBO {
 			sql.append(" dd.active_flag as activeFlag ,dd.seq as seq ");
 			sql.append(" FROM unieap.role_resource rr,unieap.user u,unieap.user_role ur,unieap.dic_data_tree dd ");
 			sql.append(" where u.user_id = ur.user_id and ur.role_id = rr.role_id ");
-			sql.append(" and rr.resource_id = dd.dic_code and u.user_id =? and dd.language =? order by dd.parent_code, dd.seq ASC ");
+			sql.append(" and rr.resource_id = dd.dic_code and dd.dic_type = 'D' and u.user_id =? and dd.language =? order by dd.parent_code, dd.seq ASC ");
 			dicdatas = DBManager.getJT(null).query(sql.toString(),
 					new Object[] { userId,SYSConfig.defaultLanguage },
 					new EntityRowMapper(DicDataVO.class));
@@ -194,10 +203,10 @@ public class LoginBO extends BaseBO {
 	
 	private void createJs(ServletContext servlet, String fileName, String jsStr) throws Exception {
 		String shareFolderPath = SYSConfig.getConfig().get("shareFolderPath");
-		String mdmCommon = SYSConfig.getConfig().get("mdmCommon");
+		String mdmCommonPath = SYSConfig.getConfig().get("mdmCommonPath");
 		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
 		//String CODELISTJSPATH = "unieap/js/common";
-		String uploadPath = shareFolderPath+mdmCommon;
+		String uploadPath = shareFolderPath+mdmCommonPath;
 		fileBO.write(fileName, uploadPath, true, true, jsStr);
 		//FileUtils.write(path, true, true, jsStr);
 	}

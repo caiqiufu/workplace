@@ -1,8 +1,5 @@
 package com.apps.esb.service.bss.bizengine;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -10,9 +7,8 @@ import javax.servlet.ServletContext;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
-import com.apps.esb.service.bss.app.crm.vo.getavailableprimaryoffering.OfferingInfoVO;
-import com.apps.esb.service.bss.vo.offerings.OfferCategoryVO;
-import com.apps.esb.service.bss.vo.offerings.OfferingVO;
+import com.apps.esb.service.bss.app.vo.subscriber.offering.OfferingVO;
+import com.apps.esb.service.bss.vo.macre.offerings.OfferCategoryVO;
 import com.unieap.BaseBO;
 import com.unieap.handler.ConfigHandler;
 
@@ -37,14 +33,14 @@ public class CheckOfferingRuleHandler extends BaseBO implements ConfigHandler {
 		return false;
 	}
 
-	public void availableOfferings(String offeringType, Map<String, OfferingInfoVO> offeringInfoMap,
+	public void availableOfferings(String offeringType, Map<String,OfferingVO> offeringMap,
 			OfferCategoryVO offerCategoryVO) {
-		if (offerCategoryVO != null && offerCategoryVO.getOfferings() != null
+		/*if (offerCategoryVO != null && offerCategoryVO.getOfferings() != null
 				&& offerCategoryVO.getOfferings().size() > 0) {
-			List<OfferingVO> offerings = offerCategoryVO.getOfferings();
+			List<com.apps.esb.service.bss.vo.offerings.OfferingVO> offerings = offerCategoryVO.getOfferings();
 			List<OfferingVO> newOfferings = new ArrayList<OfferingVO>();
 			for (int i = 0; i < offerings.size(); i++) {
-				OfferingVO offeringVO = offerings.get(i);
+				com.apps.esb.service.bss.vo.offerings.OfferingVO offeringVO = offerings.get(i);
 				if (offeringInfoMap.containsKey(offeringVO.getOfferingId())) {
 					newOfferings.add(offeringVO);
 				}
@@ -75,7 +71,7 @@ public class CheckOfferingRuleHandler extends BaseBO implements ConfigHandler {
 				offeringVO.setOfferingName(offeringInfoVO.getOfferingName());
 				offeringVO.setOfferingType(offeringType);
 			}
-		}
+		}*/
 	}
 
 }

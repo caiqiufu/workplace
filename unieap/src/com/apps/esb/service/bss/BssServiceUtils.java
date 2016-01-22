@@ -329,7 +329,7 @@ public class BssServiceUtils {
 		String moneyaccruacy = SYSConfig.getConfig().get("mcare.unit.format.moneyaccruacy");
 		String moneylength = SYSConfig.getConfig().get("mcare.unit.format.moneylength");
 		if (StringUtils.isEmpty(amount)) {
-			return "";
+			return "0";
 		} else {
 			double money = (new Double(amount).doubleValue()) / (new Double(moneyaccruacy).doubleValue());
 			DecimalFormat df = new DecimalFormat(moneylength);
@@ -398,9 +398,7 @@ public class BssServiceUtils {
 
 	public static JSONObject modifyExtParameters(String extParameters, JSONObject parameters) throws Exception {
 		if (StringUtils.isEmpty(extParameters)) {
-			JSONObject json = new JSONObject();
-			json.put("extParameters", parameters);
-			return json;
+			return parameters;
 		} else {
 			JSONObject json = new JSONObject(extParameters);
 			Iterator<?> keys = parameters.keys();

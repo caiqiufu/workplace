@@ -9,8 +9,8 @@ import javax.servlet.ServletContext;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 
-import com.apps.esb.service.bss.vo.offerings.OfferCategoryVO;
-import com.apps.esb.service.bss.vo.offerings.OfferingVO;
+import com.apps.esb.service.bss.vo.macre.offerings.OfferCategoryVO;
+import com.apps.esb.service.bss.vo.macre.offerings.OfferingVO;
 import com.unieap.BaseBO;
 import com.unieap.CacheMgt;
 import com.unieap.db.DBManager;

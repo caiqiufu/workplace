@@ -2,11 +2,18 @@ package com.unieap;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.unieap.base.SYSConfig;
 import com.unieap.base.ServiceUtils;
@@ -116,10 +123,16 @@ public class UnieapConstants {
 	public final static String DATEFORMAT = "yyyy-MM-dd";
 	public final static String TIMEFORMAT = "yyyy-MM-dd hh:mm:ss";
 	public final static String TIMEFORMAT2 = "yyyyMMddhhmmss";
-	public static User user = null;
+	public static Map<String, User> userList = new HashMap<String, User>();
+
+	public final static User getUser(String userCode) {
+		return userList.get(userCode);
+	}
 
 	public final static User getUser() {
-		return user;
+		org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		return userList.get(u.getUsername());
 	}
 
 	public final static String getCurrentTime(String dsName, String format) {
