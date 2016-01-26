@@ -29,4 +29,11 @@ public abstract class ServiceUtils {
 		Object obj = (Object) context.getBean(beanName);
 		return obj;
 	}
+	public static Object getBeanByTenantId(String beanName) {
+		String tenantId = SYSConfig.getConfig().get("tenantId");
+		beanName = beanName+"_"+tenantId;
+		ApplicationContext context = AppContextContainer.getAppContext();
+		Object obj = (Object) context.getBean(beanName);
+		return obj;
+	}
 }

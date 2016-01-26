@@ -43,18 +43,24 @@ public class LoadSystemData {
 	public void loadBizHandlerData() {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
-				"SELECT handler_name as handlerName,class_name as className ,parameters FROM unieap.handler_config ");
+				"SELECT handler_name as handlerName,app_handler_name as appHandlerName, cust_handler_name as custHandlerName,class_name as className ,parameters FROM unieap.handler_config ");
 		sql.append(" where active_flag = 'Y' and tenant_id =?  and handler_type ='B'");
 		List<Map<String, Object>> datas = DBManager.getJT(null).queryForList(sql.toString(),
 				new Object[] {SYSConfig.getConfig().get("tenantId") });
 		if (datas != null && datas.size() > 0) {
 			Map<String, Map<String, String>> bizHandler = new HashMap<String, Map<String, String>>();
 			Map<String, Object> data;
-			String handlerName = null, className = null, parameters = null;
+			String handlerName = null,appHandlerName = null,custHandlerName =null, className = null, parameters = null;
 			for (int i = 0; i < datas.size(); i++) {
 				data = datas.get(i);
 				if (data.get("handlerName") != null) {
 					handlerName = data.get("handlerName").toString();
+				}
+				if (data.get("appHandlerName") != null) {
+					appHandlerName = data.get("appHandlerName").toString();
+				}
+				if (data.get("custHandlerName") != null) {
+					custHandlerName = data.get("custHandlerName").toString();
 				}
 				if (data.get("className") != null) {
 					className = data.get("className").toString();
@@ -64,6 +70,8 @@ public class LoadSystemData {
 				}
 				Map<String, String> biz = new HashMap<String, String>();
 				biz.put("handlerName", handlerName);
+				biz.put("appHandlerName", appHandlerName);
+				biz.put("custHandlerName", custHandlerName);
 				biz.put("className", className);
 				biz.put("parameters", parameters);
 				bizHandler.put(handlerName, biz);

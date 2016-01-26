@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -28,11 +29,7 @@ import com.unieap.tools.JSONUtils;
  * @author <a href="mailto: caiqiufu@sohu.com">蔡秋伏</a>
  * @version $Revision$
  */
-public class BaseVO implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class BaseVO {
 	public final Log log = LogFactory.getLog(BaseVO.class);
 	public String toString() {
 		return (this == null ? "" : ReflectionToStringBuilder.toString(this,
@@ -65,4 +62,34 @@ public class BaseVO implements Serializable {
 		}
 		return json.toString();
 	}
+	public Map<String,String> extAttris = new HashMap<String,String>();
+	public Map<String, String> getExtAttris() {
+		return extAttris;
+	}
+	public void setExtAttris(Map<String, String> extAttris) {
+		this.extAttris = extAttris;
+	}
+	
+	private String effectiveTime;
+	private String expiryTime;
+	private String remark;
+	public String getEffectiveTime() {
+		return effectiveTime;
+	}
+	public String getExpiryTime() {
+		return expiryTime;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setEffectiveTime(String effectiveTime) {
+		this.effectiveTime = effectiveTime;
+	}
+	public void setExpiryTime(String expiryTime) {
+		this.expiryTime = expiryTime;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }
