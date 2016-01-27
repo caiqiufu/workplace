@@ -23,7 +23,7 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 
-@Service("smartGetAvailablePrimaryOffer")
+@Service("queryAvailablePrimaryOffer_1")
 public class SmartGetAvailablePrimaryOffer extends CustSoapMessageHandler implements BizHandler {
 
 	@Override

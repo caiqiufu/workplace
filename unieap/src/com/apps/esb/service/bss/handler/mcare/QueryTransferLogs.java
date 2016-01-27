@@ -25,11 +25,11 @@ import com.unieap.base.ServiceUtils;
 import com.unieap.tools.JSONUtils;
 
 @Service("queryTransferLogs")
-public class QueryTransferLogs implements BizHandler{
+public class QueryTransferLogs implements BizHandler {
 
 	@Override
-	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler, Map<String, Object> extParameters)
-			throws Exception {
+	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler,
+			Map<String, Object> extParameters) throws Exception {
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
@@ -39,36 +39,22 @@ public class QueryTransferLogs implements BizHandler{
 			return processResult;
 		}
 		QueryTransferLogsVO queryTransferLogsVO = (QueryTransferLogsVO) processResult.getVo();
-		List<TransferLogVO> transferLogList = queryTransferLogsVO.getTransferLogList();
-		if(transferLogList!=null &&transferLogList.size()>0){
-			List<TransferBalanceLogVO> logs = new ArrayList<TransferBalanceLogVO>();
-			for(int i = 0 ; i < transferLogList.size() ; i++){
-				TransferLogVO transferLogVO = transferLogList.get(i);
-				TransferBalanceLogVO transferBalanceLogVO = new TransferBalanceLogVO();
-				logs.add(transferBalanceLogVO);
-				transferBalanceLogVO.setResultCode(transferLogVO.getResultCode());
-				transferBalanceLogVO.setTradeTime(BssServiceUtils.dateFormat(transferLogVO.getTradeTime()));
-				transferBalanceLogVO.setTransferAmount(BssServiceUtils.moneyFormat(transferLogVO.getTransferAmount()));
-				transferBalanceLogVO.setTransferChannelID(UnieapConstants.getDicName("rechargeChannel", transferLogVO.getTransferChannelID()));
-				transferBalanceLogVO.setTransferorNumber(transferLogVO.getServiceNumber());
-				transferBalanceLogVO.setTransfereeNumber(transferLogVO.getOppositeServiceNumber());
+		List<TransferBalanceLogVO> logs = getTransferLogs(queryTransferLogsVO);
+		if (handler != null) {
+			String custHandlerName = handler.get("custHandlerName");
+			if (!StringUtils.isEmpty(custHandlerName)) {
+				CustomizeBizHanlder custHandler = (CustomizeBizHanlder) ServiceUtils.getBean(custHandlerName);
+				List<Object> originalVOs = new ArrayList<Object>();
+				originalVOs.add(queryTransferLogsVO);
+				custHandler.process(requestInfo, handler, extParameters, logs, originalVOs);
 			}
-			if(handler!=null){
-				String custHandlerName = handler.get("custHandlerName");
-				if(!StringUtils.isEmpty(custHandlerName)){
-					CustomizeBizHanlder custHandler = (CustomizeBizHanlder)ServiceUtils.getBean(custHandlerName);
-					List<Object> originalVOs = new ArrayList<Object>();
-					originalVOs.add(queryTransferLogsVO);
-					custHandler.process(requestInfo, handler, extParameters, logs,originalVOs);
-				}
-			}
-			JSONArray logsJson = JSONUtils.getJSONArray(logs);
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("transferBalanceLog", logsJson);
-			processResult.setExtParameters(jsonResult.toString());
 		}
+		JSONArray logsJson = JSONUtils.getJSONArray(logs);
+		JSONObject jsonResult = new JSONObject();
+		jsonResult.put("transferBalanceLog", logsJson);
+		processResult.setExtParameters(jsonResult.toString());
 		return processResult;
-		
+
 	}
 
 	@Override
@@ -95,4 +81,24 @@ public class QueryTransferLogs implements BizHandler{
 		return null;
 	}
 
+	private List<TransferBalanceLogVO> getTransferLogs(QueryTransferLogsVO queryTransferLogsVO) {
+		List<TransferLogVO> transferLogList = queryTransferLogsVO.getTransferLogList();
+		if (transferLogList != null && transferLogList.size() > 0) {
+			List<TransferBalanceLogVO> logs = new ArrayList<TransferBalanceLogVO>();
+			for (int i = 0; i < transferLogList.size(); i++) {
+				TransferLogVO transferLogVO = transferLogList.get(i);
+				TransferBalanceLogVO transferBalanceLogVO = new TransferBalanceLogVO();
+				logs.add(transferBalanceLogVO);
+				transferBalanceLogVO.setResultCode(transferLogVO.getResultCode());
+				transferBalanceLogVO.setTradeTime(BssServiceUtils.dateFormat(transferLogVO.getTradeTime()));
+				transferBalanceLogVO.setTransferAmount(BssServiceUtils.moneyFormat(transferLogVO.getTransferAmount()));
+				transferBalanceLogVO.setTransferChannelID(
+						UnieapConstants.getDicName("rechargeChannel", transferLogVO.getTransferChannelID()));
+				transferBalanceLogVO.setTransferorNumber(transferLogVO.getServiceNumber());
+				transferBalanceLogVO.setTransfereeNumber(transferLogVO.getOppositeServiceNumber());
+			}
+			return logs;
+		}
+		return null;
+	}
 }

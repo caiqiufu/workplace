@@ -8,8 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.apps.esb.service.bss.BssServiceUtils;
-import com.apps.esb.service.bss.app.vo.customer.basicinfo.CustomerVO;
 import com.apps.esb.service.bss.app.vo.subscriber.basicinfo.SubscriberVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
@@ -45,21 +43,12 @@ public class VerifyCodeLogin implements BizHandler {
 		String returnCode = smsBO.checkVerifyCode("V", requestInfo.getRequestBody().getServiceNumber(), verifyCode);
 		ProcessResult processResult = new ProcessResult();
 		if (UnieapConstants.C0.equals(returnCode)) {
-			BizHandler getSubscriptionData = (BizHandler) ServiceUtils.getBean("getSubscriptionData");
-			ProcessResult processResultSubscriberData = getSubscriptionData.process(requestInfo, handler,
-					extParameters);
-			SubscriberVO subscriberVO = (SubscriberVO) processResultSubscriberData.getVo();
-
-			JSONObject customerObj = new JSONObject("{customerId:" + subscriberVO.getCustomerId() + "}");
-			JSONObject newExtParameters = BssServiceUtils
-					.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), customerObj);
-			requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());
-
-			BizHandler getCustomerData = (BizHandler) ServiceUtils.getBean("getCustomerData");
-			ProcessResult processResultGetCustomerData = getCustomerData.process(requestInfo, handler, extParameters);
-			CustomerVO customerVO = (CustomerVO) processResultGetCustomerData.getVo();
-
-			subscriberVO.setCustomerVO(customerVO);
+			BizHandler querySubscriber = (BizHandler) ServiceUtils.getBeanByTenantId("querySubscriber");
+			ProcessResult processSubscriber = querySubscriber.process(requestInfo, handler, extParameters);
+			if (!UnieapConstants.C0.equals(processSubscriber.getResultCode())) {
+				return processSubscriber;
+			}
+			SubscriberVO subscriberVO = (SubscriberVO) processSubscriber.getVo();
 			processResult.setVo(subscriberVO);
 			processResult.setResultCode(UnieapConstants.C0);
 			processResult.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));

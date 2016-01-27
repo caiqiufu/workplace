@@ -75,7 +75,7 @@ public class SmartQueryCDR extends CustSoapMessageHandler implements BizHandler 
 
 	public SOAPMessage getRequestSOAPMessage(int number, String serviceNumber, RequestInfo requestInfo)
 			throws Exception {
-		SOAPMessage message = SoapCallUtils.getMessageFactory().createMessage();
+		/*SOAPMessage message = SoapCallUtils.getMessageFactory().createMessage();
 		this.getCBSBbHeader("QueryCDRRequestMsg", message);
 		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
 		SOAPElement reqestElement = bodyElement.addChildElement("QueryCDRRequest");
@@ -92,23 +92,8 @@ public class SmartQueryCDR extends CustSoapMessageHandler implements BizHandler 
 		reqestElement.addChildElement("BeginRowNum", "bbs").addTextNode("0");
 		// reqestElement.addChildElement("FetchRowNum","bbs").addTextNode(SYSConfig.getConfig().get("cbs.query.cdr.fetchrownum"));
 		reqestElement.addChildElement("FetchRowNum", "bbs").addTextNode("0");
-		return message;
-	}
-
-	public String[] getTimes(int number) {
-		Calendar cale = null;
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-		String firstday, lastday;
-		cale = Calendar.getInstance();
-		cale.add(Calendar.MONTH, -number);
-		cale.set(Calendar.DAY_OF_MONTH, 1);
-		firstday = format.format(cale.getTime()) + "000000";
-
-		cale = Calendar.getInstance();
-		cale.add(Calendar.MONTH, -number + 1);
-		cale.set(Calendar.DAY_OF_MONTH, 0);
-		lastday = format.format(cale.getTime()) + "235959";
-		return new String[] { firstday, lastday };
+		return message;*/
+		return null;
 	}
 
 	public ProcessResult queryCDRSummary(String serviceNumber, RequestInfo requestInfo) throws Exception {

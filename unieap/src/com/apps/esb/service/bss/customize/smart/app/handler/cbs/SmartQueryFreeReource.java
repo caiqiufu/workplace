@@ -24,7 +24,7 @@ import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 
 @Service("queryFreeReource_1")
-public class SmartQueryFreeUnits extends CustSoapMessageHandler implements BizHandler {
+public class SmartQueryFreeReource extends CustSoapMessageHandler implements BizHandler {
 
 	@Override
 	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler,

@@ -1,6 +1,7 @@
 package com.apps.esb.service.bss.handler;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,5 +37,20 @@ public class SoapMessageHandler {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		String dt = sdf.format(data);
 		return dt;
+	}
+	public String[] getTimes(int number) {
+		Calendar cale = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String firstday, lastday;
+		cale = Calendar.getInstance();
+		cale.add(Calendar.MONTH, -number);
+		cale.set(Calendar.DAY_OF_MONTH, 1);
+		firstday = format.format(cale.getTime()) + "000000";
+
+		cale = Calendar.getInstance();
+		cale.add(Calendar.MONTH, -number + 1);
+		cale.set(Calendar.DAY_OF_MONTH, 0);
+		lastday = format.format(cale.getTime()) + "235959";
+		return new String[] { firstday, lastday };
 	}
 }

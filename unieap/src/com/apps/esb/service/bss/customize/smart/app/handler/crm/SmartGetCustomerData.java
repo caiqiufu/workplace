@@ -23,7 +23,7 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 
-@Service("smartGetCustomerData_1")
+@Service("queryCustomer_1")
 public class SmartGetCustomerData extends CustSoapMessageHandler implements BizHandler {
 
 	@Override

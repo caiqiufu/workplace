@@ -24,7 +24,7 @@ import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 import com.unieap.base.SYSConfig;
 
-@Service("xchangePromotion_1")
+@Service("xchange_1")
 public class SmartXchangePromotion extends CustSoapMessageHandler implements BizHandler {
 
 	@Override

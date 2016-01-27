@@ -1,9 +1,6 @@
 package com.apps.esb.service.bss.customize.smart.app.handler.cbs;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +28,6 @@ import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
-import com.unieap.UnieapConstants;
-import com.unieap.base.SYSConfig;
 
 @Service("queryRechargeLogs_1")
 public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements BizHandler {
@@ -71,17 +66,9 @@ public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements Bi
 		reqestElement.addChildElement("TotalRowNum", "ars").addTextNode("0");
 		reqestElement.addChildElement("BeginRowNum", "ars").addTextNode("0");
 		reqestElement.addChildElement("FetchRowNum", "ars").addTextNode("1000");
-		Date endTime = UnieapConstants.getDateTime(null);
-		Calendar rightNow = Calendar.getInstance();
-		rightNow.setTime(endTime);
-		rightNow.add(Calendar.DAY_OF_YEAR,
-				-Integer.parseInt(SYSConfig.getConfig().get("cbs.query.rechargelog.during")));
-		Date beginTime = rightNow.getTime();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-		String beginTimeStr = sdf.format(beginTime);
-		String endTimeStr = sdf.format(endTime);
-		reqestElement.addChildElement("StartTime", "ars").addTextNode(beginTimeStr);
-		reqestElement.addChildElement("EndTime", "ars").addTextNode(endTimeStr);
+		String[] times = getTimes(1);
+		reqestElement.addChildElement("StartTime", "ars").addTextNode(times[0]);
+		reqestElement.addChildElement("EndTime", "ars").addTextNode(times[1]);
 		return message;
 	}
 

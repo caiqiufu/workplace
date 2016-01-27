@@ -19,14 +19,14 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 
-@Service("changeCustomerData_1")
+@Service("changeCustomer_1")
 public class SmartChangeCustomerData extends CustSoapMessageHandler implements BizHandler {
 
 	@Override
 	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler,
 			Map<String, Object> extParameters) throws Exception {
 		RequestInfo newRequestInfo = BssServiceUtils.copyRequestInfo(requestInfo);
-		newRequestInfo.getRequestHeader().setBizCode("changeCustomerData");
+		newRequestInfo.getRequestHeader().setBizCode("changeCustomer");
 		return SoapCallUtils.process(this, newRequestInfo, requestInfo.getRequestBody().getServiceNumber(),
 				requestInfo.getRequestBody().getExtParameters(), handler, "ws.crm.query.timeout");
 	}

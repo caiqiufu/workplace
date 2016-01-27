@@ -24,10 +24,10 @@ import com.unieap.base.ServiceUtils;
 import com.unieap.tools.JSONUtils;
 
 @Service("queryXchangeLogs")
-public class QueryXchangeLogs implements BizHandler{
+public class QueryXchangeLogs implements BizHandler {
 	@Override
-	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler, Map<String, Object> extParameters)
-			throws Exception {
+	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler,
+			Map<String, Object> extParameters) throws Exception {
 		if (StringUtils.isEmpty(requestInfo.getRequestBody().getServiceNumber())) {
 			throw new Exception("serviceNumber is null");
 		}
@@ -37,37 +37,21 @@ public class QueryXchangeLogs implements BizHandler{
 			return processResult;
 		}
 		QueryXchangeLogsVO queryXchangeLogsVO = (QueryXchangeLogsVO) processResult.getVo();
-		List<com.apps.esb.service.bss.app.vo.account.xchange.XchangeLogVO> xchangeLogList = queryXchangeLogsVO.getXchangeLogList();
-		if(xchangeLogList!=null &&xchangeLogList.size()>0){
-			List<XchangeLogVO> logs = new ArrayList<XchangeLogVO>();
-			for(int i = 0 ; i < xchangeLogList.size() ; i++){
-				com.apps.esb.service.bss.app.vo.account.xchange.XchangeLogVO xchangeLogVO = xchangeLogList.get(i);
-				if(Double.parseDouble(xchangeLogVO.getDeductAmount())==0){
-					XchangeLogVO myXchangeLogVO = new XchangeLogVO();
-					logs.add(myXchangeLogVO);
-					myXchangeLogVO.setApplierNumber(xchangeLogVO.getApplierNumber());
-					myXchangeLogVO.setBonusAmount(BssServiceUtils.moneyFormat(xchangeLogVO.getBonusAmount()));
-					myXchangeLogVO.setBonusExpTime(BssServiceUtils.dateFormat(xchangeLogVO.getExpiryTime()));
-					myXchangeLogVO.setDeductAmount(BssServiceUtils.moneyFormat(xchangeLogVO.getDeductAmount()));
-					myXchangeLogVO.setReceiverNumber(xchangeLogVO.getReceiverNumber());
-					myXchangeLogVO.setTradeTime(BssServiceUtils.dateFormat(xchangeLogVO.getTradeTime()));
-					myXchangeLogVO.setTransferFee(BssServiceUtils.moneyFormat(xchangeLogVO.getTransferFee()));
-				}
+		List<XchangeLogVO> logs = getXchangeLogs(queryXchangeLogsVO);
+
+		if (handler != null) {
+			String custHandlerName = handler.get("custHandlerName");
+			if (!StringUtils.isEmpty(custHandlerName)) {
+				CustomizeBizHanlder custHandler = (CustomizeBizHanlder) ServiceUtils.getBean(custHandlerName);
+				List<Object> originalVOs = new ArrayList<Object>();
+				originalVOs.add(queryXchangeLogsVO);
+				custHandler.process(requestInfo, handler, extParameters, logs, originalVOs);
 			}
-			if(handler!=null){
-				String custHandlerName = handler.get("custHandlerName");
-				if(!StringUtils.isEmpty(custHandlerName)){
-					CustomizeBizHanlder custHandler = (CustomizeBizHanlder)ServiceUtils.getBean(custHandlerName);
-					List<Object> originalVOs = new ArrayList<Object>();
-					originalVOs.add(queryXchangeLogsVO);
-					custHandler.process(requestInfo, handler, extParameters, logs,originalVOs);
-				}
-			}
-			JSONArray logsJson = JSONUtils.getJSONArray(logs);
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("xChangeLog", logsJson);
-			processResult.setExtParameters(jsonResult.toString());
 		}
+		JSONArray logsJson = JSONUtils.getJSONArray(logs);
+		JSONObject jsonResult = new JSONObject();
+		jsonResult.put("xChangeLog", logsJson);
+		processResult.setExtParameters(jsonResult.toString());
 		return processResult;
 	}
 
@@ -95,4 +79,27 @@ public class QueryXchangeLogs implements BizHandler{
 		return null;
 	}
 
+	private List<XchangeLogVO> getXchangeLogs(QueryXchangeLogsVO queryXchangeLogsVO) {
+		List<com.apps.esb.service.bss.app.vo.account.xchange.XchangeLogVO> xchangeLogList = queryXchangeLogsVO
+				.getXchangeLogList();
+		if (xchangeLogList != null && xchangeLogList.size() > 0) {
+			List<XchangeLogVO> logs = new ArrayList<XchangeLogVO>();
+			for (int i = 0; i < xchangeLogList.size(); i++) {
+				com.apps.esb.service.bss.app.vo.account.xchange.XchangeLogVO xchangeLogVO = xchangeLogList.get(i);
+				if (Double.parseDouble(xchangeLogVO.getDeductAmount()) == 0) {
+					XchangeLogVO myXchangeLogVO = new XchangeLogVO();
+					logs.add(myXchangeLogVO);
+					myXchangeLogVO.setApplierNumber(xchangeLogVO.getApplierNumber());
+					myXchangeLogVO.setBonusAmount(BssServiceUtils.moneyFormat(xchangeLogVO.getBonusAmount()));
+					myXchangeLogVO.setBonusExpTime(BssServiceUtils.dateFormat(xchangeLogVO.getExpiryTime()));
+					myXchangeLogVO.setDeductAmount(BssServiceUtils.moneyFormat(xchangeLogVO.getDeductAmount()));
+					myXchangeLogVO.setReceiverNumber(xchangeLogVO.getReceiverNumber());
+					myXchangeLogVO.setTradeTime(BssServiceUtils.dateFormat(xchangeLogVO.getTradeTime()));
+					myXchangeLogVO.setTransferFee(BssServiceUtils.moneyFormat(xchangeLogVO.getTransferFee()));
+				}
+			}
+			return logs;
+		}
+		return null;
+	}
 }
