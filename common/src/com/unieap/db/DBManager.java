@@ -14,7 +14,7 @@ import com.unieap.base.ServiceUtils;
  * Copyright: Copyright (c) 2009
  * </p>
  * <p>
- * Company: 深圳市天源迪科技术股份有限公司
+ * Company: 
  * </p>
  * 
  * @author <a href="mailto: leixuebin@neusoft.com">蔡秋伏</a>
