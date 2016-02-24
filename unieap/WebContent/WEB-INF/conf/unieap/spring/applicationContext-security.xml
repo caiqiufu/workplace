@@ -17,18 +17,21 @@
 	<http pattern="/logout.jsp" security="none" />
 	<http pattern="/unieap/**" security="none" />
 	<!-- APP 访问的HTML，免过滤 -->
-	<http pattern="/apps/mcare/html/**" security="none" />
-	<http pattern="/apps/mcare/images/**" security="none" />
-	<http pattern="/apps/mcare/apk/**" security="none" />
 	<http pattern="/sharefolder/**" security="none" />
+	<http pattern="/apps/mcare/**" security="none" />
 	<!-- 外部系统请求URL，不用鉴权验证 -->
 	<http pattern="/extAction.do*" security="none" />
+	<http pattern="/mCareLoginController.do*" security="none" />
+	<http pattern="/verifyCodeController.do*" security="none" />
 	<!-- 對webservice 不做任何處理，否則會導致SOAP協議被轉義成text/html请求 -->
 	<http pattern="/services/*" security="none" />
 
 	<http access-denied-page="/accessDenied.jsp">
 		<form-login login-page="/login.jsp"
 			authentication-failure-url="/403.jsp" default-target-url="/index.jsp" />
+			
+			 <intercept-url pattern="/mCareController.do*" access="ROLE_MCARE"/>
+			 <intercept-url pattern="/extAction.do*" access="ROLE_MSHOP"/>
 		<!-- admin 页面访问权限 <intercept-url pattern="/admin.jsp" access="ROLE_ADMIN" 
 			/> username-parameter,password-parameter设置登录用户名和密码的请求name 默认：j_username,j_password -->
 		<!-- 访问/**资源的用户必须具有 ROLE_USER的权限 <intercept-url pattern="/user.jsp" access="ROLE_USER" 
