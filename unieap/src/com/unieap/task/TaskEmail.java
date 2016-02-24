@@ -17,12 +17,15 @@ import com.unieap.pojo.EmailNotify;
 import com.unieap.pojo.ExcLog;
 
 @Component
-public class TaskEmail {
+public class TaskEmail extends TaskService{
 	@Scheduled(cron="30 * * * * ?")
 	public void sendEmail() {
+		if(!this.checkTaskStatus("task.send.email")){
+			return;
+		}
 		DetachedCriteria criteria = DetachedCriteria.forClass(EmailNotify.class);
 		criteria.add(Restrictions.eq("status","T"));
-		List datas = DBManager.getHT(null).findByCriteria(criteria);
+		List<?> datas = DBManager.getHT(null).findByCriteria(criteria);
 		if(datas!=null && datas.size()>0){
 			String[] tos;
 			for(int i = 0 ; i< datas.size() ; i++){

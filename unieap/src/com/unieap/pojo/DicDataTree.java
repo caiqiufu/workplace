@@ -26,12 +26,13 @@ public class DicDataTree implements java.io.Serializable {
 	private Date modifyDate;
 	private String createBy;
 	private String modifyBy;
+	private String tenantId;
 
 	public DicDataTree() {
 	}
 
 	public DicDataTree(Integer dicId, String dicCode, String dicName, String leaf, String activeFlag, Date createDate,
-			String createBy) {
+			String createBy,String tenantId) {
 		this.dicId = dicId;
 		this.dicCode = dicCode;
 		this.dicName = dicName;
@@ -39,11 +40,12 @@ public class DicDataTree implements java.io.Serializable {
 		this.activeFlag = activeFlag;
 		this.createDate = createDate;
 		this.createBy = createBy;
+		this.tenantId = tenantId;
 	}
 
 	public DicDataTree(Integer dicId, String dicCode, String dicName, Integer parentId, String parentCode,
 			String parentName,String dicType, String leaf, Integer seq, String href, String icon, String activeFlag, String remark,
-			String language, Date createDate, Date modifyDate, String createBy, String modifyBy) {
+			String language, Date createDate, Date modifyDate, String createBy, String modifyBy,String tenantId) {
 		this.dicId = dicId;
 		this.dicCode = dicCode;
 		this.dicName = dicName;
@@ -62,6 +64,7 @@ public class DicDataTree implements java.io.Serializable {
 		this.modifyDate = modifyDate;
 		this.createBy = createBy;
 		this.modifyBy = modifyBy;
+		this.tenantId = tenantId;
 	}
 
 	public Integer getDicId() {
@@ -206,6 +209,14 @@ public class DicDataTree implements java.io.Serializable {
 
 	public void setModifyBy(String modifyBy) {
 		this.modifyBy = modifyBy;
+	}
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }

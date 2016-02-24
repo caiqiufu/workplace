@@ -5,7 +5,7 @@ public class LicenseGenerate {
 	public static void main(String[] args) throws Exception {
 		KeyGenerater keyGenerater = new KeyGenerater();
 		keyGenerater.generater();
-		String expiredTime = Signaturer.sign(keyGenerater.getPriKey(), "2016-02-15 00:00:00");
+		String expiredTime = Signaturer.sign(keyGenerater.getPriKey(), "2016-05-15 00:00:00");
 		System.out.println("licence.expiretime = " + expiredTime);
 		//boolean verify = SignProvider.verify(keyGenerater.getPubKey(), "2015-11-15 00:00:00", signed);
 		//System.out.println("verify = " + verify);

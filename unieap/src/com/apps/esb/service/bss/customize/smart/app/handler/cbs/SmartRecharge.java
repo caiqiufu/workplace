@@ -142,7 +142,7 @@ public class SmartRecharge extends CustSoapMessageHandler implements BizHandler 
 		List<LifeCycleChgInfoVO> lifeCycleChgInfoList = new ArrayList<LifeCycleChgInfoVO>();
 		List<FreeResourceChgInfoVO> freeResourceChgInfoList = new ArrayList<FreeResourceChgInfoVO>();
 		
-		RechargeBonusVO rechargeBonusVO = new RechargeBonusVO();
+		//RechargeBonusVO rechargeBonusVO = new RechargeBonusVO();
 		rechargeLogVO.setBalanceChgInfoList(balanceChgInfoList);
 		rechargeLogVO.setCreditChgInfoList(creditChgInfoList);
 		rechargeLogVO.setLifeCycleChgInfoList(lifeCycleChgInfoList);

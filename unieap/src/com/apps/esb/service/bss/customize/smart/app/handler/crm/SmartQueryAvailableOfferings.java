@@ -38,7 +38,7 @@ public class SmartQueryAvailableOfferings extends CustSoapMessageHandler impleme
 		}
 		ProcessResult result = new ProcessResult();
 		result.setResultCode(UnieapConstants.C0);
-		result.setResultDesc(UnieapConstants.SUCCESS);
+		result.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
 
 		OfferCategoryVO offerCategoryVO = getOfferingsCategory(categoryId);
 

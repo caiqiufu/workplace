@@ -54,7 +54,6 @@ public class QueryOfferings implements BizHandler {
 				.getVo();
 		ProcessResult result = new ProcessResult();
 		result.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
-		result.setResultCode(UnieapConstants.C0);
 		result.setResultDesc(UnieapConstants.getMessage(UnieapConstants.C0));
 		OfferCategoryVO offerCategoryVO = getOfferingsCategory(categoryId);
 

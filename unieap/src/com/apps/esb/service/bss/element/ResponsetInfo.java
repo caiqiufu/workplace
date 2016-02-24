@@ -1,13 +1,13 @@
 package com.apps.esb.service.bss.element;
 
 public class ResponsetInfo {
-	public ResponsetHeader responsetHeader;
+	public ResponseHeader ResponseHeader;
 	public ResponseBody responseBody;
-	public ResponsetHeader getResponsetHeader() {
-		return responsetHeader;
+	public ResponseHeader getResponseHeader() {
+		return ResponseHeader;
 	}
-	public void setResponsetHeader(ResponsetHeader responsetHeader) {
-		this.responsetHeader = responsetHeader;
+	public void setResponseHeader(ResponseHeader ResponseHeader) {
+		this.ResponseHeader = ResponseHeader;
 	}
 	public ResponseBody getResponseBody() {
 		return responseBody;

@@ -58,7 +58,11 @@ public class MyUserDetailService implements UserDetailsService {
 	private Collection<GrantedAuthority> getRoles(String userCode){
 		Collection<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
 		GrantedAuthority auth = new GrantedAuthorityImpl("unieap");
+		GrantedAuthority auth2 = new GrantedAuthorityImpl("ROLE_MCARE");
+		GrantedAuthority auth3 = new GrantedAuthorityImpl("ROLE_MSHOP");
 		auths.add(auth);
+		auths.add(auth2);
+		auths.add(auth3);
 		//StringBuffer allocs = new StringBuffer("'").append(username).append("'");
 		/*List<Map<String,Object>> orgs = getUserOrgs(username);
 		if(orgs!=null&&orgs.size()>0){

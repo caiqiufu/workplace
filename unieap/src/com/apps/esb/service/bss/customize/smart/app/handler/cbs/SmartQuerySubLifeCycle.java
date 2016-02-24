@@ -13,9 +13,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.apps.esb.service.bss.BssServiceUtils;
+import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.LifeCycleStatusVO;
+import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.StatusVO;
 import com.apps.esb.service.bss.customize.smart.app.handler.CustSoapMessageHandler;
-import com.apps.esb.service.bss.customize.smart.app.handler.cbs.vo.querysublifecycle.LifeCycleStatusVO;
-import com.apps.esb.service.bss.customize.smart.app.handler.cbs.vo.querysublifecycle.QuerySubLifeCycleVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
@@ -61,11 +61,13 @@ public class SmartQuerySubLifeCycle extends CustSoapMessageHandler implements Bi
 	@Override
 	public ProcessResult getResposeResult(SOAPMessage response) throws Exception {
 
-		QuerySubLifeCycleVO querySubLifeCycleVO = new QuerySubLifeCycleVO();
-		List<LifeCycleStatusVO> lifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
-		querySubLifeCycleVO.setLifeCycleStatusList(lifeCycleStatusList);
+		LifeCycleStatusVO lifeCycleStatusVO = new LifeCycleStatusVO();
+		List<StatusVO> statusList = new ArrayList<StatusVO>();
+		StatusVO currentStatus = new StatusVO();
+		lifeCycleStatusVO.setCurrentStatus(currentStatus);
+		lifeCycleStatusVO.setStatusList(statusList);
 		ProcessResult result = new ProcessResult();
-		result.setVo(querySubLifeCycleVO);
+		result.setVo(lifeCycleStatusVO);
 		org.w3c.dom.Document document = response.getSOAPPart().getEnvelope().getOwnerDocument();
 		if (document.getElementsByTagName("cbs:ResultCode").getLength() > 0) {
 
@@ -82,25 +84,34 @@ public class SmartQuerySubLifeCycle extends CustSoapMessageHandler implements Bi
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 				if ("bcs:CurrentStatusIndex".equals(node.getNodeName())) {
-					querySubLifeCycleVO.setCurrentStatusIndex(node.getTextContent());
+					currentStatus.setStatusIndex(node.getTextContent());
 				} else if ("bcs:LifeCycleStatus".equals(node.getNodeName())) {
-					LifeCycleStatusVO lifeCycleStatusVO = new LifeCycleStatusVO();
-					lifeCycleStatusList.add(lifeCycleStatusVO);
+					StatusVO status = new StatusVO();
+					statusList.add(status);
 					NodeList lifeCycleStatusNodes = node.getChildNodes();
 					for (int j = 0; j < lifeCycleStatusNodes.getLength(); j++) {
 						Node lifeCycleStatusNode = lifeCycleStatusNodes.item(j);
-						if ("bcs:StatusName".equals(lifeCycleStatusNode.getNodeName())) {
-							lifeCycleStatusVO.setStatusName(lifeCycleStatusNode.getTextContent());
+						if ("bcs:StatusIndex".equals(lifeCycleStatusNode.getNodeName())) {
+							status.setStatusIndex(lifeCycleStatusNode.getTextContent());
+						}else if ("bcs:StatusName".equals(lifeCycleStatusNode.getNodeName())) {
+							status.setStatusDesc(lifeCycleStatusNode.getTextContent());
 						} else if ("bcs:StatusExpireTime".equals(lifeCycleStatusNode.getNodeName())) {
-							lifeCycleStatusVO.setStatusExpireTime(lifeCycleStatusNode.getTextContent());
-						} else if ("bcs:StatusIndex".equals(lifeCycleStatusNode.getNodeName())) {
-							lifeCycleStatusVO.setStatusIndex(lifeCycleStatusNode.getTextContent());
+							status.setExpiryTime(lifeCycleStatusNode.getTextContent());
 						}
 					}
 				} else if ("bcs:RBlacklistStatus".equals(node.getNodeName())) {
-					querySubLifeCycleVO.setrBlacklistStatus(node.getTextContent());
+					lifeCycleStatusVO.setrBlacklistStatus(node.getTextContent());
 				} else if ("bcs:FraudTimes".equals(node.getNodeName())) {
-					querySubLifeCycleVO.setFraudTimes(node.getTextContent());
+					lifeCycleStatusVO.setFraudTimes(node.getTextContent());
+				}
+			}
+		}
+		if(statusList.size()>0){
+			for(int i = 0 ; i< statusList.size() ; i++){
+				StatusVO s = statusList.get(i);
+				if(currentStatus.getStatusIndex().equals(s.getStatusIndex())){
+					currentStatus.setExpiryTime(s.getExpiryTime());
+					currentStatus.setStatusDesc(s.getStatusDesc());
 				}
 			}
 		}

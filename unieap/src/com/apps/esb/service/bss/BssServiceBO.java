@@ -15,7 +15,7 @@ import com.apps.esb.service.bss.element.RequestBody;
 import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponseBody;
-import com.apps.esb.service.bss.element.ResponsetHeader;
+import com.apps.esb.service.bss.element.ResponseHeader;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
@@ -118,13 +118,13 @@ public class BssServiceBO extends BaseBO {
 					setDatas(esblog);
 					//////////////////////////////////////////
 					ResponsetInfo responsetInfo = new ResponsetInfo();
-					ResponsetHeader responsetHeader = new ResponsetHeader();
-					responsetHeader.setResultCode("10004");
-					responsetHeader.setResultDesc(errorDesc);
-					responsetHeader.setTransactionId(transactionId);
+					ResponseHeader ResponseHeader = new ResponseHeader();
+					ResponseHeader.setResultCode("10004");
+					ResponseHeader.setResultDesc(errorDesc);
+					ResponseHeader.setTransactionId(transactionId);
 					ResponseBody responseBody = new ResponseBody();
 					responseBody.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
-					responsetInfo.setResponsetHeader(responsetHeader);
+					responsetInfo.setResponseHeader(ResponseHeader);
 					responsetInfo.setResponseBody(responseBody);
 					String responsetInfoString = BssServiceUtils.getResposeInfoString(responsetInfo);
 					return responsetInfoString;
@@ -147,12 +147,12 @@ public class BssServiceBO extends BaseBO {
 				setDatas(esblog);
 				///////////////////////////////////////
 				ResponsetInfo ResponsetInfo = new ResponsetInfo();
-				ResponsetHeader responsetHeader = new ResponsetHeader();
+				ResponseHeader ResponseHeader = new ResponseHeader();
 				ResponseBody responseBody = new ResponseBody();
-				ResponsetInfo.setResponsetHeader(responsetHeader);
+				ResponsetInfo.setResponseHeader(ResponseHeader);
 				ResponsetInfo.setResponseBody(responseBody);
-				responsetHeader.setResultCode(UnieapConstants.C99999);
-				responsetHeader.setResultDesc(e.getLocalizedMessage());
+				ResponseHeader.setResultCode(UnieapConstants.C99999);
+				ResponseHeader.setResultDesc(e.getLocalizedMessage());
 				String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
 				return responsetInfoString;
 			}
@@ -172,13 +172,13 @@ public class BssServiceBO extends BaseBO {
 				setDatas(esblog);
 				//////////////////////////////////////////
 				ResponsetInfo responsetInfo = new ResponsetInfo();
-				ResponsetHeader responsetHeader = new ResponsetHeader();
-				responsetHeader.setResultCode("10001");
-				responsetHeader.setResultDesc(errorDesc);
-				responsetHeader.setTransactionId(transactionId);
+				ResponseHeader ResponseHeader = new ResponseHeader();
+				ResponseHeader.setResultCode("10001");
+				ResponseHeader.setResultDesc(errorDesc);
+				ResponseHeader.setTransactionId(transactionId);
 				ResponseBody responseBody = new ResponseBody();
 				responseBody.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
-				responsetInfo.setResponsetHeader(responsetHeader);
+				responsetInfo.setResponseHeader(ResponseHeader);
 				responsetInfo.setResponseBody(responseBody);
 				String responsetInfoString = BssServiceUtils.getResposeInfoString(responsetInfo);
 				return responsetInfoString;
@@ -196,20 +196,20 @@ public class BssServiceBO extends BaseBO {
 				processResult.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 				//////////////////////////////////////////////
 				ResponsetInfo responsetInfo = new ResponsetInfo();
-				ResponsetHeader responsetHeader = new ResponsetHeader();
-				responsetHeader.setResultCode(UnieapConstants.C99999);
-				responsetHeader.setResultDesc(e.getLocalizedMessage());
-				responsetHeader.setTransactionId(transactionId);
-				responsetHeader.setBizCode(bizCode);
-				responsetHeader.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
-				responsetHeader.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
-				responsetHeader.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
-				responsetHeader.setResponseTime(UnieapConstants.getCurrentTime(null, null));
-				responsetHeader.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
+				ResponseHeader ResponseHeader = new ResponseHeader();
+				ResponseHeader.setResultCode(UnieapConstants.C99999);
+				ResponseHeader.setResultDesc(e.getLocalizedMessage());
+				ResponseHeader.setTransactionId(transactionId);
+				ResponseHeader.setBizCode(bizCode);
+				ResponseHeader.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
+				ResponseHeader.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
+				ResponseHeader.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
+				ResponseHeader.setResponseTime(UnieapConstants.getCurrentTime(null, null));
+				ResponseHeader.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
 				ResponseBody responseBody = new ResponseBody();
 				responseBody.setServiceNumber(requestInfo.getRequestBody().getServiceNumber());
 				responseBody.setExtParameters(requestInfo.getRequestBody().getExtParameters());
-				responsetInfo.setResponsetHeader(responsetHeader);
+				responsetInfo.setResponseHeader(ResponseHeader);
 				responsetInfo.setResponseBody(responseBody);
 				String responsetInfoString = BssServiceUtils.getResposeInfoString(responsetInfo);
 				long endTime = System.currentTimeMillis();
@@ -224,13 +224,15 @@ public class BssServiceBO extends BaseBO {
 			long endTime = System.currentTimeMillis();
 			String during = "" + (endTime - beginTime);
 			String responseTime = UnieapConstants.getCurrentTime(null, null);
-			responsetInfo.getResponsetHeader().setResponseTime(responseTime);
+			responsetInfo.getResponseHeader().setResponseTime(responseTime);
 			requestInfo.getRequestHeader().setResponseTime(responseTime);
 			Esblog esblog = BssServiceUtils.getEsbLog(requestInfo.getRequestHeader(), processResult, requestInfoString,
 					responsetInfoString, during, "esb");
 			setDatas(esblog);
 			EsblogDevice esblogDevice = BssServiceUtils.getEsbLogDevice(requestInfo.getRequestHeader(), esblog);
-			setDeviceDatas(esblogDevice);
+			if(esblogDevice!=null){
+				setDeviceDatas(esblogDevice);
+			}
 			return responsetInfoString;
 		} catch (Exception e) {
 			ProcessResult processResult = new ProcessResult();
@@ -243,11 +245,11 @@ public class BssServiceBO extends BaseBO {
 					"", during, "esb");
 			setDatas(esblog);
 			ResponsetInfo responsetInfo = new ResponsetInfo();
-			ResponsetHeader responsetHeader = new ResponsetHeader();
-			responsetHeader.setResultCode(UnieapConstants.C99999);
-			responsetHeader.setResultDesc(e.getLocalizedMessage());
+			ResponseHeader ResponseHeader = new ResponseHeader();
+			ResponseHeader.setResultCode(UnieapConstants.C99999);
+			ResponseHeader.setResultDesc(e.getLocalizedMessage());
 			ResponseBody responseBody = new ResponseBody();
-			responsetInfo.setResponsetHeader(responsetHeader);
+			responsetInfo.setResponseHeader(ResponseHeader);
 			responsetInfo.setResponseBody(responseBody);
 			String responsetInfoString = "";
 			try {
@@ -261,24 +263,24 @@ public class BssServiceBO extends BaseBO {
 
 	public String overFlowResonse() throws Exception {
 		ResponsetInfo ResponsetInfo = new ResponsetInfo();
-		ResponsetHeader responsetHeader = new ResponsetHeader();
+		ResponseHeader ResponseHeader = new ResponseHeader();
 		ResponseBody responseBody = new ResponseBody();
-		ResponsetInfo.setResponsetHeader(responsetHeader);
+		ResponsetInfo.setResponseHeader(ResponseHeader);
 		ResponsetInfo.setResponseBody(responseBody);
-		responsetHeader.setResultCode("10002");
-		responsetHeader.setResultDesc(UnieapConstants.getMessage("10002"));
+		ResponseHeader.setResultCode("10002");
+		ResponseHeader.setResultDesc(UnieapConstants.getMessage("10002"));
 		String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
 		return responsetInfoString;
 	}
 
 	public String expiredResonse() throws Exception {
 		ResponsetInfo ResponsetInfo = new ResponsetInfo();
-		ResponsetHeader responsetHeader = new ResponsetHeader();
+		ResponseHeader ResponseHeader = new ResponseHeader();
 		ResponseBody responseBody = new ResponseBody();
-		ResponsetInfo.setResponsetHeader(responsetHeader);
+		ResponsetInfo.setResponseHeader(ResponseHeader);
 		ResponsetInfo.setResponseBody(responseBody);
-		responsetHeader.setResultCode("10003");
-		responsetHeader.setResultDesc(UnieapConstants.getMessage("10003"));
+		ResponseHeader.setResultCode("10003");
+		ResponseHeader.setResultDesc(UnieapConstants.getMessage("10003"));
 		String responsetInfoString = BssServiceUtils.getResposeInfoString(ResponsetInfo);
 		return responsetInfoString;
 	}

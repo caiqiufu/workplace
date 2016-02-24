@@ -37,15 +37,15 @@ public class ExtAction extends BaseController {
 	}
 
 	@RequestMapping(params = "method=smsVerify", method = RequestMethod.GET)
-	public @ResponseBody Map<String,String> smsVerify(ReuseSmsNotify vo, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public @ResponseBody Map<String, String> smsVerify(ReuseSmsNotify vo, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		ReuseSMSBO reuseSMSBO = (ReuseSMSBO) ServiceUtils.getBean("reuseSMSBO");
 		return reuseSMSBO.smsVerify(vo);
 	}
 
 	@RequestMapping(params = "method=regisCustomer", method = RequestMethod.GET)
-	public @ResponseBody Map<String,String> regisCustomer(ReuseSmsNotify smsVo, ReuseCustomer custVo, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public @ResponseBody Map<String, String> regisCustomer(ReuseSmsNotify smsVo, ReuseCustomer custVo,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ReuseSMSBO reuseSMSBO = (ReuseSMSBO) ServiceUtils.getBean("reuseSMSBO");
 		return reuseSMSBO.regisCustomer(smsVo, custVo);
 	}
@@ -59,12 +59,14 @@ public class ExtAction extends BaseController {
 	@RequestMapping(params = "method=queryInfo")
 	public @ResponseBody String queryInfo(String parameters, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		Map<String, Object> extParameters = new HashMap<String, Object>();
+		extParameters.put("HttpServletRequest", request);
 		BssServiceBO bssServiceBO = (BssServiceBO) ServiceUtils.getBean("bssServiceBO");
-		String responsetInfoString = bssServiceBO.queryInfo(parameters, null);
-		String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
-		if(UnieapConstants.YES.equals(isdebug)){
-			System.out.println("parameters="+parameters);
-			System.out.println("responsetInfoString="+responsetInfoString);
+		String responsetInfoString = bssServiceBO.queryInfo(parameters, extParameters);
+		String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		if (UnieapConstants.YES.equals(isdebug)) {
+			System.out.println("parameters=" + parameters);
+			System.out.println("responsetInfoString=" + responsetInfoString);
 		}
 		return responsetInfoString;
 	}
@@ -74,16 +76,16 @@ public class ExtAction extends BaseController {
 			throws Exception {
 		BssServiceBO bssServiceBO = (BssServiceBO) ServiceUtils.getBean("bssServiceBO");
 		String responsetInfoString = bssServiceBO.bizHandle(parameters, null);
-		String isdebug =SYSConfig.getConfig().get("mcare.app.extaction.debug");
-		if(UnieapConstants.YES.equals(isdebug)){
-			System.out.println("parameters="+parameters);
-			System.out.println("responsetInfoString="+responsetInfoString);
+		String isdebug = SYSConfig.getConfig().get("mcare.app.extaction.debug");
+		if (UnieapConstants.YES.equals(isdebug)) {
+			System.out.println("parameters=" + parameters);
+			System.out.println("responsetInfoString=" + responsetInfoString);
 		}
 		return responsetInfoString;
 	}
 
 	@RequestMapping(params = "method=bizFileHandle")
-	public @ResponseBody String submitComplain(String parameters,HttpServletRequest request,
+	public @ResponseBody String submitComplain(String parameters, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		FileBO fileBO = (FileBO) ServiceUtils.getBean("fileBO");
 		List<FileItem> items = fileBO.getFileItems(request);

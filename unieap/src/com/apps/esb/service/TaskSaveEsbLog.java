@@ -16,11 +16,16 @@ import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.unieap.CacheMgt;
 import com.unieap.db.DBManager;
+import com.unieap.task.TaskService;
 
 @Component
-public class TaskSaveEsbLog {
+public class TaskSaveEsbLog extends TaskService{
 	@Scheduled(cron = "15 * * * * ?")
 	public void saveEsbLog() {
+		if(!this.checkTaskStatus("task.esb.log.save")){
+			return;
+		}
+		
 		List<Esblog> datas = CacheMgt.getEsblogDatas();
 		if (datas.size() > 0) {
 			List<Esblog> copyDatas = new ArrayList<Esblog>();
@@ -39,6 +44,9 @@ public class TaskSaveEsbLog {
 
 	@Scheduled(cron = "15 * * * * ?")
 	public void saveEsbSOAPLog() throws Exception {
+		if(!this.checkTaskStatus("task.esb.log.save")){
+			return;
+		}
 		List<Map<String, Object>> datas = CacheMgt.getEsblogSOAPDatas();
 		if (datas.size() > 0) {
 			List<Map<String, Object>> copyDatas = new ArrayList<Map<String, Object>>();

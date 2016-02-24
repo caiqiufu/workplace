@@ -33,6 +33,8 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 		}*/
 		Collection<String> roles= new ArrayList<String>();
 		roles.add("unieap");
+		roles.add("ROLE_MCARE");
+		roles.add("ROLE_MSHOP");
 		return roles;
 	}
 	public boolean supports(Class<?> clazz) {

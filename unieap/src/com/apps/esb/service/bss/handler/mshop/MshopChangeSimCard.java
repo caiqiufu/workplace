@@ -39,7 +39,7 @@ public class MshopChangeSimCard implements BizHandler {
 		BizHandler querySubscriber = (BizHandler) ServiceUtils.getBeanByTenantId("querySubscriber");
 		ProcessResult processSubscriber = querySubscriber.process(requestInfo, handler, extParameters);
 		SubscriberVO subscriberVO = (SubscriberVO) processSubscriber.getVo();
-		JSONObject custObj = new JSONObject("{OldICCID:"+subscriberVO.getICCID()+"}");
+		JSONObject custObj = new JSONObject("{OldICCID:"+subscriberVO.getSimCardVO().getIccid()+"}");
 		JSONObject newExtParameters = BssServiceUtils
 				.modifyExtParameters(requestInfo.getRequestBody().getExtParameters(), custObj);
 		requestInfo.getRequestBody().setExtParameters(newExtParameters.toString());

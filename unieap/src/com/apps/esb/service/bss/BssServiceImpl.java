@@ -3,7 +3,7 @@ package com.apps.esb.service.bss;
 import javax.jws.WebService;
 
 import com.apps.esb.service.bss.element.ResponseBody;
-import com.apps.esb.service.bss.element.ResponsetHeader;
+import com.apps.esb.service.bss.element.ResponseHeader;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.unieap.UnieapConstants;
 
@@ -15,11 +15,11 @@ public class BssServiceImpl extends BssServiceBO implements BssService {
 			return this.queryInfo(requestInfoString,null);
 		} catch (Exception e) {
 			ResponsetInfo responsetInfo = new ResponsetInfo();
-			ResponsetHeader responsetHeader = new ResponsetHeader();
-			responsetHeader.setResultCode(UnieapConstants.C99999);
-			responsetHeader.setResultDesc(e.getLocalizedMessage());
+			ResponseHeader ResponseHeader = new ResponseHeader();
+			ResponseHeader.setResultCode(UnieapConstants.C99999);
+			ResponseHeader.setResultDesc(e.getLocalizedMessage());
 			ResponseBody responseBody = new ResponseBody();
-			responsetInfo.setResponsetHeader(responsetHeader);
+			responsetInfo.setResponseHeader(ResponseHeader);
 			responsetInfo.setResponseBody(responseBody);
 			String responsetInfoString = "";
 			try {

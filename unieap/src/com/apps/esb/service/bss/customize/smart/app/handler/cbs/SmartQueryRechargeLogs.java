@@ -150,8 +150,7 @@ public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements Bi
 									if ("ars:StatusName".equals(oldLifeCycleStatusNode.getNodeName())) {
 										oldLifeCycleStatusVO.setStatusDesc(oldLifeCycleStatusNode.getTextContent());
 									} else if ("ars:StatusExpireTime".equals(oldLifeCycleStatusNode.getNodeName())) {
-										oldLifeCycleStatusVO
-												.setExpiryTime(oldLifeCycleStatusNode.getTextContent());
+										oldLifeCycleStatusVO.setExpiryTime(oldLifeCycleStatusNode.getTextContent());
 									} else if ("ars:StatusIndex".equals(oldLifeCycleStatusNode.getNodeName())) {
 										oldLifeCycleStatusVO.setStatusIndex(oldLifeCycleStatusNode.getTextContent());
 									}
@@ -165,8 +164,7 @@ public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements Bi
 									if ("ars:StatusName".equals(oldLifeCycleStatusNode.getNodeName())) {
 										newLifeCycleStatusVO.setStatusDesc(oldLifeCycleStatusNode.getTextContent());
 									} else if ("ars:StatusExpireTime".equals(oldLifeCycleStatusNode.getNodeName())) {
-										newLifeCycleStatusVO
-												.setExpiryTime(oldLifeCycleStatusNode.getTextContent());
+										newLifeCycleStatusVO.setExpiryTime(oldLifeCycleStatusNode.getTextContent());
 									} else if ("ars:StatusIndex".equals(oldLifeCycleStatusNode.getNodeName())) {
 										newLifeCycleStatusVO.setStatusIndex(oldLifeCycleStatusNode.getTextContent());
 									}

@@ -38,11 +38,12 @@ public class DicBO extends BaseBO {
 		vo.setLeaf(UnieapConstants.YES);
 		vo.setCreateDate(UnieapConstants.getDateTime(null));
 		vo.setCreateBy(UnieapConstants.getUser().getUserCode());
+		vo.setTenantId(SYSConfig.getConfig().get("tenantId"));
 		DBManager.getHT(null).save(vo);
 		parent.setLeaf(UnieapConstants.NO);
 		DBManager.getHT(null).update(parent);
-		Map model = result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
-		model.put("id", vo.getDicId().intValue());
+		Map<String, String> model = result(UnieapConstants.ISSUCCESS, UnieapConstants.SUCCESS);
+		model.put("id", vo.getDicId().toString());
 		return model;
 	}
 
@@ -83,7 +84,7 @@ public class DicBO extends BaseBO {
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Map<String, String> dicDataDeal(String operType, DicDataTree vo) throws Exception {
 		if (StringUtils.equals(operType, UnieapConstants.ADD)) {
-			Map result = checkDicCodeExist(vo);
+			Map<String, String> result = checkDicCodeExist(vo);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
 				saveRoleResource(vo);
 				return save(vo);
@@ -91,7 +92,7 @@ public class DicBO extends BaseBO {
 				return result;
 			}
 		} else if (StringUtils.equals(operType, UnieapConstants.MODIFY)) {
-			Map result = checkDicCodeExistForUpdate(vo);
+			Map<String, String> result = checkDicCodeExistForUpdate(vo);
 			if (StringUtils.equals(result.get(UnieapConstants.ISSUCCESS).toString(), UnieapConstants.SUCCESS)) {
 				return update(vo);
 			} else {
@@ -130,7 +131,7 @@ public class DicBO extends BaseBO {
 		criteria.add(dicCode.eq(vo.getDicCode()));
 		Property language = Property.forName("language");
 		criteria.add(language.eq(vo.getLanguage()));
-		List resdatas = DBManager.getHT(null).findByCriteria(criteria);
+		List<?> resdatas = DBManager.getHT(null).findByCriteria(criteria);
 		if (resdatas != null && resdatas.size() > 0) {
 			Map<String, String> map = result(UnieapConstants.RETURNMESSAGE,
 					UnieapConstants.getMessage("mdm.dic.check.dicCode", new Object[] { vo.getDicCode() }));
@@ -151,7 +152,7 @@ public class DicBO extends BaseBO {
 		criteria.add(dicCode.eq(vo.getDicCode()));
 		Property language = Property.forName("language");
 		criteria.add(language.eq(vo.getLanguage()));
-		List datas = DBManager.getHT(null).findByCriteria(criteria);
+		List<?> datas = DBManager.getHT(null).findByCriteria(criteria);
 		if (datas != null && datas.size() > 0) {
 			Map<String, String> map = result(UnieapConstants.RETURNMESSAGE,
 					UnieapConstants.getMessage("mdm.dic.check.dicCode", new Object[] { vo.getDicCode() }));
@@ -200,7 +201,7 @@ public class DicBO extends BaseBO {
 		sql.append("r.create_Date as createDate,r.create_By as createBy,");
 		sql.append("r.modify_Date as modifyDate,r.modify_By as modifyBy,r.active_Flag as activeFlag,");
 		sql.append("remark FROM role_resource rr, role r where rr.role_id = r.role_id and rr.resource_id = ?");
-		List items = DBManager.getJT(null).query(sql.toString(), new Object[] { dicCode },
+		List<Object> items = DBManager.getJT(null).query(sql.toString(), new Object[] { dicCode },
 				new EntityRowMapper(Role.class));
 		page.setItems(items);
 

@@ -20,6 +20,7 @@ import com.apps.esb.service.bss.app.vo.subscriber.basicinfo.SubscriberVO;
 import com.apps.esb.service.bss.app.vo.subscriber.limitation.ConsumptionLimitVO;
 import com.apps.esb.service.bss.app.vo.subscriber.offering.OfferingVO;
 import com.apps.esb.service.bss.app.vo.subscriber.offering.ServiceVO;
+import com.apps.esb.service.bss.app.vo.subscriber.sim.SimCardVO;
 import com.apps.esb.service.bss.customize.smart.app.handler.CustSoapMessageHandler;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
@@ -84,11 +85,13 @@ public class SmartGetSubscriptionData extends CustSoapMessageHandler implements 
 			OfferingVO primaryOfferingVO = new OfferingVO();
 			List<OfferingVO> supplementaryOfferingList = new ArrayList<OfferingVO>();
 			List<ConsumptionLimitVO> consumptionLimitList = new ArrayList<ConsumptionLimitVO>();
+			SimCardVO simCardVO = new SimCardVO();
 			// List<AddressVO> addressList = new ArrayList<AddressVO>();
 			subscriberVO.setCustomerVO(customerVO);
 			subscriberVO.setPrimaryOfferingVO(primaryOfferingVO);
 			subscriberVO.setSupplementaryOfferingList(supplementaryOfferingList);
 			subscriberVO.setConsumptionLimitList(consumptionLimitList);
+			subscriberVO.setSimCardVO(simCardVO);
 			// subscriberVO.setAddressList(addressList);
 			NodeList nodes = getSubscriberBodyNode.getChildNodes();
 			for (int i = 0; i < nodes.getLength(); i++) {
@@ -103,12 +106,25 @@ public class SmartGetSubscriptionData extends CustSoapMessageHandler implements 
 					subscriberVO.setServiceNumber(node.getTextContent());
 				} else if ("quer:SubscriberType".equals(node.getNodeName())) {
 					subscriberVO.setSubscriberType(node.getTextContent());
+					if("0".equals(node.getTextContent())){
+						subscriberVO.setPaymentFlag("PPS");
+					}else{
+						subscriberVO.setPaymentFlag("POS");
+					}
 				} else if ("quer:NetworkType".equals(node.getNodeName())) {
 					subscriberVO.setNetworkType(node.getTextContent());
 				} else if ("quer:IMEI".equals(node.getNodeName())) {
 					subscriberVO.setIMEI(node.getTextContent());
 				} else if ("quer:ICCID".equals(node.getNodeName())) {
-					subscriberVO.setICCID(node.getTextContent());
+					simCardVO.setIccid(node.getTextContent());
+				}else if ("quer:PIN1".equals(node.getNodeName())) {
+					simCardVO.setPin1(node.getTextContent());
+				}else if ("quer:PIN2".equals(node.getNodeName())) {
+					simCardVO.setPin2(node.getTextContent());
+				}else if ("quer:PUK1".equals(node.getNodeName())) {
+					simCardVO.setPuk1(node.getTextContent());
+				}else if ("quer:PUK2".equals(node.getNodeName())) {
+					simCardVO.setPuk2(node.getTextContent());
 				} else if ("quer:BrandId".equals(node.getNodeName())) {
 					subscriberVO.setBrandId(node.getTextContent());
 				} else if ("quer:Language".equals(node.getNodeName())) {

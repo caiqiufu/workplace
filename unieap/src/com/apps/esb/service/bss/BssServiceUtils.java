@@ -27,7 +27,7 @@ import com.apps.esb.service.bss.element.RequestBody;
 import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponseBody;
-import com.apps.esb.service.bss.element.ResponsetHeader;
+import com.apps.esb.service.bss.element.ResponseHeader;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.unieap.UnieapConstants;
@@ -132,6 +132,12 @@ public class BssServiceUtils {
 			JSONObject requestBody = (JSONObject) jsonResult.get("requestBody");
 			if (requestBody.has("serviceNumber")) {
 				String serviceNumber = requestBody.getString("serviceNumber");
+				if(StringUtils.isNotEmpty(serviceNumber)){
+					String first = StringUtils.substring(serviceNumber, 0, 1);
+					if("0".equals(first)){
+						serviceNumber = StringUtils.substring(serviceNumber, 1);
+					}
+				}
 				body.setServiceNumber(serviceNumber);
 			}
 			if (requestBody.has("extParameters")) {
@@ -158,7 +164,7 @@ public class BssServiceUtils {
 
 	public static String getResposeInfoString(ResponsetInfo responseInfo) throws Exception {
 		JSONObject jsonResult = new JSONObject();
-		ResponsetHeader header = responseInfo.getResponsetHeader();
+		ResponseHeader header = responseInfo.getResponseHeader();
 		/*
 		 * if(!UnieapConstants.C0.equals(header.getResultCode())){ String
 		 * resultDesc = UnieapConstants.getMessage("99998");
@@ -209,20 +215,24 @@ public class BssServiceUtils {
 	}
 
 	public static EsblogDevice getEsbLogDevice(RequestHeader requestHeader, Esblog esblog) {
-		EsblogDevice esblogDevice = new EsblogDevice();
-		esblogDevice.setApkversion(requestHeader.getDeviceInfo().getAPKVersion());
-		esblogDevice.setBrand(requestHeader.getDeviceInfo().getBrand());
-		esblogDevice.setImei(requestHeader.getDeviceInfo().getIMEI());
-		esblogDevice.setModel(requestHeader.getDeviceInfo().getModel());
-		esblogDevice.setNetworkType(requestHeader.getDeviceInfo().getNetworkType());
-		esblogDevice.setOstype(requestHeader.getDeviceInfo().getOSType());
-		esblogDevice.setOsversion(requestHeader.getDeviceInfo().getOSVersion());
-		esblogDevice.setResolution(requestHeader.getDeviceInfo().getResolution());
-		esblogDevice.setId(UnieapConstants.getSequence(null, "esb"));
-		esblogDevice.setLogId(esblog.getLogId());
-		esblogDevice.setCreateDate(esblog.getCreateDate());
-		esblogDevice.setServiceNumber(esblog.getServiceNumber());
-		return esblogDevice;
+		if(requestHeader.getDeviceInfo()!=null){
+			EsblogDevice esblogDevice = new EsblogDevice();
+			esblogDevice.setApkversion(requestHeader.getDeviceInfo().getAPKVersion());
+			esblogDevice.setBrand(requestHeader.getDeviceInfo().getBrand());
+			esblogDevice.setImei(requestHeader.getDeviceInfo().getIMEI());
+			esblogDevice.setModel(requestHeader.getDeviceInfo().getModel());
+			esblogDevice.setNetworkType(requestHeader.getDeviceInfo().getNetworkType());
+			esblogDevice.setOstype(requestHeader.getDeviceInfo().getOSType());
+			esblogDevice.setOsversion(requestHeader.getDeviceInfo().getOSVersion());
+			esblogDevice.setResolution(requestHeader.getDeviceInfo().getResolution());
+			esblogDevice.setId(UnieapConstants.getSequence(null, "esb"));
+			esblogDevice.setLogId(esblog.getLogId());
+			esblogDevice.setCreateDate(esblog.getCreateDate());
+			esblogDevice.setServiceNumber(esblog.getServiceNumber());
+			return esblogDevice;
+		}else{
+			return null;
+		}
 	}
 
 	public static String getSoapMessageString(SOAPMessage message) throws Exception {
@@ -271,17 +281,17 @@ public class BssServiceUtils {
 
 	public static ResponsetInfo getResponsetInfo(RequestInfo requestInfo, ProcessResult processResult) {
 		ResponsetInfo responsetInfo = new ResponsetInfo();
-		ResponsetHeader responsetHeader = new ResponsetHeader();
-		responsetHeader.setBizCode(requestInfo.getRequestHeader().getBizCode());
-		responsetHeader.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
-		responsetHeader.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
+		ResponseHeader ResponseHeader = new ResponseHeader();
+		ResponseHeader.setBizCode(requestInfo.getRequestHeader().getBizCode());
+		ResponseHeader.setChannelCode(requestInfo.getRequestHeader().getChannelCode());
+		ResponseHeader.setExtTransactionId(requestInfo.getRequestHeader().getExtTransactionId());
 		// store log id
-		responsetHeader.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
-		responsetHeader.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
-		responsetHeader.setResponseTime(UnieapConstants.getCurrentTime(null, null));
-		responsetHeader.setResultCode(processResult.getResultCode());
-		responsetHeader.setResultDesc(processResult.getResultDesc());
-		responsetInfo.setResponsetHeader(responsetHeader);
+		ResponseHeader.setTransactionId(requestInfo.getRequestHeader().getTransactionId());
+		ResponseHeader.setRequestTime(requestInfo.getRequestHeader().getRequestTime());
+		ResponseHeader.setResponseTime(UnieapConstants.getCurrentTime(null, null));
+		ResponseHeader.setResultCode(processResult.getResultCode());
+		ResponseHeader.setResultDesc(processResult.getResultDesc());
+		responsetInfo.setResponseHeader(ResponseHeader);
 		ResponseBody responseBody = new ResponseBody();
 		responseBody.setServiceNumber(processResult.getServiceNumber());
 		responseBody.setExtParameters(processResult.getExtParameters());
@@ -329,7 +339,7 @@ public class BssServiceUtils {
 		String moneyaccruacy = SYSConfig.getConfig().get("mcare.unit.format.moneyaccruacy");
 		String moneylength = SYSConfig.getConfig().get("mcare.unit.format.moneylength");
 		if (StringUtils.isEmpty(amount)) {
-			return "0";
+			return "0.00";
 		} else {
 			double money = (new Double(amount).doubleValue()) / (new Double(moneyaccruacy).doubleValue());
 			DecimalFormat df = new DecimalFormat(moneylength);

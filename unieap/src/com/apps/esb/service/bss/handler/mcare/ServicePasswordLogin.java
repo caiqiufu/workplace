@@ -101,7 +101,8 @@ public class ServicePasswordLogin implements BizHandler {
 		vo.setSupplement("");
 		vo.setEmail("");
 		vo.setDateOfBirth(customerVO.getDateOfBirth());
-		
+		vo.setPaymentFlag(subscriberVO.getPaymentFlag());
+		vo.setPaymentFlagDesc(subscriberVO.getPaymentFlagDesc());
 		StringBuffer name = new StringBuffer();
 		if (StringUtils.isNotEmpty(customerVO.getFirstName())) {
 			name.append(customerVO.getFirstName()).append(" ");

@@ -31,7 +31,7 @@ public class FlowController {
 	public static boolean isQueryOverFlow() {
 		String queryCountStr = SYSConfig.getConfig().get("licence.flow.controller.query");
 		if (StringUtils.isEmpty(queryCountStr)) {
-			queryCountStr = "5";
+			queryCountStr = "2";
 		}
 		int queryCount = Integer.parseInt(queryCountStr);
 		if (currentQueryNumber > queryCount) {

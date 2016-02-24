@@ -8,11 +8,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.unieap.base.SYSConfig;
@@ -130,9 +125,15 @@ public class UnieapConstants {
 	}
 
 	public final static User getUser() {
-		org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-				.getContext().getAuthentication().getPrincipal();
-		return userList.get(u.getUsername());
+		if(SecurityContextHolder
+				.getContext().getAuthentication()!=null&&SecurityContextHolder
+						.getContext().getAuthentication().getPrincipal()!=null){
+			org.springframework.security.core.userdetails.User u = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+					.getContext().getAuthentication().getPrincipal();
+			return userList.get(u.getUsername());
+		}else{
+			return null;
+		}
 	}
 
 	public final static String getCurrentTime(String dsName, String format) {

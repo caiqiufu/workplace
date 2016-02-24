@@ -59,5 +59,8 @@
         <property name="modifyBy" type="string">
             <column name="modify_by" length="45" />
         </property>
+        <property name="tenantId" type="string">
+            <column name="tenant_id" length="45"/>
+        </property>
     </class>
 </hibernate-mapping>

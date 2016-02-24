@@ -114,7 +114,7 @@ public class MshopQuerySubscriber implements BizHandler {
 		mshopSubscriberVO.setBillCycleDesc(subscriberVO.getAccountVO().getBillCycleDesc());
 		mshopSubscriberVO.setBillMediumList(billMediumList);
 		mshopSubscriberVO.setDeactivationDate(subscriberVO.getBarTwoWayTime());
-		mshopSubscriberVO.setICCID(subscriberVO.getICCID());
+		mshopSubscriberVO.setICCID(subscriberVO.getSimCardVO().getIccid());
 		mshopSubscriberVO.setIMEI(subscriberVO.getIMEI());
 		mshopSubscriberVO.setLanguage(subscriberVO.getLanguage());
 		mshopSubscriberVO.setPaymentFlag(subscriberVO.getPaymentFlag());

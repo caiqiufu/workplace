@@ -35,6 +35,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 					return;
 				}
 			}
+			throw new AccessDeniedException("no access right");
 		}else{
 			throw new AccessDeniedException("no access right");
 		}

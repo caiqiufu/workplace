@@ -20,7 +20,7 @@ import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 import com.unieap.base.SYSConfig;
 import com.unieap.encrypt.EncryptionUtils;
 
-@Service("smartCheckPassword")
+@Service("checkPassword_1")
 public class SmartCheckPassword extends CustSoapMessageHandler implements BizHandler {
 
 	@Override
