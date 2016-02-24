@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,11 @@ import com.unieap.tools.JSONUtils;
  * @author <a href="mailto: caiqiufu@sohu.com">蔡秋伏</a>
  * @version $Revision$
  */
-public class BaseVO {
+public class BaseVO implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public final Log log = LogFactory.getLog(BaseVO.class);
 	public String toString() {
 		return (this == null ? "" : ReflectionToStringBuilder.toString(this,
