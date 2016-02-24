@@ -21,7 +21,7 @@ import com.apps.esb.service.bss.app.vo.subscriber.chginfo.BalanceChgInfoVO;
 import com.apps.esb.service.bss.app.vo.subscriber.chginfo.CreditChgInfoVO;
 import com.apps.esb.service.bss.app.vo.subscriber.chginfo.LifeCycleChgInfoVO;
 import com.apps.esb.service.bss.app.vo.subscriber.freeresource.FreeResourceVO;
-import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.LifeCycleStatusVO;
+import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.StatusVO;
 import com.apps.esb.service.bss.customize.smart.app.handler.CustSoapMessageHandler;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
@@ -134,8 +134,8 @@ public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements Bi
 					} else if ("ars:LifeCycleChgInfo".equals(node.getNodeName())) {
 						LifeCycleChgInfoVO lifeCycleChgInfoVO = new LifeCycleChgInfoVO();
 						lifeCycleChgInfoList.add(lifeCycleChgInfoVO);
-						List<LifeCycleStatusVO> oldLifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
-						List<LifeCycleStatusVO> newLifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
+						List<StatusVO> oldLifeCycleStatusList = new ArrayList<StatusVO>();
+						List<StatusVO> newLifeCycleStatusList = new ArrayList<StatusVO>();
 						lifeCycleChgInfoVO.setOldLifeCycleStatusList(oldLifeCycleStatusList);
 						lifeCycleChgInfoVO.setNewLifeCycleStatusList(newLifeCycleStatusList);
 						NodeList lifeCycleChgInfoNodes = node.getChildNodes();
@@ -143,7 +143,7 @@ public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements Bi
 							Node lifeCycleChgInfoNode = lifeCycleChgInfoNodes.item(k);
 							if ("ars:OldLifeCycleStatus".equals(lifeCycleChgInfoNode.getNodeName())) {
 								NodeList oldLifeCycleStatusNodes = lifeCycleChgInfoNode.getChildNodes();
-								LifeCycleStatusVO oldLifeCycleStatusVO = new LifeCycleStatusVO();
+								StatusVO oldLifeCycleStatusVO = new StatusVO();
 								oldLifeCycleStatusList.add(oldLifeCycleStatusVO);
 								for (int l = 0; l < oldLifeCycleStatusNodes.getLength(); l++) {
 									Node oldLifeCycleStatusNode = oldLifeCycleStatusNodes.item(l);
@@ -158,7 +158,7 @@ public class SmartQueryRechargeLogs extends CustSoapMessageHandler implements Bi
 								}
 							} else if ("ars:NewLifeCycleStatus".equals(lifeCycleChgInfoNode.getNodeName())) {
 								NodeList newLifeCycleStatusNodes = lifeCycleChgInfoNode.getChildNodes();
-								LifeCycleStatusVO newLifeCycleStatusVO = new LifeCycleStatusVO();
+								StatusVO newLifeCycleStatusVO = new StatusVO();
 								newLifeCycleStatusList.add(newLifeCycleStatusVO);
 								for (int l = 0; l < newLifeCycleStatusNodes.getLength(); l++) {
 									Node oldLifeCycleStatusNode = newLifeCycleStatusNodes.item(l);

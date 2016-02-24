@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.commons.lang.StringUtils;
@@ -50,7 +52,7 @@ public class UserLogin implements BizHandler {
 			throw new Exception("password is null");
 		}
 		ProcessResult processResult = new ProcessResult();
-		boolean flag = verifyUser(json.getString("userCode"), json.getString("password"));
+		boolean flag = verifyUser(json.getString("userCode"), json.getString("password"),(HttpServletRequest)extParameters.get("HttpServletRequest"));
 		if (flag) {
 			MshopUserVO user = new MshopUserVO();
 			user.setUserId(UnieapConstants.getUser().getUserId().toString());
@@ -97,7 +99,7 @@ public class UserLogin implements BizHandler {
 		return null;
 	}
 
-	private boolean verifyUser(String userCode, String password) {
+	private boolean verifyUser(String userCode, String password, HttpServletRequest request) {
 		Property userCodeProperty = Property.forName("userCode");
 		DetachedCriteria criteria = DetachedCriteria.forClass(com.unieap.pojo.User.class)
 				.add(userCodeProperty.eq(userCode));
@@ -107,8 +109,7 @@ public class UserLogin implements BizHandler {
 			PasswordEncoder passwordEncoder = (PasswordEncoder) ServiceUtils.getBean("passwordEncoder");
 			String encodedPassword = passwordEncoder.encodePassword(password, null);
 			if (StringUtils.equals(encodedPassword, user.getPassword())) {
-				UnieapConstants.userList.put(user.getUserCode(), user);
-				addUserToAuthenticate(user);
+				addUserToAuthenticate(user,"ROLE_MSHOP",request);
 				return true;
 			} else {
 				return false;
@@ -119,14 +120,18 @@ public class UserLogin implements BizHandler {
 		}
 	}
 
-	private void addUserToAuthenticate(com.unieap.pojo.User user) {
+	public void addUserToAuthenticate(com.unieap.pojo.User user,String roleName, HttpServletRequest request) {
+		UnieapConstants.userList.put(user.getUserCode(), user);
 		Collection<GrantedAuthority> rules = new ArrayList<GrantedAuthority>();
-		GrantedAuthority auth = new GrantedAuthorityImpl("unieap");
+		GrantedAuthority auth = new GrantedAuthorityImpl(roleName);
 		rules.add(auth);
 		org.springframework.security.core.userdetails.User uu = new org.springframework.security.core.userdetails.User(
-				user.getUserCode(), user.getPassword(), true, false, true, false, rules);
+				user.getUserCode(), user.getPassword(), true, true, true, true, rules);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(uu, null, rules);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+		HttpSession session = request.getSession(true);  
+		//在session中存放security context,方便同一个session中控制用户的其他操作  
+		session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext()); 
 	}
 
 	public Map<String, PermissionVO> getMenusByUserId(Integer userId) throws Exception {

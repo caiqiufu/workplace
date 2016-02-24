@@ -24,7 +24,7 @@ import com.apps.esb.service.bss.app.vo.subscriber.chginfo.CreditChgInfoVO;
 import com.apps.esb.service.bss.app.vo.subscriber.chginfo.FreeResourceChgInfoVO;
 import com.apps.esb.service.bss.app.vo.subscriber.chginfo.LifeCycleChgInfoVO;
 import com.apps.esb.service.bss.app.vo.subscriber.chginfo.LoanChgInfoVO;
-import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.LifeCycleStatusVO;
+import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.StatusVO;
 import com.apps.esb.service.bss.customize.smart.app.handler.CustSoapMessageHandler;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
@@ -154,15 +154,15 @@ public class SmartTransfer extends CustSoapMessageHandler implements BizHandler 
 				} else if ("ars:HandlingChargeAmt".equals(transferorNode.getNodeName())) {
 					transferorVO.setHandlingChargeAmt(transferorNode.getTextContent());
 				} else if ("ars:LifeCycleChgInfo".equals(transferorNode.getNodeName())) {
-					List<LifeCycleStatusVO> oldLifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
+					List<StatusVO> oldLifeCycleStatusList = new ArrayList<StatusVO>();
 					lifeCycleChgInfoVO.setOldLifeCycleStatusList(oldLifeCycleStatusList);
-					List<LifeCycleStatusVO> newLifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
+					List<StatusVO> newLifeCycleStatusList = new ArrayList<StatusVO>();
 					lifeCycleChgInfoVO.setNewLifeCycleStatusList(newLifeCycleStatusList);
 					NodeList lifeCycleChgInfoNodes = transferorNode.getChildNodes();
 					for (int j = 0; j < lifeCycleChgInfoNodes.getLength(); j++) {
 						Node lifeCyckeChgInfoNode = lifeCycleChgInfoNodes.item(j);
 						if ("ars:OldLifeCycleStatus".equals(lifeCyckeChgInfoNode.getNodeName())) {
-							LifeCycleStatusVO lifeCycleStatusVO = new LifeCycleStatusVO();
+							StatusVO lifeCycleStatusVO = new StatusVO();
 							oldLifeCycleStatusList.add(lifeCycleStatusVO);
 							NodeList oldLifeCycleStatusNodes = lifeCyckeChgInfoNode.getChildNodes();
 							for (int l = 0; l < oldLifeCycleStatusNodes.getLength(); l++) {
@@ -178,7 +178,7 @@ public class SmartTransfer extends CustSoapMessageHandler implements BizHandler 
 
 						} else if ("ars:NewLifeCycleStatus".equals(lifeCyckeChgInfoNode.getNodeName())) {
 							NodeList newLifeCycleStatusNodes = lifeCyckeChgInfoNode.getChildNodes();
-							LifeCycleStatusVO lifeCycleStatusVO = new LifeCycleStatusVO();
+							StatusVO lifeCycleStatusVO = new StatusVO();
 							newLifeCycleStatusList.add(lifeCycleStatusVO);
 							for (int l = 0; l < newLifeCycleStatusNodes.getLength(); l++) {
 								Node newLifeCycleStatusNode = newLifeCycleStatusNodes.item(l);
@@ -275,15 +275,15 @@ public class SmartTransfer extends CustSoapMessageHandler implements BizHandler 
 				} else if ("ars:HandlingChargeAmt".equals(transfereeNode.getNodeName())) {
 					transferorVO.setHandlingChargeAmt(transfereeNode.getTextContent());
 				} else if ("ars:LifeCycleChgInfo".equals(transfereeNode.getNodeName())) {
-					List<LifeCycleStatusVO> oldLifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
+					List<StatusVO> oldLifeCycleStatusList = new ArrayList<StatusVO>();
 					lifeCycleChgInfoVO.setOldLifeCycleStatusList(oldLifeCycleStatusList);
-					List<LifeCycleStatusVO> newLifeCycleStatusList = new ArrayList<LifeCycleStatusVO>();
+					List<StatusVO> newLifeCycleStatusList = new ArrayList<StatusVO>();
 					lifeCycleChgInfoVO.setNewLifeCycleStatusList(newLifeCycleStatusList);
 					NodeList lifeCycleChgInfoNodes = transfereeNode.getChildNodes();
 					for (int j = 0; j < lifeCycleChgInfoNodes.getLength(); j++) {
 						Node lifeCyckeChgInfoNode = lifeCycleChgInfoNodes.item(j);
 						if ("ars:OldLifeCycleStatus".equals(lifeCyckeChgInfoNode.getNodeName())) {
-							LifeCycleStatusVO lifeCycleStatusVO = new LifeCycleStatusVO();
+							StatusVO lifeCycleStatusVO = new StatusVO();
 							oldLifeCycleStatusList.add(lifeCycleStatusVO);
 							NodeList oldLifeCycleStatusNodes = lifeCyckeChgInfoNode.getChildNodes();
 							for (int l = 0; l < oldLifeCycleStatusNodes.getLength(); l++) {
@@ -299,7 +299,7 @@ public class SmartTransfer extends CustSoapMessageHandler implements BizHandler 
 
 						} else if ("ars:NewLifeCycleStatus".equals(lifeCyckeChgInfoNode.getNodeName())) {
 							NodeList newLifeCycleStatusNodes = lifeCyckeChgInfoNode.getChildNodes();
-							LifeCycleStatusVO lifeCycleStatusVO = new LifeCycleStatusVO();
+							StatusVO lifeCycleStatusVO = new StatusVO();
 							newLifeCycleStatusList.add(lifeCycleStatusVO);
 							for (int l = 0; l < newLifeCycleStatusNodes.getLength(); l++) {
 								Node newLifeCycleStatusNode = newLifeCycleStatusNodes.item(l);

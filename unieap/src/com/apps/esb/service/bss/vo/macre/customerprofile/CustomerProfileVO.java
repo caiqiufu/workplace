@@ -8,6 +8,8 @@ public class CustomerProfileVO extends BaseVO{
 	private String activeDate;
 	private String subscriberType;
 	private String subscriberTypeDesc;
+	private String paymentFlag;
+	private String paymentFlagDesc;
 	private String status;
 	private String statusReason;
 	private String corpName;
@@ -142,6 +144,18 @@ public class CustomerProfileVO extends BaseVO{
 	}
 	public void setPrimaryOfferingName(String primaryOfferingName) {
 		this.primaryOfferingName = primaryOfferingName;
+	}
+	public String getPaymentFlag() {
+		return paymentFlag;
+	}
+	public String getPaymentFlagDesc() {
+		return paymentFlagDesc;
+	}
+	public void setPaymentFlag(String paymentFlag) {
+		this.paymentFlag = paymentFlag;
+	}
+	public void setPaymentFlagDesc(String paymentFlagDesc) {
+		this.paymentFlagDesc = paymentFlagDesc;
 	}
 	
 }

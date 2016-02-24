@@ -138,7 +138,7 @@ public class MshopQuerySubscriber implements BizHandler {
 		return mshopSubscriberVO;
 	}
 	private void setBalance(MshopSubscriberVO mshopSubscriberVO,QueryBalanceVO queryBalanceVO){
-		mshopSubscriberVO.setTotalBalance(queryBalanceVO.getTotalBalance());
+		mshopSubscriberVO.setTotalBalance(queryBalanceVO.getTotalBalanceAmount());
 		mshopSubscriberVO.setOutstandingBill(queryBalanceVO.getTotalOutStandingAmount());
 		mshopSubscriberVO.setTotalCreditLimit(queryBalanceVO.getTotalCreditLimitAmount());
 		mshopSubscriberVO.setAvailableAmount(queryBalanceVO.getTotalAvailableAmount());

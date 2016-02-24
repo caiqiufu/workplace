@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.apps.esb.service.bss.app.vo.account.recharge.RechargeLogVO;
+import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.StatusVO;
 import com.apps.esb.service.bss.element.RequestInfo;
 import com.apps.esb.service.bss.element.ResponsetInfo;
 import com.apps.esb.service.bss.handler.BizHandler;
@@ -42,7 +43,7 @@ public class VoucherCardRecharge implements BizHandler {
 			voucherRechargeVO.setBalance(balanceChgInfoVO.getNewBalanceAmount());
 		}
 		List<com.apps.esb.service.bss.app.vo.subscriber.chginfo.LifeCycleChgInfoVO> lifeCycleChgInfoList = rechargeLogVO.getLifeCycleChgInfoList();
-		List<com.apps.esb.service.bss.app.vo.subscriber.lifecycle.LifeCycleStatusVO> newLifeCycleStatusList =lifeCycleChgInfoList.get(0).getNewLifeCycleStatusList();
+		List<StatusVO> newLifeCycleStatusList =lifeCycleChgInfoList.get(0).getNewLifeCycleStatusList();
 		voucherRechargeVO.setValidity(newLifeCycleStatusList.get(0).getExpiryTime());
 		if(handler!=null){
 			String custHandlerName = handler.get("custHandlerName");
