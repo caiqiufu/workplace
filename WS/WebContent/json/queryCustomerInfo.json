@@ -1,0 +1,33 @@
+{
+	"requestBody":{
+		"subscriberType":"1",
+		"serviceNumber":"962138386",
+		"extParameters":{
+			"customerInfo":{
+				"dateOfBirth":"",
+				"certificateNumber":"387126268721",
+				"customerId":"1010020223930",
+				"firstName":"SINHA ROCKY ",
+				"certificateType":"3",
+				"address":"rrgg"
+			}
+		}
+	},
+	"requestHeader":{
+		"accessUser":"unieap",
+		"bizCode":"C023",
+		"deviceInfo":{
+			"model":"CHM-UL00",
+			"networkType":"3",
+			"IMEI":"868088027539507",
+			"OSVersion":"4.4.2",
+			"OSType":"ANDROID",
+			"extParameters":"",
+			"brand":"Honor",
+			"resolution":"720*1280",
+			"APKVersion":101
+		},
+		"requestTime":"20151129111949",
+		"accessPwd":"356a192b7913b04c54574d18c28d46e6395428ab"
+	}
+}

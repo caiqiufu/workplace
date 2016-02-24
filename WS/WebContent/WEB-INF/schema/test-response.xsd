@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.99bill.com/schema/test"
+	xmlns:test="http://www.99bill.com/schema/test" xmlns="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+	<element name="test-response" type="test:TestResponse" />
+	<complexType name="TestResponse">
+		<sequence>
+			<element name="customer" type="test:Customer" />
+		</sequence>
+	</complexType>
+	<complexType name="Customer">
+		<sequence>
+			<element name="person" type="test:Person" />
+			<element name="street" type="string" />
+			<element name="city" type="string" />
+			<element name="state" type="string" />
+			<element name="zip" type="integer" />
+			<element name="phone" type="string" />
+		</sequence>
+	</complexType>
+	<complexType name="Person">
+		<sequence>
+			<element name="customer-no" type="int" />
+			<element name="first-name" type="string" />
+			<element name="last-name" type="string" />
+		</sequence>
+	</complexType>
+</schema>

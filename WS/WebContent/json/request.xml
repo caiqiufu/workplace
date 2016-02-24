@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:arc="http://cbs.huawei.com/ar/wsservice/arcommon" xmlns:ars="http://www.huawei.com/bme/cbsinterface/arservices"
+	xmlns:cbs="http://www.huawei.com/bme/cbsinterface/cbscommon">
+	<SOAP-ENV:Header />
+	<SOAP-ENV:Body>
+		<ars:RechargeRequestMsg>
+			<RequestHeader>
+				<cbs:Version>1.0</cbs:Version>
+				<cbs:MessageSeq>20151024032455176528</cbs:MessageSeq>
+				<cbs:AccessSecurity>
+					<cbs:LoginSystemCode>menta</cbs:LoginSystemCode>
+					<cbs:Password>4Jgjajx8iL6rBqYVCK5Z1A==</cbs:Password>
+				</cbs:AccessSecurity>
+			</RequestHeader>
+			<RechargeReqest>
+				<ars:RechargeSerialNo>20151024032455670097</ars:RechargeSerialNo>
+				<ars:RechargeObj>
+					<ars:SubAccessCode>
+						<ars:PrimaryIdentity>962138386</ars:PrimaryIdentity>
+					</ars:SubAccessCode>
+				</ars:RechargeObj>
+				<ars:RechargeInfo>
+					<ars:CardPayment>
+						<ars:CardPinNumber>11122345678877765554</ars:CardPinNumber>
+					</ars:CardPayment>
+				</ars:RechargeInfo>
+			</RechargeReqest>
+		</ars:RechargeRequestMsg>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

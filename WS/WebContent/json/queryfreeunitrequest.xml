@@ -1,0 +1,37 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:bbs="http://www.huawei.com/bme/cbsinterface/bbservices"
+	xmlns:cbs="http://www.huawei.com/bme/cbsinterface/cbscommon" xmlns:bbc="http://www.huawei.com/bme/cbsinterface/bbcommon">
+	<soapenv:Header />
+	<soapenv:Body>
+		<bbs:QueryFreeUnitRequestMsg>
+			<RequestHeader>
+				<cbs:Version>1</cbs:Version>
+				<cbs:BusinessCode>USSD</cbs:BusinessCode>
+				<cbs:MessageSeq>65490837880986545</cbs:MessageSeq>
+				<cbs:OwnershipInfo>
+					<cbs:BEID>101</cbs:BEID>
+				</cbs:OwnershipInfo>
+				<cbs:AccessSecurity>
+					<cbs:LoginSystemCode>ussd</cbs:LoginSystemCode>
+					<cbs:Password>jw8cn+D9LsKz2b3xz/TQmw==</cbs:Password>
+					<cbs:RemoteIP>10.10.10.80</cbs:RemoteIP>
+				</cbs:AccessSecurity>
+				<cbs:OperatorInfo>
+					<cbs:OperatorID>101</cbs:OperatorID>
+				</cbs:OperatorInfo>
+				<cbs:AccessMode>1</cbs:AccessMode>
+				<cbs:MsgLanguageCode>2002</cbs:MsgLanguageCode>
+				<cbs:TimeFormat>
+					<cbs:TimeType>2</cbs:TimeType>
+				</cbs:TimeFormat>
+			</RequestHeader>
+			<QueryFreeUnitRequest>
+				<bbs:QueryObj>
+					<bbs:SubAccessCode>
+						<bbc:PrimaryIdentity>69204160</bbc:PrimaryIdentity>
+					</bbs:SubAccessCode>
+				</bbs:QueryObj>
+			</QueryFreeUnitRequest>
+		</bbs:QueryFreeUnitRequestMsg>
+	</soapenv:Body>
+</soapenv:Envelope>

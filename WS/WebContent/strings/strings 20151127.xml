@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mobile Care</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_center">Me</string>
+    <string name="tab_server">Service</string>
+    <string name="call_duration">Voice</string>
+    <string name="flow">Internet</string>
+    <string name="flow_manager">Internet</string>
+    <string name="myflow_detail">Internet Details</string>
+    <string name="remain">Remain</string>
+    <string name="see_detail">Details</string>
+    <string name="realtime_charge">Usage</string>
+    <string name="current_balance">Balance</string>
+    <string name="data_charge">%s$</string>
+    <string name="data_time">%sMin</string>
+    <string name="data_flow">%sMB</string>
+    <string name="current_rewards">Point</string>
+    <string name="mybill">My Bills</string>
+    <string name="pack_balance">Remaining</string>
+    <string name="mybusiness">My Offerings</string>
+    <string name="recharge_fee">Top-up</string>
+    <string name="recharge">Top-up</string>
+    <string name="recharge_card">Voucher Card Top-up</string>
+    <string name="recharge_record">Top Up History</string>
+    <string name="recharge_record_tips">The above is %s query result</string>
+    <string name="my_order">My Order</string>
+    <string name="my_collect">My Favorite </string>
+    <string name="collect">Favorite</string>
+    <string name="shipping_address">Address Management</string>
+    <string name="my_invoice">My Invoice</string>
+    <string name="common_server">Service</string>
+    <string name="server_support">Support</string>
+    <string name="nearby_server_hall">Smart Shop</string>
+    <string name="common_ussd">USSD</string>
+    <string name="common_number">Hotline Number</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_list">Feedback History</string>
+    <string name="server_guide">Service Guide</string>
+    <string name="help_center">Help Center</string>
+    <string name="save">Save</string>
+    <string name="login">Login</string>
+    <string name="forget_password">forget password</string>
+    <string name="forget_password_tips">please call to service center to reset password,thanks</string>
+    <string name="login_auto">auto login</string>
+    <string name="login_auto_tips">Save password?\n other people will login automatically</string>
+    <string name="login_sms">SMS Verify Code Login</string>
+    <string name="login_password">Service Password Login</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="dial">Dial</string>
+    <string name="hint_phone">please type in phone number</string>
+    <string name="hint_password">please type in password</string>
+    <string name="hint_sms_verify">please type in verify code</string>
+    <string name="get_sms_verify">verify code</string>
+    <string name="get_sms_verify_reload">reload</string>
+    <string name="get_sms_verify_success">verify code has been send</string>
+    <string name="get_sms_verify_fail">failed to get verify code</string>
+    <string name="count_down">after %1$d retry</string>
+    <string name="toast_error_password_null">password not be blank</string>
+    <string name="toast_error_phone_null">phone number not be blank</string>
+    <string name="toast_error_phone_invalid">phone number incorrect</string>
+    <string name="toast_error_email_invalid">Email format incorrect</string>
+    <string name="toast_feedback_error_phone_null">please type in phone number</string>
+    <string name="toast_feedback_error_content_null">please type in content</string>
+    <string name="close">Close</string>
+    <string name="login_phone">my phone number</string>
+    <string name="notin_contacts">not existing in contact</string>
+    <string name="hint_recharge_phone">phone number</string>
+    <string name="hint_recharge_password">please type in pin number</string>
+    <string name="recharge_scan">Scan</string>
+    <string name="recharge_now">Top-up</string>
+    <string name="recharge_time">Top-up Date</string>
+    <string name="recharge_channel">Channel</string>
+    <string name="recharge_sum">Amount($)</string>
+    <string name="buy_flow">more internet>></string>
+    <string name="flow_remain_month_title">Remaining</string>
+    <string name="flow_used_month_title">Usage</string>
+    <string name="flow_per_day_title">Daily</string>
+    <string name="flow_remain_month">Remaining %sGB：</string>
+    <string name="flow_total_amount">Total Amount %sGB</string>
+    <string name="voice_total_amount">Current month voice duration:%sMin</string>
+    <string name="flow_remain_website">you can visit website about %s hours</string>
+    <string name="flow_remain_music">you can online music about %s hours</string>
+    <string name="flow_remain_video">you can online video about %s hours</string>
+    <string name="flow_remain_chat">you can online chat about %s hours</string>
+    <string name="flow_remain_reading">you can online read about %s hours</string>
+    <string name="flow_remain_email">you can eamil %s</string>
+    <string name="flow_used_title">Usage:</string>
+    <string name="business_hander">Change Offering</string>
+    <string name="offering_detail">Details</string>
+    <string name="event_detail">Activity Detail</string>
+    <string name="offering_user">For: %s</string>
+    <string name="offering_time">Effective Date:</string>
+    <string name="offering_fee">Price:</string>
+    <string name="offering_detail2">Details</string>
+    <string name="fee_standard">Price</string>
+    <string name="common_question">Question</string>
+    <string name="warm_tips">Notification</string>
+    <string name="do_offering">Order Now</string>
+    <string name="my_offering_time_des" formatted="false">Order Date: %s\nEffective Date: %s\nExpiry Date: %s\nPrice %s USD/Month</string>
+    <string name="my_offering_time_des_nofee" formatted="false">Order Date: %s\nEffective Date: %s\nExpiry Date: %s</string>
+    <string name="my_offering_time_des_noorder" formatted="false">Effective Date: %s\nExpiry Date: %s</string>
+    <string name="unsubscribe">Cancel</string>
+    <string name="more_offering">More</string>
+    <string name="my_offering_title_main">Subscribed Offerings</string>
+    <string name="my_offering_title_appreciation">Sub Offerings</string>
+    <string name="my_offering_title_base">Basic Service</string>
+    <string name="my_offering_title_other">Other Service</string>
+    <string name="offering_main">Primary Offering</string>
+    <string name="offering_appreciation">Supplementary Offering</string>
+    <string name="offering_base">Basic Service</string>
+    <string name="offering_other">Others</string>
+    <string name="format_minute">%sMin</string>
+    <string name="myinfo_star">Star: </string>
+    <string name="myinfo_certificate_type">Certificate Type: </string>
+    <string name="myinfo_certificate_number">Certificate NO.: </string>
+    <string name="myinfo_subscriber_type">Payment Type: </string>
+    <string name="myinfo_status">Status: </string>
+    <string name="myinfo_name">Name: </string>
+    <string name="myinfo_authen">Supplemented: </string>
+    <string name="myinfo_register_date">Create Date: </string>
+    <string name="myinfo_email">Email: </string>
+    <string name="myinfo_phone">Contact Number: </string>
+    <string name="myinfo_address">Address: </string>
+    <string name="myinfo_birth">Date Of Birth: </string>
+    <string name="myinfo_zip">Post Code: </string>
+    <string name="modify">Modify</string>
+    <string name="logout">Logout</string>
+    <string name="logout_tips">Are you sure logout?</string>
+    <string name="hint_contact_phone">please type in phone number</string>
+    <string name="hint_certificate_type">please select certificate type</string>
+    <string name="hint_certificate_number">please type in certificate no.</string>
+    <string name="hint_name">please type in name</string>
+    <string name="hint_email">please type in email</string>
+    <string name="hint_zip">please type in post code</string>
+    <string name="hint_address">please type in address</string>
+    <string name="hint_birth">please select date</string>
+    <string name="center_myinfo">profile information</string>
+    <string name="myinfo_modify">modify profile info</string>
+    <string name="hall_name">Shop Name: </string>
+    <string name="hall_time">Open Time: </string>
+    <string name="hall_id">No.: </string>
+    <string name="hall_address">Shop Address: </string>
+    <string name="see_map">Map View</string>
+    <string name="feedback_appraise">Score: </string>
+    <string name="feedback_appraise_score">%s Point</string>
+    <string name="feedback_phone">Phone Number: </string>
+    <string name="feedback_content">Content: </string>
+    <string name="feedback_upload_img">Picture</string>
+    <string name="msg_detail">Message Detail</string>
+    <string name="msg_center">Message Center</string>
+    <string name="msg_notification">Notification</string>
+    <string name="msg_note">Bulletin</string>
+    <string name="prefix_nodata">sorry, don\'t have </string>
+    <string name="messsage_center_nodata">currently dont't have content</string>
+    <string name="error_parameter">parameter error</string>
+    <string name="progress_processing">processing&#8230;</string>
+    <string name="xlistview_header_hint_normal">pull down refresh</string>
+    <string name="xlistview_header_hint_ready">release refresh</string>
+    <string name="xlistview_header_hint_loading">loading&#8230;</string>
+    <string name="xlistview_header_last_time">last updated time: </string>
+    <string name="xlistview_footer_hint_normal">more</string>
+    <string name="xlistview_footer_hint_ready">release load more</string>
+
+    <string-array name="month_name">
+        <item>1 JAN</item>
+        <item>2 FEB</item>
+        <item>3 MAR</item>
+        <item>4 APR</item>
+        <item>5 MAY</item>
+        <item>6 JUN</item>
+        <item>7 JUL</item>
+        <item>8 AUG</item>
+        <item>9 SEP</item>
+        <item>10 OCT</item>
+        <item>11 NOV</item>
+        <item>12 DEC</item>
+    </string-array>
+
+    <string-array name="certificate_type">
+        <item>Cambodia ID Card</item>
+        <item>Government ID Card</item>
+        <item>Monk ID Card</item>
+        <item>Passport with valid Visa</item>
+    </string-array>
+    
+    <array name="bill_image">
+        <item>@drawable/bill1</item>
+        <item>@drawable/bill2</item>
+        <item>@drawable/bill3</item>
+        <item>@drawable/bill4</item>
+        <item>@drawable/bill5</item>
+        <item>@drawable/bill6</item>
+        <item>@drawable/bill7</item>
+    </array>
+    
+    <string name="tips_unlogin">please login</string>
+    <string name="setting">Settings</string>
+    <string name="about">About</string>
+    <string name="about_value">mobile care app provide service similar as shop center for end customer, provide top up, change offering, get internet data etc services</string>
+    <string name="check_update">Check Update</string>
+    <string name="update_title">mCarw Update</string>
+    <string name="update_tips">Your software is up to date</string>
+    <string name="curr_version">Version %s</string>
+    <string name="title_voice">Voice</string>
+    <string name="title_data_flow">Internet</string>
+    <string name="offering_remain">Package Remaining</string>
+    
+    <string name="pop_photo">Photo</string>
+    <string name="pop_choose">Select from photo</string>
+    
+    <string name="confirm_unsubscribe">Cancel offering: %s?</string>
+    
+    <string name="network_inavailable">internet error, please check configure and retry later</string>
+    <string name="service_error">interner or system error, please retry later</string>
+    <string name="loading_error">loading failed, click to retry</string>
+    
+    <string name="ratio_analysis">Proportion Chart</string>
+    <string name="recently_consume">Consumption in %s months</string>
+    <string name="bill_detail">Invoice Details</string>
+    <string name="bill_count">Total</string>
+    <string name="money_unit">$%s</string>
+    <string name="go_recharge">Top-up</string>
+    <string name="mybill_bottom_tips" formatted="false">all these bill information is number %s usage up to deadline %s, only for reference</string>
+    
+    <string name="offering_detail_submit" formatted="false">Dear subscriber,you will get offering %s for number %s ,please confirm</string>
+    <string name="offering_detail_success">Dear subscriber, you subscription %s success, can check status from "My Offerings"</string>
+    <string name="iknow">Noted</string>
+    
+    <string name="xchange">Xchange</string>
+    <string name="submit">Submit</string>
+    <string name="query_xchange_list">Xchange History</string>
+    <string name="xchange_list">Xchange History</string>
+    <string name="xchange_time">Xchange Time</string>
+    <string name="xchange_amt">Xchange Amount</string>
+    <string name="xchange_expire_time">Expire Time</string>
+    <string name="balance_transfer">Balance Transfer</string>
+    <string name="query_transfer_list">Transfer History</string>
+    <string name="transfer_list">Transfer History</string>
+    <string name="transfer_time">Transfer Time</string>
+    <string name="transfer_from">Transfer From</string>
+    <string name="transfer_amount">Amount</string>
+    
+    <string name="call_confirm_ussd">Dial USSD: %s ?</string>
+    <string name="call_confirm_number">Dial Number %s ?</string>
+    
+    
+    
+</resources>

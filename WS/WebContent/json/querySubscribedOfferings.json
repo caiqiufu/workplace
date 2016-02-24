@@ -1,0 +1,33 @@
+{
+	"responseHeader":{
+		"transactionId":"20160131122352826743",
+		"requestTime":"20160131122352",
+		"channelCode":"mcarePortal",
+		"resultCode":"0",
+		"bizCode":"C002",
+		"resultDesc":"success",
+		"responseTime":"20160131122353"
+	},
+	"responseBody":{
+		"serviceNumber":"10509888",
+		"extParameters":{
+			"subscriberInfo":{
+				"subscriberType":"0",
+				"dateOfBirth":"19850317",
+				"customerName":"Wei Xiao ",
+				"extAttris":{
+					
+				},
+				"certificateNumber":"G55941440",
+				"customerId":"112035343799",
+				"email":"",
+				"address":"1116 15 China ",
+				"supplement":"",
+				"customerLevel":"1",
+				"activeDate":"2015-05-26 09:00:03",
+				"certificateType":"1",
+				"primaryOfferingName":"Super60"
+			}
+		}
+	}
+}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://demo.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://demo.com" xmlns:intf="http://demo.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://demo.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="queryInfo">
+    <complexType>
+     <sequence>
+      <element name="qequestInfo" type="impl:RequestInfo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="RequestBody">
+    <sequence>
+     <element name="extParameters" nillable="true" type="xsd:string"/>
+     <element name="serviceNumber" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="RequestHeader">
+    <sequence>
+     <element name="accessPwd" nillable="true" type="xsd:string"/>
+     <element name="accessUser" nillable="true" type="xsd:string"/>
+     <element name="bizCode" nillable="true" type="xsd:string"/>
+     <element name="channelCode" nillable="true" type="xsd:string"/>
+     <element name="extTransactionId" nillable="true" type="xsd:string"/>
+     <element name="requestTime" nillable="true" type="xsd:string"/>
+     <element name="responseTime" nillable="true" type="xsd:string"/>
+     <element name="systemCode" nillable="true" type="xsd:string"/>
+     <element name="transactionId" nillable="true" type="xsd:string"/>
+     <element name="version" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="RequestInfo">
+    <sequence>
+     <element name="requestBody" nillable="true" type="impl:RequestBody"/>
+     <element name="requestHeader" nillable="true" type="impl:RequestHeader"/>
+    </sequence>
+   </complexType>
+   <element name="queryInfoResponse">
+    <complexType>
+     <sequence>
+      <element name="queryInfoReturn" type="impl:ResponsetInfo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ResponsetInfo">
+    <sequence>
+     <element name="responseBody" nillable="true" type="impl:RequestBody"/>
+     <element name="responsetHeader" nillable="true" type="impl:RequestHeader"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="queryInfoRequest">
+
+      <wsdl:part element="impl:queryInfo" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryInfoResponse">
+
+      <wsdl:part element="impl:queryInfoResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="BssServiceImpl">
+
+      <wsdl:operation name="queryInfo">
+
+         <wsdl:input message="impl:queryInfoRequest" name="queryInfoRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:queryInfoResponse" name="queryInfoResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="BssServiceImplSoapBinding" type="impl:BssServiceImpl">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="queryInfo">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="queryInfoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="queryInfoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="BssServiceImplService">
+
+      <wsdl:port binding="impl:BssServiceImplSoapBinding" name="BssServiceImpl">
+
+         <wsdlsoap:address location="http://localhost:8080/WS/services/BssServiceImpl"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

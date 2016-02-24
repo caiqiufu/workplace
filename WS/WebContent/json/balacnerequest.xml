@@ -1,0 +1,28 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:ars="http://www.huawei.com/bme/cbsinterface/arservices"
+	xmlns:cbs="http://www.huawei.com/bme/cbsinterface/cbscommon" xmlns:arc="http://cbs.huawei.com/ar/wsservice/arcommon">
+	<soapenv:Header />
+	<soapenv:Body>
+		<ars:QueryBalanceRequestMsg>
+			<RequestHeader>
+				<cbs:Version>1</cbs:Version>
+				<cbs:MessageSeq>11222222</cbs:MessageSeq>
+				<cbs:AccessSecurity>
+					<cbs:LoginSystemCode>1</cbs:LoginSystemCode>
+					<cbs:Password>1</cbs:Password>
+				</cbs:AccessSecurity>
+			</RequestHeader>
+			<QueryBalanceRequest>
+				<ars:QueryObj>
+					<!--You have a CHOICE of the next 2 items at this level -->
+					<ars:SubAccessCode>
+						<!--You have a CHOICE of the next 2 items at this level -->
+						<arc:PrimaryIdentity>101122212</arc:PrimaryIdentity>
+					</ars:SubAccessCode>
+				</ars:QueryObj>
+				<!--Optional: -->
+				<ars:BalanceType>?</ars:BalanceType>
+			</QueryBalanceRequest>
+		</ars:QueryBalanceRequestMsg>
+	</soapenv:Body>
+</soapenv:Envelope>

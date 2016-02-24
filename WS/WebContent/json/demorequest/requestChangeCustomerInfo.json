@@ -1,0 +1,31 @@
+{
+	"requestBody":{
+		"serviceNumber":"962138364",
+		"extParameters":{
+			"customerInfo":{
+				"dateOfBirth":"19820624",
+				"certificateNumber":"111222233",
+				"address":"xili nanshan",
+				"firstName":"Chai",
+				"certificateType":"1"
+			}
+		}
+	},
+	"requestHeader":{
+		"accessUser":"unieap",
+		"requestTime":"20151122234314",
+		"bizCode":"C023",
+		"deviceInfo":{
+			"model":"P8",
+			"networkType":"3",
+			"extParameters ":"",
+			"IMEI":"356952073509324",
+			"OSVersion":"9.0.1",
+			"OSType":"IOS",
+			"brand":"huawei",
+			"resolution":"1080x1920",
+			"APKVersion":"1.0"
+		},
+		"accessPwd":"356a192b7913b04c54574d18c28d46e6395428ab"
+	}
+}

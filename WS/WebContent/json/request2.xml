@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bas="http://crm.huawei.com/basetype/" xmlns:quer="http://crm.huawei.com/query/">
+  <SOAP-ENV:Header/>
+  <SOAP-ENV:Body>
+    <quer:GetSubscriberRequest>
+      <quer:RequestHeader>
+        <bas:TransactionId>20151024122742165499</bas:TransactionId>
+        <bas:ChannelId>18</bas:ChannelId>
+        <bas:TechnicalChannelId>53</bas:TechnicalChannelId>
+        <bas:AccessUser>ipcc</bas:AccessUser>
+        <bas:AccessPwd>r8q0a5WwGNboj9I35XzNcQ==</bas:AccessPwd>
+      </quer:RequestHeader>
+      <quer:GetSubscriberBody>
+        <quer:ServiceNumber>10212648</quer:ServiceNumber>
+      </quer:GetSubscriberBody>
+    </quer:GetSubscriberRequest>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

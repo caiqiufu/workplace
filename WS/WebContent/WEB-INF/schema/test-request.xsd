@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.99bill.com/schema/test"
+	xmlns:test="http://www.99bill.com/schema/test" xmlns="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+	<element name="test-request" type="test:TestRequest" />
+	<complexType name="TestRequest">
+		<sequence>
+			<element name="request-header" type="test:RequestHeader" />
+			<element name="request-body" type="test:RequestBody" />
+		</sequence>
+	</complexType>
+
+	<complexType name="RequestHeader">
+		<sequence>
+			<element name="service" type="string" />
+			<element name="version" type="string" />
+			<element name="method" type="string" />
+		</sequence>
+	</complexType>
+
+	<complexType name="RequestBody">
+		<sequence>
+			<element name="customer-no" type="int" />
+			<element name="first-name" type="string" />
+			<element name="last-name" type="string" />
+			<element name="phone" type="string" />
+		</sequence>
+	</complexType>
+</schema>

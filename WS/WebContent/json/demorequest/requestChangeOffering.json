@@ -1,0 +1,34 @@
+{
+	"requestBody":{
+		"serviceNumber":"962138364",
+		"extParameters":{
+			"offeringInfo":{
+				"supplementaryOfferings":[
+					{
+						"actionType":"1",
+						"offeringType":"S",
+						"offeringId":"1290134625"
+					}
+				],
+				"isChangePrimarryOffering":"N"
+			}
+		}
+	},
+	"requestHeader":{
+		"requestTime":"20151029221806",
+		"accessUser":"unieap",
+		"bizCode":"C014",
+		"accessPwd":"356a192b7913b04c54574d18c28d46e6395428ab",
+		"deviceInfo":{
+			"extParameters ":"",
+			"APKVersion":"1.0",
+			"OSType":"IOS",
+			"OSVersion":"9.0.1",
+			"IMEI":"356952073509324",
+			"model":"P8",
+			"networkType":"3",
+			"resolution":"1080x1920",
+			"brand":"huawei"
+		}
+	}
+}

@@ -1,0 +1,74 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ars="http://www.huawei.com/bme/cbsinterface/arservices" xmlns:cbs="http://www.huawei.com/bme/cbsinterface/cbscommon" xmlns:arc="http://cbs.huawei.com/ar/wsservice/arcommon">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ars:QueryBalanceResultMsg>
+         <ResultHeader>
+            <cbs:Version>1.0</cbs:Version>
+            <cbs:ResultCode>0</cbs:ResultCode>
+            <!--Optional:-->
+            <cbs:MsgLanguageCode>1</cbs:MsgLanguageCode>
+            <cbs:ResultDesc>success</cbs:ResultDesc>
+            <!--Zero or more repetitions:-->
+            <cbs:AdditionalProperty>
+               <cbs:Code>1</cbs:Code>
+               <cbs:Value>111</cbs:Value>
+            </cbs:AdditionalProperty>
+         </ResultHeader>
+         <QueryBalanceResult>
+            <!--1 to 2 repetitions:-->
+            <ars:AcctList>
+               <ars:AcctKey>111111111</ars:AcctKey>
+               <!--1 or more repetitions:-->
+               <ars:BalanceResult>
+                  <arc:BalanceType>2000</arc:BalanceType>
+                  <!--Optional:-->
+                  <arc:BalanceTypeName>mainaccount</arc:BalanceTypeName>
+                  <arc:TotalAmount>2.00</arc:TotalAmount>
+                  <arc:DepositFlag>N</arc:DepositFlag>
+                  <arc:RefundFlag>N</arc:RefundFlag>
+                  <arc:CurrencyID>1000</arc:CurrencyID>
+                  <!--1 or more repetitions:-->
+                  <arc:BalanceDetail>
+                     <arc:BalanceInstanceID>?</arc:BalanceInstanceID>
+                     <arc:Amount>?</arc:Amount>
+                     <arc:InitialAmount>?</arc:InitialAmount>
+                     <arc:EffectiveTime>?</arc:EffectiveTime>
+                     <arc:ExpireTime>?</arc:ExpireTime>
+                  </arc:BalanceDetail>
+               </ars:BalanceResult>
+               <!--Zero or more repetitions:-->
+               <ars:OutStandingList>
+                  <ars:BillCycleID>?</ars:BillCycleID>
+                  <ars:BillCycleBeginTime>?</ars:BillCycleBeginTime>
+                  <ars:BillCycleEndTime>?</ars:BillCycleEndTime>
+                  <ars:DueDate>?</ars:DueDate>
+                  <!--1 or more repetitions:-->
+                  <ars:OutStandingDetail>
+                     <ars:OutStandingAmount>?</ars:OutStandingAmount>
+                     <ars:CurrencyID>?</ars:CurrencyID>
+                  </ars:OutStandingDetail>
+               </ars:OutStandingList>
+               <!--Zero or more repetitions:-->
+               <ars:AccountCredit>
+                  <!--Optional:-->
+                  <ars:CreditLimitType>?</ars:CreditLimitType>
+                  <!--Optional:-->
+                  <ars:CreditLimitTypeName>?</ars:CreditLimitTypeName>
+                  <ars:TotalCreditAmount>?</ars:TotalCreditAmount>
+                  <ars:TotalUsageAmount>?</ars:TotalUsageAmount>
+                  <ars:TotalRemainAmount>?</ars:TotalRemainAmount>
+                  <ars:CurrencyID>?</ars:CurrencyID>
+                  <!--Zero or more repetitions:-->
+                  <ars:CreditAmountInfo>
+                     <ars:CreditInstID>?</ars:CreditInstID>
+                     <ars:LimitClass>?</ars:LimitClass>
+                     <ars:Amount>?</ars:Amount>
+                     <ars:EffectiveTime>?</ars:EffectiveTime>
+                     <ars:ExpireTime>?</ars:ExpireTime>
+                  </ars:CreditAmountInfo>
+               </ars:AccountCredit>
+            </ars:AcctList>
+         </QueryBalanceResult>
+      </ars:QueryBalanceResultMsg>
+   </soapenv:Body>
+</soapenv:Envelope>

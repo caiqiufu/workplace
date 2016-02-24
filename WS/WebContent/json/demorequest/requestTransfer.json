@@ -1,0 +1,27 @@
+{
+	"requestBody":{
+		"serviceNumber":"962138386",
+		"extParameters":{
+			"transferorNumber":"962138364",
+			"transferAmount":"20000000",
+			"transfereeNumber":"962138386"
+		}
+	},
+	"requestHeader":{
+		"accessUser":"unieap",
+		"requestTime":"20151125023555",
+		"bizCode":"C021",
+		"deviceInfo":{
+			"model":"P8",
+			"networkType":"3",
+			"extParameters ":"",
+			"IMEI":"356952073509324",
+			"OSVersion":"9.0.1",
+			"OSType":"IOS",
+			"brand":"huawei",
+			"resolution":"1080x1920",
+			"APKVersion":"1.0"
+		},
+		"accessPwd":"356a192b7913b04c54574d18c28d46e6395428ab"
+	}
+}

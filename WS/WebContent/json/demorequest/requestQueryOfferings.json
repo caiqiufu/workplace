@@ -1,0 +1,25 @@
+{
+	"requestBody":{
+		"serviceNumber":"15899785476",
+		"extParameters":{
+			"categoryId":"2"
+		}
+	},
+	"requestHeader":{
+		"requestTime":"20151029230248",
+		"accessUser":"unieap",
+		"bizCode":"C010",
+		"accessPwd":"356a192b7913b04c54574d18c28d46e6395428ab",
+		"deviceInfo":{
+			"extParameters ":"",
+			"APKVersion":"1.0",
+			"OSType":"IOS",
+			"OSVersion":"9.0.1",
+			"IMEI":"356952073509324",
+			"model":"P8",
+			"networkType":"3",
+			"resolution":"1080x1920",
+			"brand":"huawei"
+		}
+	}
+}

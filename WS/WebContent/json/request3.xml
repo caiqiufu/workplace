@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:bas="http://crm.huawei.com/basetype/" xmlns:ser="http://crm.huawei.com/service/">
+	<SOAP-ENV:Header />
+	<SOAP-ENV:Body>
+		<ser:SubmitOrderRequest>
+			<ser:RequestHeader>
+				<bas:TransactionId>20151029101821989087</bas:TransactionId>
+				<bas:ChannelId>18</bas:ChannelId>
+				<bas:TechnicalChannelId>53</bas:TechnicalChannelId>
+				<bas:AccessUser>ipcc</bas:AccessUser>
+				<bas:AccessPwd>r8q0a5WwGNboj9I35XzNcQ==</bas:AccessPwd>
+			</ser:RequestHeader>
+			<ser:SubmitRequestBody>
+				<ser:Order>
+					<bas:OrderType>CO025</bas:OrderType>
+				</ser:Order>
+				<ser:OrderItems>
+					<bas:OrderItem>
+						<bas:OrderItemInfo>
+							<bas:OrderItemType>CO025</bas:OrderItemType>
+						</bas:OrderItemInfo>
+						<bas:Subscriber>
+							<bas:ServiceNumber>962138364</bas:ServiceNumber>
+							<bas:SupplementaryOfferingList>
+								<bas:OfferingInfo>
+									<bas:ActionType>1</bas:ActionType>
+									<bas:OfferingId>
+										<bas:OfferingId>1290134625</bas:OfferingId>
+									</bas:OfferingId>
+								</bas:OfferingInfo>
+							</bas:SupplementaryOfferingList>
+						</bas:Subscriber>
+					</bas:OrderItem>
+				</ser:OrderItems>
+
+			</ser:SubmitRequestBody>
+		</ser:SubmitOrderRequest>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

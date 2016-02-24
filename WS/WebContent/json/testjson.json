@@ -1,0 +1,45 @@
+{
+	"requestBody":{
+		"serviceNumber":"15899785476",
+		"extParameters":{
+			"verifyCode":"833329"
+		}
+	},
+	"requestHeader":{
+		"requestTime":"20150927083325",
+		"bizCode":"C004",
+		"deviceInfo":{
+			"APKVersion":"1.0",
+			"OSType":"IOS",
+			"IMEI":"356952073509324",
+			"networkType":"3",
+			"version":"9.0.1",
+			"resolution":"1920×1080"
+		}
+	}
+}
+{
+	"responseBody":{
+		"serviceNumber":"15899785476",
+		"extParameters":{
+			"serviceNumber":"15899785476",
+			"address":" China guandongshen shenzhenshi nanshanqu xilizhen nvrenshijie",
+			"subscriberType":"1",
+			"activeDate":"20150910000000",
+			"corpName":"Unieap Group",
+			"corpNo":"333",
+			"email":"caiqiufu@sohu.com",
+			"status":"active",
+			"supplement":"已登记"
+		}
+	},
+	"responseHeader":{
+		"requestTime":"20150927083325",
+		"bizCode":"C004",
+		"responseTime":"20150930031718",
+		"resultCode":"1",
+		"resultDesc":"success",
+		"transactionId":"20150930031714753719",
+		"channelCode":"eCare"
+	}
+}

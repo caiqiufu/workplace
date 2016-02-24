@@ -1,0 +1,77 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:bbs="http://www.huawei.com/bme/cbsinterface/bbservices"
+	xmlns:cbs="http://www.huawei.com/bme/cbsinterface/cbscommon">
+	<soapenv:Header />
+	<soapenv:Body>
+		<bbs:QueryFreeUnitResultMsg>
+			<ResultHeader>
+				<cbs:Version>?</cbs:Version>
+				<cbs:ResultCode>?</cbs:ResultCode>
+				<!--Optional: -->
+				<cbs:MsgLanguageCode>?</cbs:MsgLanguageCode>
+				<cbs:ResultDesc>?</cbs:ResultDesc>
+				<!--Zero or more repetitions: -->
+				<cbs:AdditionalProperty>
+					<cbs:Code>?</cbs:Code>
+					<cbs:Value>?</cbs:Value>
+				</cbs:AdditionalProperty>
+			</ResultHeader>
+			<QueryFreeUnitResult>
+				<!--Zero or more repetitions: -->
+				<bbs:FreeUnitItem>
+					<bbs:FreeUnitType>?</bbs:FreeUnitType>
+					<bbs:FreeUnitTypeName>?</bbs:FreeUnitTypeName>
+					<bbs:MeasureUnit>?</bbs:MeasureUnit>
+					<bbs:MeasureUnitName>?</bbs:MeasureUnitName>
+					<bbs:TotalInitialAmount>?</bbs:TotalInitialAmount>
+					<bbs:TotalUnusedAmount>?</bbs:TotalUnusedAmount>
+					<!--1 or more repetitions: -->
+					<bbs:FreeUnitItemDetail>
+						<bbs:FreeUnitInstanceID>?</bbs:FreeUnitInstanceID>
+						<bbs:InitialAmount>?</bbs:InitialAmount>
+						<bbs:CurrentAmount>?</bbs:CurrentAmount>
+						<bbs:EffectiveTime>?</bbs:EffectiveTime>
+						<bbs:ExpireTime>?</bbs:ExpireTime>
+						<!--Optional: -->
+						<bbs:FreeUnitOrigin>
+							<bbs:OriginType>?</bbs:OriginType>
+							<!--You have a CHOICE of the next 2 items at this level -->
+							<bbs:OfferingKey>
+								<!--You have a CHOICE of the next 2 items at this level -->
+								<bbs:OfferingID>?</bbs:OfferingID>
+								<bbs:OfferingCode>?</bbs:OfferingCode>
+								<!--Optional: -->
+								<bbs:PurchaseSeq>?</bbs:PurchaseSeq>
+							</bbs:OfferingKey>
+							<bbs:PlanID>?</bbs:PlanID>
+						</bbs:FreeUnitOrigin>
+						<bbs:RollOverFlag>?</bbs:RollOverFlag>
+						<!--Optional: -->
+						<bbs:LastRollOveredTime>?</bbs:LastRollOveredTime>
+					</bbs:FreeUnitItemDetail>
+					<!--Zero or more repetitions: -->
+					<bbs:MemberUsageList>
+						<bbs:PrimaryIdentity>?</bbs:PrimaryIdentity>
+						<bbs:SubscriberKey>?</bbs:SubscriberKey>
+						<bbs:UsedAmount>?</bbs:UsedAmount>
+					</bbs:MemberUsageList>
+				</bbs:FreeUnitItem>
+				<!--Zero or more repetitions: -->
+				<bbs:ShareUsageList>
+					<bbs:SharedPrimaryIdentity>?</bbs:SharedPrimaryIdentity>
+					<!--Optional: -->
+					<bbs:OfferingKey>
+						<!--You have a CHOICE of the next 2 items at this level -->
+						<bbs:OfferingID>?</bbs:OfferingID>
+						<bbs:OfferingCode>?</bbs:OfferingCode>
+						<!--Optional: -->
+						<bbs:PurchaseSeq>?</bbs:PurchaseSeq>
+					</bbs:OfferingKey>
+					<bbs:UsedAmount>?</bbs:UsedAmount>
+					<bbs:FreeUnitType>?</bbs:FreeUnitType>
+					<bbs:MeasureUnit>?</bbs:MeasureUnit>
+				</bbs:ShareUsageList>
+			</QueryFreeUnitResult>
+		</bbs:QueryFreeUnitResultMsg>
+	</soapenv:Body>
+</soapenv:Envelope>
