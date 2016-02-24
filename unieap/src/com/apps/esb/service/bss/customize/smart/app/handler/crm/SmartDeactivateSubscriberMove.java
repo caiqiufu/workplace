@@ -17,8 +17,8 @@ import com.apps.esb.service.bss.handler.BizHandler;
 import com.apps.esb.service.bss.handler.ProcessResult;
 import com.apps.esb.service.bss.interfacecall.SoapCallUtils;
 
-@Service("changeSubscriberStatus_1")
-public class SmartDeactivateSubscriber extends CustSoapMessageHandler implements BizHandler {
+@Service("changeSubscriberStatusmove_1")
+public class SmartDeactivateSubscriberMove extends CustSoapMessageHandler implements BizHandler {
 
 	@Override
 	public ProcessResult process(RequestInfo requestInfo, Map<String, String> handler,

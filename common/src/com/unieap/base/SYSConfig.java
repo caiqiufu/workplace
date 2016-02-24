@@ -30,7 +30,7 @@ public class SYSConfig {
 		filePath = config.get("filePath");
 		selectMaxNum = Integer.parseInt(config.get("selectMaxNum"));
 		pageSize = Integer.parseInt(config.get("pageSize"));
-		defaultLanguage = config.get("defaultLanguage");
+		defaultLanguage = config.get("language");
 	}
 
 	public static Map<String, Map<String, String>> getBizHandler() {

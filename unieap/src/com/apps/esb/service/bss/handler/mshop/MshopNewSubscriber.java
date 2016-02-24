@@ -17,7 +17,7 @@ import com.apps.esb.service.bss.handler.ProcessResult;
 import com.unieap.base.ServiceUtils;
 
 
-@Service("mshopChangeCustomer")
+@Service("mshopNewSubscriber")
 public class MshopNewSubscriber implements BizHandler {
 
 	@Override
