@@ -17,8 +17,12 @@
 				<span class="color_6">Primary Offering : </span><font class='descTitle1'>${pimaryOfferingName}</font>
 			</div>
 			<div>
-				<span class="color_6">Service Type : </span>Service password or SMS
-				verification code login
+				<span class="color_6">Service Number : </span><font
+					class='descTitle1'>${serviceNumber}</font>
+			</div>
+			<div>
+				<span class="color_6">Service Type : </span>
+				Display subscriber main balance, bonus and next cycle.  
 			</div>
 		</div>
 		<div class='cl'></div>
