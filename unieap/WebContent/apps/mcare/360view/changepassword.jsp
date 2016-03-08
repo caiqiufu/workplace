@@ -160,6 +160,10 @@
 			<span class="color_6">Service Number : </span><font
 				class='descTitle1'>${serviceNumber}</font>
 		</div>
+		<div>
+			<span class="color_6">Service Type : </span>
+			Change self service password.  
+		</div>
 	</div>
 	<div class='cl'></div>
 	<div style="border-top: 1px solid #00e1e1"></div>

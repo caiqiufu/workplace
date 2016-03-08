@@ -64,9 +64,7 @@ public class MCareController extends BaseController{
 		ModelAndView ma = new ModelAndView("apps/mcare/360view/mysimcard");
 		mcareBO.setCommonInfo(vo, ma);
 		ma.addObject("menuTitle", menuTitle);
-		ma.addObject("customerName", vo.getCustomerName());
-		ma.addObject("serviceNumber", vo.getServiceNumber());
-		return ma;
+		return mcareBO.getMySimCard(vo, ma);
 	}
 	@RequestMapping(params="method=usagehistory")  
 	public ModelAndView usagehistory(String menuTitle,HttpServletRequest request,HttpServletResponse response) throws Exception { 

@@ -36,13 +36,14 @@ public class SmartServicePasswordLogin extends CustSoapMessageHandler implements
 		if (StringUtils.isEmpty(json.getString("password"))) {
 			throw new Exception("password is null");
 		}
-		BizHandler checkPassword = (BizHandler) ServiceUtils.getBeanByTenantId("checkPassword");
+		/*BizHandler checkPassword = (BizHandler) ServiceUtils.getBeanByTenantId("checkPassword");
 		ProcessResult processResultCheckPassword = checkPassword.process(requestInfo,handler,extParameters);
 		ProcessResult processResult = new ProcessResult();
 		if(!UnieapConstants.C0.equals(processResultCheckPassword.getResultCode())){
 			return processResultCheckPassword;
-		}
+		}*/
 		
+		ProcessResult processResult = new ProcessResult();
 		
 		SmartGetSubscriptionData getSubscriptionData = (SmartGetSubscriptionData) ServiceUtils.getBean("smartQuerySubscriber");
 		ProcessResult processResultSubscriberData = getSubscriptionData.process(requestInfo, handler, extParameters);

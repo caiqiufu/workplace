@@ -7,6 +7,7 @@ import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPMessage;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -53,13 +54,19 @@ public class SmartQueryOfferingRentCycle extends CustSoapMessageHandler implemen
 		SOAPBodyElement bodyElement = (SOAPBodyElement) message.getSOAPBody().getChildElements().next();
 		SOAPElement reqestElement = bodyElement.addChildElement("QueryOfferingRentCycleRequest");
 		SOAPElement objElement = reqestElement.addChildElement("OfferingInst", "bcs");
-		SOAPElement subAccessCodeElement = objElement.addChildElement("SubAccessCode", "bcs");
+		SOAPElement offeringOwnerElement = objElement.addChildElement("OfferingOwner", "bcs");
+		SOAPElement subAccessCodeElement = offeringOwnerElement.addChildElement("SubAccessCode", "bcs");
 		SOAPElement primaryIdentityElement = subAccessCodeElement.addChildElement("PrimaryIdentity", "bcc");
 		primaryIdentityElement.addTextNode(serviceNumber);
-
+		
+		JSONObject json = new JSONObject(requestInfo.getRequestBody().getExtParameters());
+		if (!json.has("primaryOfferingId")) {
+			throw new Exception("primaryOfferingId is null");
+		}
+		String primaryOfferingId = json.getString("primaryOfferingId");
 		SOAPElement offeringKeyElement = objElement.addChildElement("OfferingKey", "bcs");
 		SOAPElement offeringIDElement = offeringKeyElement.addChildElement("OfferingID", "bcc");
-		offeringIDElement.addTextNode("");
+		offeringIDElement.addTextNode(primaryOfferingId);
 		return message;
 	}
 

@@ -6,7 +6,6 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-
 <link href="<%=path%>/apps/mcare/mcare.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="<%=path%>/unieap/js/jquery/jquery-2.2.0.js"></script>
 

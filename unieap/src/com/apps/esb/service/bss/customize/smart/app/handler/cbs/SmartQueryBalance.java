@@ -120,6 +120,11 @@ public class SmartQueryBalance extends CustSoapMessageHandler implements BizHand
 								}
 							}
 						}
+						if("C_MAIN_ACCOUNT".equals(balanceVO.getBalanceType())){
+							queryBalanceVO.setTotalBalanceAmount(balanceVO.getTotalAmount());
+						}else if("C_MAIN_BILLING_ACCOUNT".equals(balanceVO.getBalanceType())){
+							queryBalanceVO.setTotalBalanceAmount(balanceVO.getTotalAmount());
+						}
 					}else if("ars:OutStandingList".equals(node.getNodeName())){
 						NodeList outStandingListNodes = node.getChildNodes();
 						OutStandingVO outStandingVO = new OutStandingVO();
@@ -188,7 +193,19 @@ public class SmartQueryBalance extends CustSoapMessageHandler implements BizHand
 								
 							}
 						}
+						queryBalanceVO.setTotalCreditLimitAmount(creditLimitVO.getTotalCreditAmount());
+						if("C_CREDITLIMITTYPE_BILL_CYCLE".equals(creditLimitVO.getCreditLimitType())){
+							queryBalanceVO.setTotalCreditLimitAmount(creditLimitVO.getTotalCreditAmount());
+						}
 					}
+				}
+				if(queryBalanceVO.getOutStandingList()!=null&&queryBalanceVO.getOutStandingList().size()>0){
+					double outstandAmount = 0;
+					for(int j= 0 ; j< queryBalanceVO.getOutStandingList().size(); j++){
+						OutStandingVO outStandingVO = queryBalanceVO.getOutStandingList().get(j);
+						outstandAmount = outstandAmount + Double.parseDouble(outStandingVO.getOutStandingDetailList().get(0).getOutStandingAmount());
+					}
+					queryBalanceVO.setTotalOutStandingAmount(Double.toString(outstandAmount));
 				}
 			}
 		}

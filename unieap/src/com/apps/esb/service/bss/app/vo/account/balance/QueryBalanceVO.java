@@ -7,7 +7,7 @@ import com.unieap.base.vo.BaseVO;
 public class QueryBalanceVO extends BaseVO{
 	private String accountId;
 	/**
-	 * main account balance
+	 * main account balance, advance balance
 	 */
 	private String totalBalanceAmount;
 	/**

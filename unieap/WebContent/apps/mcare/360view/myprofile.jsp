@@ -26,33 +26,37 @@
 			<span class="color_6">Service Number : </span><font
 				class='descTitle1'>${serviceNumber}</font>
 		</div>
+		<div>
+			<span class="color_6">Service Type : </span>
+			Display profile information, number status, life cycle date, home address etc.  
+		</div>
 	</div>
 	<div class='cl'></div>
 	<div style="border-top: 1px solid #00e1e1"></div>
 	<div>
-		<table>
+		<table class="tableDisplay">
 			<tr>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Service Number</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Service Number</span></td>
 				<td><span class="tableDispalyValue">${serviceNumber}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Status</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Status</span></td>
 				<td><span class="tableDispalyValue">${statusDesc}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Status Reason</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Status Reason</span></td>
 				<td><span class="tableDispalyValue">${statusReasonDesc}</span></td>
 			</tr>
 			<tr>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Payment Flag</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Payment Flag</span></td>
 				<td><span class="tableDispalyValue">${paymentFlagDesc}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Activation Date</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Activation Date</span></td>
 				<td><span class="tableDispalyValue">${activateTime}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Suspesion Date</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Suspesion Date</span></td>
 				<td><span class="tableDispalyValue">${suspesionTime}</span></td>
 			</tr>
 			<tr>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Deactivation Date</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Deactivation Date</span></td>
 				<td><span class="tableDispalyValue">${deactivationTime}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Expiry Date</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Expiry Date</span></td>
 				<td><span class="tableDispalyValue">${expiryTime}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">language</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Language</span></td>
 				<td><span class="tableDispalyValue">${language}</span></td>
 			</tr>
 		</table>
@@ -61,16 +65,16 @@
 			<span class="displayListTitle">Home Address</span>
 		</div>
 		<div style="border-top: 1px solid #00e1e1"></div>
-		<table>
+		<table class="tableDisplay">
 			<tr>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Nationality</span></td>
-				<td class="tableDisplayTdValue"><span class="tableDispalyValue">${addressNationality}</span></td>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">City/Province</span></td>
-				<td colspan='3'><span class="tableDispalyValue">${addressProvince}</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Nationality</span></td>
+				<td><span class="tableDispalyValue">${addressNationality}</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">City/Province</span></td>
+				<td colspan='3'><span style = "width:300px" class="tableDispalyValue">${addressProvince}</span></td>
 			</tr>
 			<tr>
-				<td class="tableDisplayTdField"><span class="tableDispalyField">Details</span></td>
-				<td colspan='5'><span class="tableDispalyValue">${addressDetails}</span></td>
+				<td class="tableDispalyMultipleField"><span class="tableDispalyField">Details</span></td>
+				<td colspan='5'><span style = "width:400px" class="tableDispalyValue">${addressDetails}</span></td>
 			</tr>
 		</table>
 	</div>

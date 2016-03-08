@@ -243,7 +243,6 @@
 table {
 	width: 100%;
 }
-
 table td {
 	border: 2px solid #FFFFFF;
 	height: 35px;
@@ -252,6 +251,9 @@ table td {
 */
 .tableDisplay{
 	width: 100%;
+}
+.tableDisplay td{
+	height: 35px;
 }
 /*
 .oneFieldTableTd {
@@ -265,17 +267,18 @@ table td {
 	background: #FFFFFF;
 }
 .tableDispalyField {
-	vertical-align: middle;
+	padding-left: 5px;
 	font-size: 14px;
-	color: #000000;
+	width: 120px;
 	display: block;
-	padding-left: 10px;
+	padding-left: 2px;
 	background: #CCFFFF;
 	background: -moz-linear-gradient(#CCFFFF 0%, #CCFFFF 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #CCFFFF),
 		color-stop(100%, #CCFFFF));
 	background: -webkit-linear-gradient(#CCFFFF 0%, #CCFFFF 100%);
 	background: linear-gradient(#CCFFFF 0%, #CCFFFF 100%);
+	
 }
 .tableDispalyOneField {
 	vertical-align: middle;
@@ -291,10 +294,10 @@ table td {
 	background: linear-gradient(#CCFFFF 0%, #CCFFFF 100%);
 }
 .tableDispalyMultipleField {
-	vertical-align: middle;
+	/**vertical-align: middle;*/
 	width: 120px;
 	border: 2px solid #FFFFFF;
-	height: 35px;
+	/**height: 35px;*/
 	color: #000000;
 	background: #CCFFFF;
 	background: -moz-linear-gradient(#CCFFFF 0%, #CCFFFF 100%);
@@ -308,7 +311,7 @@ table td {
 	width: 100px;
 	color: #000000;
 	display: block;
-	padding-left: 10px;
+	padding-left: 5px;
 	background: #FFFFFF;
 	background: -moz-linear-gradient(#FFFFFF 0%, #FFFFFF 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFFFFF),

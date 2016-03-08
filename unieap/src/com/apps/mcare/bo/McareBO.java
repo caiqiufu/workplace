@@ -24,6 +24,7 @@ import com.apps.esb.service.bss.app.vo.subscriber.freeresource.QueryFreeResource
 import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.LifeCycleStatusVO;
 import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.StatusVO;
 import com.apps.esb.service.bss.app.vo.subscriber.sim.SimCardVO;
+import com.apps.esb.service.bss.customize.smart.app.handler.cbs.vo.queryofferingrentcycle.QueryOfferingRentCycleVO;
 import com.apps.esb.service.bss.element.RequestBody;
 import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.element.RequestInfo;
@@ -176,15 +177,26 @@ public class McareBO extends BaseBO {
 		ProcessResult processFreeReource = queryFreeReource.process(requestInfo3, null, null);
 		QueryFreeResourceVO queryFreeResourceVO = (QueryFreeResourceVO) processFreeReource.getVo();
 		
+		RequestInfo requestInfo4 = getRequestInfo("queryOfferingRentCycle", vo.getServiceNumber());
+		JSONObject extParametersJson = new JSONObject();
+		extParametersJson.put("primaryOfferingId", subscriberVO.getPrimaryOfferingVO().getOfferingId());
+		requestInfo4.getRequestBody().setExtParameters(extParametersJson.toString());
+		BizHandler queryOfferingRentCycle = (BizHandler) ServiceUtils.getBeanByTenantId("queryOfferingRentCycle");
+		ProcessResult processOfferingRentCycle = queryOfferingRentCycle.process(requestInfo4, null, null);
+		QueryOfferingRentCycleVO queryOfferingRentCycleVO = (QueryOfferingRentCycleVO) processOfferingRentCycle.getVo();
+		
 		double prepaidTotalBlanceAmount = 0;
 		double PostPaidTotalAvailableAmount = 0;
 		
 		if (!StringUtils.isEmpty( queryBalanceVO.getTotalBalanceAmount())) {
-			prepaidTotalBlanceAmount = new Double(queryBalanceVO.getTotalBalanceAmount()).doubleValue();
+			prepaidTotalBlanceAmount = prepaidTotalBlanceAmount + Double.parseDouble(queryBalanceVO.getTotalBalanceAmount());
 		}
 		
 		if (!StringUtils.isEmpty(queryBalanceVO.getTotalAvailableAmount())) {
-			PostPaidTotalAvailableAmount = new Double(queryBalanceVO.getTotalAvailableAmount()).doubleValue();
+			PostPaidTotalAvailableAmount = PostPaidTotalAvailableAmount + Double.parseDouble(queryBalanceVO.getTotalAvailableAmount());
+		}
+		if (!StringUtils.isEmpty(queryBalanceVO.getTotalCreditLimitAmount())) {
+			PostPaidTotalAvailableAmount = Double.parseDouble(queryBalanceVO.getTotalCreditLimitAmount());
 		}
 		double bonusAccountBalance = 0;
 		if(queryFreeResourceVO.getFreeResourceList()!=null&&queryFreeResourceVO.getFreeResourceList().size()>0){
@@ -200,7 +212,11 @@ public class McareBO extends BaseBO {
 		ma.addObject("totalAvailableAmount",BssServiceUtils.moneyFormat(Double.toString(prepaidTotalBlanceAmount+PostPaidTotalAvailableAmount)));
 		ma.addObject("mainAccountBalance",BssServiceUtils.moneyFormat(queryBalanceVO.getTotalBalanceAmount()));
 		ma.addObject("bonusAccountBalance", BssServiceUtils.moneyFormat(Double.toString(bonusAccountBalance)));
-		ma.addObject("nextCycle",BssServiceUtils.dateFormat(subscriberVO.getPrimaryOfferingVO().getExpiryTime()));
+		if(queryOfferingRentCycleVO.getOfferingRentCycleList()!=null&&queryOfferingRentCycleVO.getOfferingRentCycleList().size()>0){
+			ma.addObject("nextCycle",BssServiceUtils.dateFormat(queryOfferingRentCycleVO.getOfferingRentCycleList().get(0).getEndDay()));
+		}else{
+			ma.addObject("nextCycle",BssServiceUtils.dateFormat(subscriberVO.getPrimaryOfferingVO().getExpiryTime()));
+		}
 		ma.addObject("pimaryOfferingName", vo.getPrimaryOfferingName());
 		String time = UnieapConstants.getCurrentTime(null, null);
 		ma.addObject("year", time.substring(0, 4));
@@ -309,8 +325,6 @@ public class McareBO extends BaseBO {
 		BizHandler querySubscriber = (BizHandler) ServiceUtils.getBeanByTenantId("querySubscriber");
 		ProcessResult resultQuerySubscriber = querySubscriber.process(requestInfo, null, null);
 		SubscriberVO subscriberVO = (SubscriberVO) resultQuerySubscriber.getVo();
-		ma.addObject("customerName", vo.getCustomerName());
-		ma.addObject("serviceNumber", vo.getServiceNumber());
 		SimCardVO simCardVO = subscriberVO.getSimCardVO();
 		if(simCardVO!=null){
 			ma.addObject("iccid", simCardVO.getIccid());
