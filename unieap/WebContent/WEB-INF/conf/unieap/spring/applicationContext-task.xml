@@ -7,13 +7,12 @@
     <!--method1
 	-->
 	<task:annotation-driven/> 
-	<!-- 
 	<task:scheduled-tasks>   
-        <task:scheduled ref="taskDefectEmail" method="execute" cron="15 * * * * ?"/> 
-        <task:scheduled ref="taskDefectStatus" method="execute" cron="15 * * * * ?"/>   
+        <task:scheduled ref="taskSaveEsbLog" method="saveEsbLog" cron="15 * * * * ?"/> 
+        <task:scheduled ref="taskSaveEsbLog" method="saveEsbSOAPLog" cron="15 * * * * ?"/> 
 	</task:scheduled-tasks>
-	<bean id="taskDefectEmail" class="com.unieap.task.TaskDefectEmail"/>
-	<bean id="taskDefectStatus" class="com.unieap.task.TaskDefectStatus"/>
+	<bean id="taskSaveEsbLog" class="com.apps.esb.service.TaskSaveEsbLog"/>
+	<!-- 
 	 --> 
 	
 	
