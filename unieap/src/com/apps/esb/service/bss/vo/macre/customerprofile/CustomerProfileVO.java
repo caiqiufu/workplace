@@ -3,13 +3,15 @@ package com.apps.esb.service.bss.vo.macre.customerprofile;
 import com.unieap.base.vo.BaseVO;
 
 public class CustomerProfileVO extends BaseVO{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String customerId;
 	private String serviceNumber;
 	private String activeDate;
 	private String subscriberType;
 	private String subscriberTypeDesc;
-	private String paymentFlag;
-	private String paymentFlagDesc;
 	private String status;
 	private String statusReason;
 	private String corpName;
@@ -25,6 +27,8 @@ public class CustomerProfileVO extends BaseVO{
     private String dateOfBirth;
     private String customerLevel;
     private String primaryOfferingName;
+    private String paymentFlag;
+	private String paymentFlagDesc;
 	public String getCorpName() {
 		return corpName;
 	}
@@ -157,5 +161,6 @@ public class CustomerProfileVO extends BaseVO{
 	public void setPaymentFlagDesc(String paymentFlagDesc) {
 		this.paymentFlagDesc = paymentFlagDesc;
 	}
+
 	
 }
