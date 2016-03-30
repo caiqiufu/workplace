@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.xml.soap.SOAPMessage;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.apps.esb.pojo.Esblog;
@@ -20,7 +19,7 @@ import com.unieap.task.TaskService;
 
 @Component
 public class TaskSaveEsbLog extends TaskService{
-	@Scheduled(cron = "15 * * * * ?")
+	//@Scheduled(cron = "15 * * * * ?")
 	public void saveEsbLog() {
 		if(!this.checkTaskStatus("task.esb.log.save")){
 			return;
@@ -42,7 +41,7 @@ public class TaskSaveEsbLog extends TaskService{
 		}
 	}
 
-	@Scheduled(cron = "15 * * * * ?")
+	//@Scheduled(cron = "15 * * * * ?")
 	public void saveEsbSOAPLog() throws Exception {
 		if(!this.checkTaskStatus("task.esb.log.save")){
 			return;
