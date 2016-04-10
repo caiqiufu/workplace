@@ -1,8 +1,13 @@
 package com.unieap.mdm.vo;
 
+import org.springframework.util.StringUtils;
+
+import com.unieap.CacheMgt;
+
 public class SystemConfigVO {
 	private Integer id;
 	private String type;
+	private String typeDesc;
 	private String name;
 	private String value;
 	private String description;
@@ -17,6 +22,20 @@ public class SystemConfigVO {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getTypeDesc() {
+		if (!StringUtils.isEmpty(this.type)) {
+			DicDataVO dic = CacheMgt.getDicData("systemConfigType", type);
+			if (dic != null) {
+				this.typeDesc = dic.getDicName();
+			}else{
+				this.typeDesc = type;
+			}
+		}
+		return typeDesc;
+	}
+	public void setTypeDesc(String typeDesc) {
+		this.typeDesc = typeDesc;
 	}
 	public String getName() {
 		return name;

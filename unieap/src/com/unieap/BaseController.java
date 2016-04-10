@@ -27,7 +27,7 @@ public class BaseController  extends MultiActionController{
     public String exp(HttpServletRequest request, Exception ex) {  
         request.setAttribute("ex", ex);  
         ExcLog log = new ExcLog();
-        log.setId(UnieapConstants.getSequence(null,"unieap"));
+        log.setId(UnieapConstants.getSequence(null,UnieapConstants.UNIEAP));
         log.setBizModule("unieap");
         log.setExType("system_exception");
         log.setExCode("");

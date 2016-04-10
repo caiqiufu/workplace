@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.unieap.BaseBO;
 import com.unieap.UnieapConstants;
 import com.unieap.db.DBManager;
+import com.unieap.pojo.Notification;
 import com.unieap.pojo.SmsVerfiy;
 
 @Service("smsBO")
@@ -43,6 +44,19 @@ public class SmsBO  extends BaseBO{
 		smsVerfiy.setId(getSequence(null, UnieapConstants.UNIEAP));
 		smsVerfiy.setSendDate(UnieapConstants.getDateTime(null));
 		DBManager.getHT(null).save(smsVerfiy);
+		sendNotification(smsVerfiy);
 		return smsVerfiy;
+	}
+	public void sendNotification(SmsVerfiy smsVerfiy){
+		Notification notification = new Notification();
+		notification.setId(getSequence(null, UnieapConstants.UNIEAP));
+		notification.setContent(smsVerfiy.getContent().getBytes());
+		notification.setCreateDate(UnieapConstants.getDateTime(null));
+		notification.setFromBy(smsVerfiy.getFromBy());
+		notification.setSendTo(smsVerfiy.getSendTo());
+		notification.setSendType("SMS");
+		notification.setSubject("Login Verify Code");
+		notification.setType(smsVerfiy.getType());
+		DBManager.getHT(null).save(smsVerfiy);
 	}
 }

@@ -83,7 +83,7 @@ public abstract class BaseBO{
 		ps.setItems(datas);
 	}
 	/**
-	 * 针对sql预计，只参与分页数据组装
+	 * 针对sql设计，只参与分页数据组装
 	 * @param className
 	 * @param sql
 	 * @param totalSql

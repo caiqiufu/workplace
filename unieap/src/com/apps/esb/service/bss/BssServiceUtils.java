@@ -194,7 +194,7 @@ public class BssServiceUtils {
 	public static Esblog getEsbLog(RequestHeader requestHeader, ProcessResult processResult, String requestInfoString,
 			String responsetInfoString, String during, String destSystem) {
 		Esblog esblog = new Esblog();
-		esblog.setLogId(UnieapConstants.getSequence(null, "esb"));
+		esblog.setLogId(UnieapConstants.getSequence(null, "log"));
 		esblog.setChannelCode(requestHeader.getChannelCode());
 		esblog.setBizCode(requestHeader.getBizCode());
 		esblog.setServiceNumber(processResult.getServiceNumber());
@@ -225,7 +225,7 @@ public class BssServiceUtils {
 			esblogDevice.setOstype(requestHeader.getDeviceInfo().getOSType());
 			esblogDevice.setOsversion(requestHeader.getDeviceInfo().getOSVersion());
 			esblogDevice.setResolution(requestHeader.getDeviceInfo().getResolution());
-			esblogDevice.setId(UnieapConstants.getSequence(null, "esb"));
+			esblogDevice.setId(UnieapConstants.getSequence(null, "log"));
 			esblogDevice.setLogId(esblog.getLogId());
 			esblogDevice.setCreateDate(esblog.getCreateDate());
 			esblogDevice.setServiceNumber(esblog.getServiceNumber());

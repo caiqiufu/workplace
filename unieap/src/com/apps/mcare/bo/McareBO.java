@@ -24,7 +24,7 @@ import com.apps.esb.service.bss.app.vo.subscriber.freeresource.QueryFreeResource
 import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.LifeCycleStatusVO;
 import com.apps.esb.service.bss.app.vo.subscriber.lifecycle.StatusVO;
 import com.apps.esb.service.bss.app.vo.subscriber.sim.SimCardVO;
-import com.apps.esb.service.bss.customize.smart.app.handler.cbs.vo.queryofferingrentcycle.QueryOfferingRentCycleVO;
+import com.apps.esb.service.bss.customize.smart.app.cbs.vo.queryofferingrentcycle.QueryOfferingRentCycleVO;
 import com.apps.esb.service.bss.element.RequestBody;
 import com.apps.esb.service.bss.element.RequestHeader;
 import com.apps.esb.service.bss.element.RequestInfo;

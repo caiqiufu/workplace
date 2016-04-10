@@ -32,7 +32,7 @@ public class ChangeLogBO extends BaseBO {
 	 * @return
 	 */
 	public Map<String, String> save(Chglog vo) {
-		vo.setLogId(getSequence(null,UnieapConstants.UNIEAP));
+		vo.setLogId(getSequence(null,"log"));
 		vo.setModifyDate(UnieapConstants.getDateTime(null));
 		vo.setUserName(UnieapConstants.getUser().getUserName());
 		setDatas(vo);

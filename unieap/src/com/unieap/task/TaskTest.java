@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TaskTest {
 
-	//@Scheduled(cron="15 * * * * ?")
+	@Scheduled(cron="15 * * * * ?")
 	public void myTest(){
 		System.out.println("test job");
 	}

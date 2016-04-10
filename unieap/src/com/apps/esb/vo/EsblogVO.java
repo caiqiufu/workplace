@@ -43,6 +43,8 @@ public class EsblogVO {
 	}
 	public void setBizCode(String bizCode) {
 		this.bizCode = bizCode;
+	}
+	public String getBizCodeDesc() {
 		if (!StringUtils.isEmpty(this.bizCode)) {
 			DicDataVO dic = CacheMgt.getDicData("bizHandler", bizCode);
 			if (dic != null) {
@@ -51,8 +53,6 @@ public class EsblogVO {
 				this.bizCodeDesc = bizCode;
 			}
 		}
-	}
-	public String getBizCodeDesc() {
 		return bizCodeDesc;
 	}
 	public void setBizCodeDesc(String bizCodeDesc) {

@@ -42,14 +42,14 @@ public class DicDataVO {
 	}
 	public void setActiveFlag(String activeFlag) {
 		this.activeFlag = activeFlag;
+	}
+	public String getActiveFlagDesc() {
 		if(!StringUtils.isEmpty(this.activeFlag)){
 			DicDataVO dic =  CacheMgt.getDicData("activeFlag",activeFlag);
 			if(dic!=null){
 				this.activeFlagDesc = dic.getDicName();
 			}
 		}
-	}
-	public String getActiveFlagDesc() {
 		return activeFlagDesc;
 	}
 	public void setActiveFlagDesc(String activeFlagDesc) {
