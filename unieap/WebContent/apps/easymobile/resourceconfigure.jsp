@@ -148,7 +148,7 @@
                 {id:'formAdd', text: '<%=UnieapConstants.getMessage("comm.add")%>',disabled:false,
                     handler: function(){
                     	operType = 'AddNotification';
-                    	//dataForm.getForm().reset();
+                    	dataForm.getForm().reset();
                     	dataForm.getForm().findField('subject').setReadOnly(false);
                     	dataForm.getForm().findField('subject').inputEl.removeCls('readonly_field');
                     	dataForm.getForm().findField('text').setReadOnly(false);
@@ -180,35 +180,41 @@
                 }, 
                 {id:'formSubmit',text: '<%=UnieapConstants.getMessage("comm.submit")%>',disabled:true,
                     handler: function(){
-                    	var form = dataForm.getForm();
-                    	 if (form.isValid()){
-                             form.submit({
-                                 clientValidation: true,
-                                 method: 'POST',
-                                 params:{'operType':operType},
-                                 waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                                 url: 'easyMobileController.do?method=messageDeal',
-                                 success: function(form, action) {
-                                	var result = Ext.JSON.decode(action.response.responseText);
-				                    if(result.isSuccess == 'failed'){
-				                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-				                    }else{
-	                                    	gridstoreForNotification.reload();
-	                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-				                    }
-                                 },
-                                 failure: function(form, action){
-                                	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-                                 }
-                             });
-                    	 }
+                    	Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.save")%>', saveInfo);
                     }
                 }
             ]
         });
+    	function saveInfo(btn){
+    		if(btn=='yes'){
+    			 var form = dataForm.getForm();
+	           	 if (form.isValid()){
+	                    form.submit({
+	                        clientValidation: true,
+	                        method: 'POST',
+	                        params:{'operType':operType},
+	                        waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+	                        url: 'easyMobileController.do?method=messageDeal',
+	                        success: function(form, action) {
+	                       	var result = Ext.JSON.decode(action.response.responseText);
+			                    if(result.isSuccess == 'failed'){
+			                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+	                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+			                    }else{
+	                               	gridstoreForNotification.reload();
+	                               	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+	                              			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+			                    }
+	                        },
+	                        failure: function(form, action){
+	                       	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+	                    			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                        }
+	                    });
+	           	 }
+        	}
+        }
+        
     	/***note begin*********************************************************/
     	var gridstoreForNote = Ext.create('Ext.data.Store', {
             model: 'datamodel',
@@ -355,36 +361,40 @@
                 }, 
                 {id:'formSubmitNote',text: '<%=UnieapConstants.getMessage("comm.submit")%>',disabled:true,
                     handler: function(){
-                    	var form = dataFormNote.getForm();
-                    	 if (form.isValid()){
-                             form.submit({
-                                 clientValidation: true,
-                                 method: 'POST',
-                                 params:{'operType':operType},
-                                 waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                                 url: 'easyMobileController.do?method=messageDeal',
-                                 success: function(form, action) {
-                                	var result = Ext.JSON.decode(action.response.responseText);
-				                    if(result.isSuccess == 'failed'){
-				                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-				                    }else{
-	                                    	gridstoreForNote.reload();
-	                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-				                    }
-                                 },
-                                 failure: function(form, action){
-                                	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-                                 }
-                             });
-                    	 }
+                    	Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.save")%>', saveInfoNote);
                     }
                 }
             ]
         });
-    	
+    	function saveInfoNote(btn){
+    		if(btn=='yes'){
+    			 var form = dataFormNote.getForm();
+	           	 if (form.isValid()){
+	                    form.submit({
+	                        clientValidation: true,
+	                        method: 'POST',
+	                        params:{'operType':operType},
+	                        waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+	                        url: 'easyMobileController.do?method=messageDeal',
+	                        success: function(form, action) {
+	                       	var result = Ext.JSON.decode(action.response.responseText);
+			                    if(result.isSuccess == 'failed'){
+			                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+	                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+			                    }else{
+	                               	gridstoreForNote.reload();
+	                               	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+	                              			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+			                    }
+	                        },
+	                        failure: function(form, action){
+	                       	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+	                    			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                        }
+	                    });
+	           	 }
+            }
+        }
     	/***pop-up notification begin*********************************************************/
     	var gridstoreForPopup = Ext.create('Ext.data.Store', {
             model: 'datamodel',
@@ -539,37 +549,41 @@
                 }, 
                 {id:'formSubmitPopup',text: '<%=UnieapConstants.getMessage("comm.submit")%>',disabled:true,
                     handler: function(){
-                    	var form = dataFormPopup.getForm();
-                    	 if (form.isValid()){
-                             form.submit({
-                                 clientValidation: true,
-                                 method: 'POST',
-                                 params:{'operType':operType},
-                                 waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                                 url: 'easyMobileController.do?method=messageDeal',
-                                 success: function(form, action) {
-                                	var result = Ext.JSON.decode(action.response.responseText);
-				                    if(result.isSuccess == 'failed'){
-				                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-				                    }else{
-	                                    	gridstoreForPopup.reload();
-	                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-				                    }
-                                 },
-                                 failure: function(form, action){
-                                	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-                                 }
-                             });
-                    	 }
+                    	Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.save")%>', saveInfoPopup);
                     }
                 }
             ]
         });
     	
-    	
+    	function saveInfoPopup(btn){
+    		if(btn=='yes'){
+    			var form = dataFormPopup.getForm();
+	           	 if (form.isValid()){
+	                    form.submit({
+	                        clientValidation: true,
+	                        method: 'POST',
+	                        params:{'operType':operType},
+	                        waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+	                        url: 'easyMobileController.do?method=messageDeal',
+	                        success: function(form, action) {
+	                       	var result = Ext.JSON.decode(action.response.responseText);
+			                    if(result.isSuccess == 'failed'){
+			                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+	                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+			                    }else{
+	                               	gridstoreForPopup.reload();
+	                               	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+	                              			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+			                    }
+	                        },
+	                        failure: function(form, action){
+	                       	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+	                    			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                        }
+	                    });
+	           	 }
+        	}
+        }
     	/***top round pictures*************************************************/
     	var gridstoreForRound = Ext.create('Ext.data.Store', {
             model: 'datamodel',
@@ -756,36 +770,43 @@
                 }
             ]
         });
+		function saveInfoRound(btn){
+			if(btn=='yes'){
+				var form = dataFormRound.getForm();
+				var id = form.findField('id').getValue();
+	        	var hyperlink = form.findField('hyperlink').getValue();
+	        	var activeFlag = form.findField('activeFlag').getValue();
+	        	var parameters = Ext.JSON.encode({'id':id,'activeFlag':activeFlag,'hyperlink':hyperlink})
+	        	if (form.isValid()){
+	                form.submit({
+	                    clientValidation: true,
+	                    method: 'POST',
+	                    params:{'operType':operType},
+	                    waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+	                    url: 'easyMobileController.do?method=resourceConfigurePictureDeal&parameters='+encodeURL(parameters),
+	                    success: function(form, action) {
+	                   	var result = Ext.JSON.decode(action.response.responseText);
+		                    if(result.isSuccess == 'failed'){
+		                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+	                    		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+		                    }else{
+		                    	gridstoreForRound.reload();
+	                           Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+	                          		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+		                    }
+	                    },
+	                    failure: function(form, action){
+	                   	 	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+	                			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                    }
+	                });
+	       	 	}
+			}
+		}
+
     	
     	function submitRound(form){
-    		var id = form.findField('id').getValue();
-        	var hyperlink = form.findField('hyperlink').getValue();
-        	var activeFlag = form.findField('activeFlag').getValue();
-        	var parameters = Ext.JSON.encode({'id':id,'activeFlag':activeFlag,'hyperlink':hyperlink})
-        	if (form.isValid()){
-                form.submit({
-                    clientValidation: true,
-                    method: 'POST',
-                    params:{'operType':operType},
-                    waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                    url: 'easyMobileController.do?method=resourceConfigurePictureDeal&parameters='+encodeURL(parameters),
-                    success: function(form, action) {
-                   	var result = Ext.JSON.decode(action.response.responseText);
-	                    if(result.isSuccess == 'failed'){
-	                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                    		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-	                    }else{
-	                    	gridstoreForRound.reload();
-                           Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-                          		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-	                    }
-                    },
-                    failure: function(form, action){
-                   	 	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-                			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-                    }
-                });
-       	 	}
+    		Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.save")%>', saveInfoRound);
     	}
     	
     	
@@ -976,36 +997,41 @@
                 }
             ]
         });
-    	
+    	function saveInfoAd(btn){
+    		if(btn=='yes'){
+    			var form = dataFormAd.getForm();
+    			var id = form.findField('id').getValue();
+            	var hyperlink = form.findField('hyperlink').getValue();
+            	var activeFlag = form.findField('activeFlag').getValue();
+            	var parameters = Ext.JSON.encode({'id':id,'activeFlag':activeFlag,'hyperlink':hyperlink})
+            	if (form.isValid()){
+                    form.submit({
+                        clientValidation: true,
+                        method: 'POST',
+                        params:{'operType':operType},
+                        waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+                        url: 'easyMobileController.do?method=resourceConfigurePictureDeal&parameters='+encodeURL(parameters),
+                        success: function(form, action) {
+                       	var result = Ext.JSON.decode(action.response.responseText);
+    	                    if(result.isSuccess == 'failed'){
+    	                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+                        		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+    	                    }else{
+    	                    	gridstoreForAd.reload();
+                               Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+                              		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+    	                    }
+                        },
+                        failure: function(form, action){
+                       	 	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+                    			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+                        }
+                    });
+           	 	}
+        	}
+        }
     	function submitAd(form){
-    		var id = form.findField('id').getValue();
-        	var hyperlink = form.findField('hyperlink').getValue();
-        	var activeFlag = form.findField('activeFlag').getValue();
-        	var parameters = Ext.JSON.encode({'id':id,'activeFlag':activeFlag,'hyperlink':hyperlink})
-        	if (form.isValid()){
-                form.submit({
-                    clientValidation: true,
-                    method: 'POST',
-                    params:{'operType':operType},
-                    waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                    url: 'easyMobileController.do?method=resourceConfigurePictureDeal&parameters='+encodeURL(parameters),
-                    success: function(form, action) {
-                   	var result = Ext.JSON.decode(action.response.responseText);
-	                    if(result.isSuccess == 'failed'){
-	                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                    		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-	                    }else{
-	                    	gridstoreForAd.reload();
-                           Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-                          		buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-	                    }
-                    },
-                    failure: function(form, action){
-                   	 	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-                			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-                    }
-                });
-       	 	}
+    		Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.save")%>', saveInfoAd);
     	}
     	/***denomination configure begin*********************************************************/
     	
@@ -1167,37 +1193,41 @@
                 }, 
                 {id:'formSubmitDeno',text: '<%=UnieapConstants.getMessage("comm.submit")%>',disabled:true,
                     handler: function(){
-                    	var form = dataFormDeno.getForm();
-                    	 if (form.isValid()){
-                             form.submit({
-                                 clientValidation: true,
-                                 method: 'POST',
-                                 params:{'operType':operType},
-                                 waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
-                                 url: 'easyMobileController.do?method=denoDeal',
-                                 success: function(form, action) {
-                                	var result = Ext.JSON.decode(action.response.responseText);
-				                    if(result.isSuccess == 'failed'){
-				                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-				                    }else{
-	                                    	gridstoreForDeno.reload();
-	                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
-		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-				                    }
-                                 },
-                                 failure: function(form, action){
-                                	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-                             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-                                 }
-                             });
-                    	 }
+                    	Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', '<%=UnieapConstants.getMessage("comm.confirm.save")%>', saveInfoDeno);
                     }
                 }
             ]
         });
     	
-    	
+    	function saveInfoDeno(btn){
+    		if(btn=='yes'){
+    			 var form = dataFormDeno.getForm();
+	           	 if (form.isValid()){
+	                    form.submit({
+	                        clientValidation: true,
+	                        method: 'POST',
+	                        params:{'operType':operType},
+	                        waitMsg: '<%=UnieapConstants.getMessage("comm.processing")%>',
+	                        url: 'easyMobileController.do?method=denoDeal',
+	                        success: function(form, action) {
+	                       	var result = Ext.JSON.decode(action.response.responseText);
+			                    if(result.isSuccess == 'failed'){
+			                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+	                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+			                    }else{
+	                               	gridstoreForDeno.reload();
+	                               	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',
+	                              			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+			                    }
+	                        },
+	                        failure: function(form, action){
+	                       	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+	                    			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                        }
+	                    });
+	           	 }
+        	}
+        }
     	
     	
     	var tabPanel = Ext.create('Ext.tab.Panel',{

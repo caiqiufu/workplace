@@ -15,34 +15,31 @@
 	        width : '100%',
      	   	frame : true,
      	   	el:'queryform',
-     	   	tbar:[
-			    { pressed :true,iconCls:'add',
-	         		tooltip:'<%=UnieapConstants.getMessage("comm.add")%>',text:'<%=UnieapConstants.getMessage("comm.add")%>',xtype:'button',id:'User_Add',hidden:true,
-			        handler : function(){showForm('Add',null);}
-				}
-		    ],
-	        listeners:{
-	        	afterRender:function(thisForm, options){
-		        	if(UnieapButton.User_Add==null&&UnieapButton.User_Add.abled==false){Ext.getCmp('User_Add').hide();}
-		        }
+     	   	tbar:[{ pressed :true,icon:'/Unieap/unieap/js/common/images/add.png',
+               		tooltip:'Add',text:'Add',xtype:'button',id:'User_Add',
+		            handler : function(){showForm('Add',null);}
+		    }],
+	        listeners:
+	        {afterRender:function(thisForm, options){
+		        	if(UnieapButton.User_Add!=null&&UnieapButton.User_Add.disabled== true){Ext.getCmp('User_Add').hide();}}
 	        },
      	    items:[
-     	           { id:'queryFieldset', width: '100%',xtype:'fieldset',title: '<%=UnieapConstants.getMessage("comm.search")%>',
+     	           { id:'queryFieldset', width: '100%',xtype:'fieldset',title: 'Search',
   	                 startCollapsed: true,collapsible: true, defaultType: 'textfield',
   	                	items:
   	                		[
 								{ xtype: 'fieldcontainer',layout: 'hbox',
 								    items: 
 								    [
-								        { xtype:'textfield',name: 'userCode',fieldLabel: '<%=UnieapConstants.getMessage("mdm.user.display.userCode")%>'},
-								        { xtype:'textfield',name:'userName',fieldLabel: '<%=UnieapConstants.getMessage("mdm.user.display.userName")%>'},
-								        { name: 'activeFlag',fieldLabel: '<%=UnieapConstants.getMessage("comm.activeFlag")%>',
+								        { xtype:'textfield',name: 'userCode',fieldLabel: 'User Code'},
+								        { xtype:'textfield',name:'userName',fieldLabel: 'User Name'},
+								        { name: 'activeFlag',fieldLabel: 'Active Flag',
 					    	                xtype: 'combo', anchor:'95%',
 					    	                displayField:   'dicName',
 				                            valueField:     'dicCode',
 				                            store:          Ext.create('Ext.data.Store', {
 				                                fields : ['dicCode', 'dicName'],
-				                                data:UnieapButton._activeFlag
+				                                data:UnieapDicdata.ActiveFlagOpt
 				                             })
 				    	                }
 								    ]
@@ -50,9 +47,9 @@
 								{xtype: 'fieldcontainer',layout: 'hbox',
 					                items: 
 					                [
-						               	{name: 'createDatetime', fieldLabel: '<%=UnieapConstants.getMessage("comm.createDate")%>',format: 'Y-m-d', xtype: 'datefield'},
-						                {name: 'modifyDatetime', fieldLabel: '<%=UnieapConstants.getMessage("comm.modifyDate")%>', format: 'Y-m-d',xtype: 'datefield'},
-						                { xtype:'button',text:'<%=UnieapConstants.getMessage("comm.search")%>',iconAlign: 'right',
+						               	{name: 'createDatetime', fieldLabel: 'Create Datetime',format: 'Y-m-d', xtype: 'datefield'},
+						                {name: 'modifyDatetime', fieldLabel: 'Modify Datetime', format: 'Y-m-d',xtype: 'datefield'},
+						                { xtype:'button',text:'Search',iconAlign: 'right',
 					    	                handler: function (){
 					    	                	var userCode=queryform.getForm().findField("userCode").getValue(); 
 					    	                    var userName=queryform.getForm().findField("userName").getValue(); 
@@ -70,8 +67,9 @@
 					    	                    gridstore.load({params:queryPara});
 					    	                }
 						                },
-						                { xtype:'button',text:'<%=UnieapConstants.getMessage("comm.reset")%>',iconAlign: 'right',
-					    	                handler: function (){
+						                { xtype:'button',text:'Reset',iconAlign: 'right',
+					    	                handler: function ()
+					    	                {
 					    	                	queryform.getForm().reset(); 
 					    	                }
 						                }
@@ -94,7 +92,6 @@
         });
         var gridstore = Ext.create('Ext.data.Store', {
             model: 'datamodel',
-            pageSize: 15,
             remoteSort: true,
             proxy: 
             { type: 'ajax', url: 'MdMController.do?method=userGrid',
@@ -112,14 +109,28 @@
         });
         var operationItems = [];
         var selectedRecord;
-       	if(UnieapButton.User_Modify!=null&&UnieapButton.User_Modify.abled== true){
+       	if(UnieapButton.User_Modify!=null&&UnieapButton.User_Modify.abled== true)
+       	{
         	operationItems.push({
-        	   iconCls : 'edit',
-               tooltip: '<%=UnieapConstants.getMessage("comm.edit")%>',
+        	   icon   : '/Unieap/unieap/js/common/images/edit.png',
+               tooltip: 'Edit',
                handler:function(grid, rowIndex, colIndex)
                {	
                		selectedRecord = grid.getStore().getAt(rowIndex);
             		showForm('Modify',selectedRecord);
+               }
+           });
+           operationItems.push({iconCls :'',tooltip:''});
+       	}
+       	if(UnieapButton.User_Delete!=null&&UnieapButton.User_Delete.abled== true)
+       	{
+        	operationItems.push({
+        	   icon   : '/Unieap/unieap/js/common/images/delete.png',
+               tooltip: 'Delete',
+               handler:function(grid, rowIndex, colIndex)
+               {	
+            	    selectedRecord = grid.getStore().getAt(rowIndex);
+               		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', removeDatas);
                }
            });
            operationItems.push({iconCls :'',tooltip:''});
@@ -131,16 +142,17 @@
    	   		store : gridstore,
 	   	   	columns:
 	   	   	[
-	   	   		{ text: "<%=UnieapConstants.getMessage("mdm.user.display.userCode")%>", dataIndex: 'userCode',sortable: true},
-	   	   		{ text: "<%=UnieapConstants.getMessage("mdm.user.display.userName")%>", dataIndex: 'userName', sortable: true},
-	   	   		{ text: "<%=UnieapConstants.getMessage("comm.activeFlag")%>",dataIndex: 'activeFlagDesc',sortable: false},
-	   	   		{ text: "<%=UnieapConstants.getMessage("comm.createDate")%>",width: 130, dataIndex: 'createDatetime', sortable: true},
-	   	   		{ text: "<%=UnieapConstants.getMessage("comm.modifyDate")%>",width: 130, dataIndex: 'modifyDatetime', sortable: true},
-	   	   		{ text: "<%=UnieapConstants.getMessage("comm.remark")%>", dataIndex: 'remark',sortable: false},
-	   	   		{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "<%=UnieapConstants.getMessage("comm.operation")%>",width:100,items:operationItems}
+	   	   		{ text: "User Code", dataIndex: 'userCode',sortable: true},
+	   	   		{ text: "User Name", dataIndex: 'userName', sortable: true},
+	   	   		{ text: "Active Flag",dataIndex: 'activeFlagDesc',sortable: false},
+	   	   		{ text: "Create Datetime",width: 130, dataIndex: 'createDatetime', sortable: true},
+	   	   		{ text: "Modify Datetime",width: 130, dataIndex: 'modifyDatetime', sortable: true},
+	   	   		{ text: "Remark", dataIndex: 'remark',sortable: false},
+	   	   		{ menuDisabled: true,sortable: false, xtype: 'actioncolumn', text: "Operation",width:100,items:operationItems}
 	   	   	],
+	        tbar:[queryform],
     	   	bbar:new Ext.PagingToolbar(
-    	   	{ store : gridstore,displayInfo: true})
+    	   	{ store : gridstore,displayInfo: true, displayMsg: 'Displaying topics {0} - {1} of {2}', emptyMsg: "No topics to display"})
         	
         });
         datagrid.render();
@@ -158,7 +170,7 @@
                     bodyPadding:5,
                     items:
                     [
-                    	{xtype:'fieldset', title:'<%=UnieapConstants.getMessage("comm.data")%>',
+                    	{xtype:'fieldset', title:'User main info',
 	                        items:
 	                        [
 	                        	{ xtype:'hiddenfield', name:'userId'},
@@ -170,77 +182,84 @@
 	                        	{ xtype:'hiddenfield', name:'modifyBy'},
 	                        	{ xtype:'hiddenfield', name:'createDatetime'},
 	                        	{ xtype:'hiddenfield', name:'modifyDatetime'},
-	                        	{ xtype:'textfield', name:'userCode',fieldLabel:'<%=UnieapConstants.getMessage("mdm.user.display.userCode")%>',maxLength:45,allowBlank:false,
+	                        	{ xtype:'textfield', name:'userCode',fieldLabel:'User Code',allowBlank:false,
 	                        		validateOnChange:false, validateOnBlur :true,
-								    validator :function(value){
+								    validator :function(value)
+								    	{
 								    			var error = true; 
-								    			if(operType == 'Modify' || value==''||value ==null){
+								    			if(operType == 'Modify' || value==''||value ==null)
+								    			{
 								    				return true;
 								    			}
 									    		Ext.Ajax.request({
 									                url: 'MdMController.do?method=userDeal',
 									                async:false,
 									                params:{'operType':"checkExist","userCode":value},
-									                success: function(response, opts){
+									                success: function(response, opts) 
+									                {
 									                	var result = Ext.JSON.decode(response.responseText);
-									                    if(result.isSuccess == 'success'){
+									                    if(result.isSuccess == 'success')
+									                    {
 									                		error = true; 
-									                    }else{
-									                    	error = result.message;
+									                    }else
+									                    {
+									                    	error = value+ ' already exist, please change to another';
 									                    }
 									                },
-									                failure: function(response, opts){
-									                	error=response.responseText;
+									                failure: function(response, opts) 
+									                {
+									                	error='Check User Code exist failed,error message:'+response.responseText;
 									                }
 								             });
 								             return error;
 								    	}
 	                        	},
-	                        	{ xtype:'textfield',name:'userName', fieldLabel:'<%=UnieapConstants.getMessage("mdm.user.display.userName")%>',maxLength:45, allowBlank:false},
-	                        	{ xtype:'combo', labelWidth:80, width:350,forceSelection: true, emptyText: '...',editable:false,allowBlank:true,
-	                                name:'activeFlag',fieldLabel:'<%=UnieapConstants.getMessage("comm.activeFlag")%>',displayField:'dicName',valueField:'dicCode',value:'Y',
+	                        	{ xtype:'textfield',name:'userName', fieldLabel:'User Name', allowBlank:false},
+	                        	{ xtype:'combo', forceSelection: true,emptyText: 'Select an Option', editable:false, allowBlank:false,
+	                                fieldLabel:'Title',name:'title',displayField:'dicName',valueField:'dicCode',
 	                                store:Ext.create('Ext.data.Store', 
-	                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata._activeFlag})
+	                                {fields : ['dicCode', 'dicName'],data:UnieapDicdata.Title})
 								},
-	                        	{ xtype:'textareafield', name:'remark',fieldLabel:'<%=UnieapConstants.getMessage("comm.remark")%>',maxLength:255,growMin:60,growMax:100,allowBlank:true}
+	                        	{ xtype:'combo', forceSelection: true, emptyText: 'Select an Option',editable:false,allowBlank:false,
+	                                fieldLabel:'Active Flag',name:'activeFlag',displayField:'dicName',valueField:'dicCode',
+	                                store:Ext.create('Ext.data.Store', 
+	                                { fields : ['dicCode', 'dicName'],data:UnieapDicdata.ActiveFlag})
+								},
+	                        	{ xtype:'textareafield', name:'remark',fieldLabel:'Remark',growMin:60,growMax:100,allowBlank:true}
 	                        ]
 	                    },
-	                    {xtype:'fieldset',title:'<%=UnieapConstants.getMessage("comm.data.detail")%>',
+	                    {xtype:'fieldset',title:'User detail info',
 	                        items:
 	                        [
-		                        { xtype:'textfield',name:'email',fieldLabel: '<%=UnieapConstants.getMessage("mdm.user.display.email")%>',vtype: 'email',maxLength:45},
+		                        { xtype:'textfield',name:'email',fieldLabel: 'Email Address',vtype: 'email'},
+		                        { xtype:'numberfield',name:'QQ',fieldLabel: 'QQ'}
 	                        ]
                     	}
                     ],
                     buttons: 
                     [
-	                    {id:'formCancel', text: '<%=UnieapConstants.getMessage("comm.cancel")%>',
-	                        handler: function(){
+	                    {id:'formCancel', text: 'Cancel',
+	                        handler: function() 
+	                        {
 	                        	dataForm.getForm().reset();
 	                        	dataWin.hide();
 	                        }
 	                    }, 
-	                    {id:'formSubmit',text: '<%=UnieapConstants.getMessage("comm.submit")%>',
+	                    {id:'formSubmit',text: 'Submit',
 	                        handler: function() {
 	                        	var form = dataForm.getForm();
 	                        	 if (form.isValid()){
 	                                 form.submit({
 	                                     clientValidation: true,
+	                                     waitMsg: 'Processing...',
 	                                     method: 'POST',
 	                                     params:{'operType':operType},
 	                                     url: 'MdMController.do?method=userDeal',
 	                                     success: function(form, action) {
-	                                    	 if(result.isSuccess == 'failed'){
-							                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-			                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-							                    }else{
-	 		                                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
-		 		                               			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-							                    }
+	                                    	 Ext.MessageBox.alert('Status', 'Save successfully.',showResult);
 	                                     },
 	                                     failure: function(form, action) {
-	                                    	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
-		                                 			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                                    	 Ext.MessageBox.alert('Status', 'Save failed, please retry.',showResult);
 	                                     }
 	                                 });
 	                        	 }
@@ -249,45 +268,44 @@
                     ]
                 });
                 dataWin = Ext.widget('window', 
-                { title: '<%=UnieapConstants.getMessage("comm.data")%>', closeAction: 'hide', width: 400, height: 400, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'userCode' });
+                { title: 'Data', closeAction: 'hide', width: 400, height: 400, layout: 'fit', modal: true, items: dataForm,defaultFocus: 'userCode' });
             }
-            if(operType=='Add'){
+            if(operType=='Add')
+            {
             	dataForm.getForm().reset();
             	dataWin.show();
-            	dataForm.getForm().findField('userCode').inputEl.removeCls('readonly_field');
-            }else if(operType=='Modify'){
+            	dataForm.getForm().findField('userCode').setReadOnly(false);
+            }else if(operType=='Modify')
+            {
             	dataWin.show();
             	dataForm.getForm().setValues(selectedRecord.data);
             	dataForm.getForm().findField('userCode').setReadOnly(true);
-            	dataForm.getForm().findField('userCode').inputEl.addCls('readonly_field');
-            }else{
+            }else
+            {
             	dataWin.show();
             }
         }
-        function removeDatas(btn){
+        function removeDatas(btn)
+        {
         	if(btn=='yes'){
 	        	var userId= selectedRecord.get("userId");
 	        	Ext.Ajax.request({
 	                url: 'MdMController.do?method=userDeal',
 	                params:{'operType':"Delete","userId":userId},
-	                success: function(response, opts){
-	                	if(result.isSuccess == 'failed'){
-	                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
-                     			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
-	                    		gridstore.reload();
-	                    }else{
-                         	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
-                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
-	                    }
+	                success: function(response, opts) 
+	                {
+	                	Ext.MessageBox.alert('Status', 'Remove data successfully.');
+	                	gridstore.remove(selectedRecord);
 	                },
-	                failure: function(response, opts){
-	                	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:response.responseText,
-	             			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                failure: function(response, opts) 
+	                {
+	                	Ext.MessageBox.alert('Status', 'Remove data failed.Error:'+response.status);
 	                }
 	             });
         	}
         }
-        function showResult(btn){
+        function showResult(btn)
+        {
         	dataWin.hide();
         	gridstore.reload();
         }

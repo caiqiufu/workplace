@@ -15,7 +15,7 @@
             extend: 'Ext.data.Model',
             fields:
             [
-            	'id','type','name','value','description'
+            	'id','type','typeDesc','name','value','description'
             ],
             idProperty: 'id'
         });
@@ -32,8 +32,16 @@
             sorters: [{ property: 'id', direction: 'DESC'}]
         });
     	var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+    		saveBtnText: '<%=UnieapConstants.getMessage("comm.save")%>', 
+            cancelBtnText: '<%=UnieapConstants.getMessage("comm.cancel")%>', 
             clicksToMoveEditor: 1,
-            autoCancel: false
+            autoCancel: false,
+            listeners:{
+            	edit:function(e){
+            		Ext.MessageBox.confirm('<%=UnieapConstants.getMessage("comm.title.confirm")%>', 
+            				'<%=UnieapConstants.getMessage("comm.confirm.update")%>', updateDatas);
+            	}
+            }
         });
     	var datagrid = Ext.create('Ext.grid.Panel', {
             store: gridstore,
@@ -47,23 +55,23 @@
             columns: [
 						{
 						    text     : '<%=UnieapConstants.getMessage("comm.id")%>',
-						    width    : 100,
+						    width    : 80,
 						    sortable : false,
 						    dataIndex: 'id'
 						},
 						{
 						    text     : '<%=UnieapConstants.getMessage("comm.type")%>',
-						    width    : 100,
+						    width    : 80,
 						    sortable : false,
-						    dataIndex: 'type'
+						    dataIndex: 'typeDesc'
 						},{
 						    text     : '<%=UnieapConstants.getMessage("comm.name")%>',
-						    width    : 100,
+						    width    : 150,
 						    sortable : false,
 						    dataIndex: 'name'
 						},{
 						    text     : '<%=UnieapConstants.getMessage("comm.value")%>',
-						    width    : 100,
+						    width    : 200,
 						    sortable : false,
 						    dataIndex: 'value',
 						    editor: {
@@ -71,7 +79,7 @@
 						    }
 						},{
 						    text     : '<%=UnieapConstants.getMessage("comm.description")%>',
-						    width    : 200,
+						    width    : 300,
 						    sortable : false,
 						    dataIndex: 'description'
 						}
@@ -79,6 +87,38 @@
             flex: true,region: 'center'
         });
     	gridstore.load();
+    	
+    	function updateDatas(btn){
+        	if(btn=='yes'){
+        		//var record = datagrid.getSelectionModel().getSelection();
+        		var record = gridstore.getModifiedRecords();
+        		var id = record[0].data.id;
+        		var newValue = record[0].data.value;
+        		Ext.Ajax.request({
+	                url: 'mdmController.do?method=configDeal',
+	                params:{'operType':'Modify','id':id,'value':newValue},
+	                success: function(response, opts){
+	                	var result = Ext.JSON.decode(response.responseText);
+	                	
+	                	if(result.isSuccess == 'failed'){
+	                    	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:result.message,
+                     			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+	                    }else{
+                         	Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:'<%=UnieapConstants.getMessage("comm.success.save")%>',fn: showResult,
+                        			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.INFO});
+	                    }
+	                },
+	                failure: function(form, action){
+                   	 Ext.MessageBox.show({title: '<%=UnieapConstants.getMessage("comm.status")%>',msg:action.response.responseText,
+                			buttons: Ext.MessageBox.OK,icon:Ext.MessageBox.ERROR});
+                    }
+	             });
+        	}
+        }
+    	
+    	function showResult(btn){
+        	gridstore.reload();
+        }
     	
     	/***tab panel***************************************************************/
     	var tabPanel = Ext.create('Ext.tab.Panel',{

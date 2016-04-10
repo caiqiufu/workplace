@@ -15,7 +15,7 @@
             extend: 'Ext.data.Model',
             fields:
             [
-            	'id','type','name','value','description'
+            	'id','type','typeDesc','name','value','description'
             ],
             idProperty: 'id'
         });
@@ -63,7 +63,7 @@
 						    text     : '<%=UnieapConstants.getMessage("comm.type")%>',
 						    width    : 80,
 						    sortable : false,
-						    dataIndex: 'type'
+						    dataIndex: 'typeDesc'
 						},{
 						    text     : '<%=UnieapConstants.getMessage("comm.name")%>',
 						    width    : 150,
@@ -90,7 +90,8 @@
     	
     	function updateDatas(btn){
         	if(btn=='yes'){
-        		var record = datagrid.getSelectionModel().getSelection();
+        		//var record = datagrid.getSelectionModel().getSelection();
+        		var record = gridstore.getModifiedRecords();
         		var id = record[0].data.id;
         		var newValue = record[0].data.value;
         		Ext.Ajax.request({
