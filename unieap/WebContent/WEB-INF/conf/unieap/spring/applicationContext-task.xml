@@ -8,13 +8,19 @@
 	-->
 	<task:annotation-driven/> 
 	<task:scheduled-tasks>   
-        <task:scheduled ref="taskSaveEsbLog" method="saveEsbLog" cron="15 * * * * ?"/> 
-        <task:scheduled ref="taskSaveEsbLog" method="saveEsbSOAPLog" cron="15 * * * * ?"/> 
+        <task:scheduled ref="taskSaveEsbLog" method="taskExecute" cron="15 * * * * ?"/> 
+        <task:scheduled ref="taskSaveSoapLog" method="taskExecute" cron="15 * * * * ?"/> 
+        <task:scheduled ref="taskSaveChgLog" method="taskExecute" cron="15 * * * * ?"/>
+        <task:scheduled ref="taskReportServiceReqest" method="taskExecute" cron="0 0/5 * * * ?"/> 
+        <task:scheduled ref="taskEmail" method="taskExecute" cron="0 0/5 * * * ?"/>
+        <task:scheduled ref="taskClearData" method="taskExecute" cron="0 0 3 * * ?"/>   
 	</task:scheduled-tasks>
-	<bean id="taskSaveEsbLog" class="com.apps.esb.service.TaskSaveEsbLog"/>
-	<!-- 
-	 --> 
-	
+	<bean id="taskSaveEsbLog" class="com.apps.esb.task.TaskSaveEsbLog"/>
+	<bean id="taskSaveSoapLog" class="com.apps.esb.task.TaskSaveSoapLog"/>
+	<bean id="taskSaveChgLog" class="com.unieap.task.TaskSaveChgLog"/>
+	<bean id="taskReportServiceReqest" class="com.apps.report.task.TaskReportServiceRequest"/>
+	<bean id="taskEmail" class="com.unieap.task.TaskEmail"/>
+	<bean id="taskClearData" class="com.unieap.task.TaskClearData"/>
 	
 	<!-- method2 -->
 	<!-- 总的管理类,如果将lazy-init ="false" 那么容器启动就会执行调度程序 

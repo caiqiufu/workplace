@@ -128,7 +128,7 @@ Ext.onReady(function() {
         max = 5000;
 
     var grid = Ext.create('Ext.grid.Panel', {
-        width: 700,
+        width: 1000,
         height: 500,
         title: 'Buffered Grid of 5,000 random records',
         store: store,

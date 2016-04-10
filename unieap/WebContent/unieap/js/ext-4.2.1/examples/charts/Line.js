@@ -19,7 +19,7 @@ Ext.onReady(function () {
                 position: 'left',
                 fields: ['newamount','assignamount','confirmedamount','pendingFixamount','rejectamount','pendingRetestamount','resolveamount','closeamount'],
                 title: 'Number of Hits',
-                //minorTickSteps: 1,
+                minorTickSteps:1,
                 grid: {
                     odd: {
                         opacity: 1,
@@ -102,7 +102,8 @@ Ext.onReady(function () {
                 Ext.MessageBox.confirm('Confirm Download', 'Would you like to download the chart as an image?', function(choice){
                     if(choice == 'yes'){
                         chart.save({
-                            type: 'image/png'
+                            type: 'image/png',
+                            name:'test'
                         });
                     }
                 });

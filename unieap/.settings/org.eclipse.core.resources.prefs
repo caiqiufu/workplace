@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 encoding//WebContent/apps=UTF-8
 encoding//WebContent/apps/mcare/mcarelogin.jsp=UTF-8
-encoding//WebContent/apps/report/esbreport.jsp=UTF-8
+encoding//WebContent/apps/report/report.jsp=UTF-8
 encoding//src/com/unieap/login/bo/LoginBO.java=UTF-8
 encoding/<project>=UTF-8

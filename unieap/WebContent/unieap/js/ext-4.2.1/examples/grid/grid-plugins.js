@@ -121,16 +121,28 @@ Ext.onReady(function(){
             {text: "Company", width: 200, dataIndex: 'company'},
             {text: "Price", renderer: Ext.util.Format.usMoney, dataIndex: 'price'},
             {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
+            {text: "Change", dataIndex: 'change'},
             {text: "% Change", dataIndex: 'pctChange'},
             {text: "Last Updated", width: 135, renderer: Ext.util.Format.dateRenderer('m/d/Y'), dataIndex: 'lastChange'}
         ],
-        columnLines: true,
+        layout: 'fit',columnLines: true,frame: true,
         width: 600,
         height: 300,
-        frame: true,
         title: 'Framed with Checkbox Selection and Horizontal Scrolling',
         iconCls: 'icon-grid',
         margin: '0 0 20 0',
+        viewConfig:{
+        	autoFill:true
+        },
         renderTo: Ext.getBody()
     });
 
